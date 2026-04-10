@@ -1,0 +1,6 @@
+Table nombre{
+    id int [pk, increment]
+    nombre varchar
+    created_at timestamp
+    updated_at timestamp
+}   

@@ -129,7 +129,7 @@ class="fixed lg:static z-50 w-[240px] h-full bg-white flex flex-col shadow-md
             {{ request()->routeIs('admin.ConfiguracionVisual.*') ? '' : 'hidden' }}">
 
                 <a href="#" class="flex items-center gap-2 p-2 rounded hover-primary">
-                    <i class="fa fa-user-cog"></i> <span>Usuarios</span>
+                    <i class="fa fa-user-cog"></i> <span>Sistema</span>
                 </a>
 
                 <a href="#" class="flex items-center gap-2 p-2 rounded hover-primary">
@@ -137,7 +137,11 @@ class="fixed lg:static z-50 w-[240px] h-full bg-white flex flex-col shadow-md
                 </a>
 
                 <a href="#" class="flex items-center gap-2 p-2 rounded hover-primary">
-                    <i class="fa fa-print"></i> <span>Impresoras</span>
+                    <i class="fa fa-print"></i> <span>Restaurante</span>
+                </a>
+
+                <a href="#" class="flex items-center gap-2 p-2 rounded hover-primary">
+                    <i class="fa fa-print"></i> <span>Libro de Reclamaciones</span>
                 </a>
 
                 <!-- ACTIVO -->
