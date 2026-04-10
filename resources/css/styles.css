@@ -153,3 +153,16 @@ html {
     100% { opacity: 0; }
 }
 
+/* Botón principal */
+.btn-primary {
+    background-color: var(--primary);
+    color: white;
+}
+
+.text-primary {
+    color: var(--primary);
+}
+
+.border-primary {
+    border-color: var(--primary);
+}
