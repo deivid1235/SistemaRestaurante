@@ -1,6 +1,25 @@
-Table nombre{
-    id int [pk, increment]
-    nombre varchar
-    created_at timestamp
-    updated_at timestamp
-}   
+Table reclamos {
+    id bigint [pk, increment, note: 'ID único autoincrementable']
+    tipo_documento varchar [note: 'DNI, CE, RUC, Pasaporte']
+    numero_documento varchar
+    primer_nombre varchar
+    segundo_nombre varchar [null, note: 'Opcional']
+    primer_apellido varchar
+    segundo_apellido varchar
+    correo varchar
+    telefono varchar
+    direccion varchar
+    departamento varchar
+    provincia varchar
+    distrito varchar
+    servicio_contratado varchar
+    numero_orden varchar [null, note: 'Opcional']
+    identificacion_servicio varchar [null, note: 'Opcional']
+    monto_reclamado decimal(10,2) [null, note: 'Monto en Soles (S/.)']
+    tipo_reclamo varchar [note: 'Reclamo o Queja']
+    motivo text
+    detalle_solicitud text
+    pedido_concreto text
+    acepto_politicas boolean [default: true]
+}
+

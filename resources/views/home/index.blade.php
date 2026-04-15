@@ -249,64 +249,6 @@
         </div>
     </section>
 
-    <footer id="contacto" class="py-12 border-t" style="background-color:#1f2937; color:#d1d5db;">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-
-            <div class="grid md:grid-cols-4 gap-8 mb-10">
-
-                <div>
-                    <h4 class="text-2xl font-bold text-white mb-4">
-                        <span class="text-red-500">Corporation</span>AOSC
-                    </h4>
-                    <p class="mb-2">Perú - Piura - Talara.</p>
-                    <p class="mb-2">Reservas: +51 952 167 090</p>
-                    <p class="mb-2">Email: grupoaosc@gmail.com</p>
-                </div>
-
-                {{-- Mapa del sitio --}}
-                <div>
-                    <h4 class="text-xl font-semibold text-white mb-4">Mapa del Sitio</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#inicio"    class="hover:text-red-500 transition">Inicio</a></li>
-                        <li><a href="#productos" class="hover:text-red-500 transition">Menú Completo</a></li>
-                        <li><a href="#filosofia" class="hover:text-red-500 transition">Nuestra Misión</a></li>
-                        <li><a href="#contacto"  class="hover:text-red-500 transition">Ubicación</a></li>
-                    </ul>
-                </div>
-
-                {{-- Legal --}}
-                <div>
-                    <h4 class="text-xl font-semibold text-white mb-4">Legal</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="hover:text-red-500 transition">Términos y Condiciones</a></li>
-                        <li><a href="#" class="hover:text-red-500 transition">Política de Privacidad</a></li>
-                        <li>
-                            <button id="open-reclamaciones-modal" class="hover:text-red-500 transition text-left">
-                                Libro de Reclamaciones
-                            </button>
-                        </li>
-                    </ul>
-                </div>
-
-                {{-- Redes sociales --}}
-                <div>
-                    <h4 class="text-xl font-semibold text-white mb-4">Síguenos</h4>
-                    <div class="flex space-x-4 text-white">
-                        <a href="#" class="p-2 bg-gray-700 rounded-full hover:bg-red-600 transition shadow-md">FB</a>
-                        <a href="#" class="p-2 bg-gray-700 rounded-full hover:bg-red-600 transition shadow-md">IG</a>
-                        <a href="#" class="p-2 bg-gray-700 rounded-full hover:bg-red-600 transition shadow-md">TW</a>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="text-center pt-8 border-t border-gray-700">
-                <p>&copy; 2025 CorporationAOSC. Todos los derechos reservados.</p>
-            </div>
-        </div>
-    </footer>
-   
-    {{-- Debug panel --}}
     
 
     {{--Login Modal--}}

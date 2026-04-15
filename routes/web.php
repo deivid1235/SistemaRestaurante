@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ConfiguracionVisualController;
+use App\Http\Controllers\LibroReclamacionController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -13,7 +14,9 @@ Route::get('/', function () {
 Route::get('/', [HomeController::class, 'index']);
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
-
+Route::get('/inicio', [HomeController::class, 'index'])->name('inicio');
+Route::get('/LibroReclamacion', function () { return view('home.LibroReclamacion');})->name('libro.reclamacion');
+Route::post('/LibroReclamacion', [LibroReclamacionController::class, 'store'])->name('libro.reclamacion.store');
 
 Route::middleware('auth')->group(function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
@@ -22,4 +25,5 @@ Route::middleware('auth')->group(function () {
     Route::post('/configuracionVisual/upload', [ConfiguracionVisualController::class, 'upload'])->name('config.visual.upload');
     Route::delete('/configuracionVisual/delete', [ConfiguracionVisualController::class, 'delete'])->name('config.visual.delete');
     Route::post('/configuracionVisual/guardarTema', [ConfiguracionVisualController::class, 'guardarTema'])->name('config.visual.tema');
+    // Rutas para Libro de Reclamaciones
 });

@@ -140,9 +140,14 @@ class="fixed lg:static z-50 w-[240px] h-full bg-white flex flex-col shadow-md
                     <i class="fa fa-print"></i> <span>Restaurante</span>
                 </a>
 
-                <a href="#" class="flex items-center gap-2 p-2 rounded hover-primary">
-                    <i class="fa fa-print"></i> <span>Libro de Reclamaciones</span>
+                <a href="" 
+                class="flex items-center gap-2 p-2 rounded hover-primary
+                {{ request()->routeIs('') ? 'bg-primary text-white shadow' : '' }}">
+                    
+                    <i class="fa fa-palette"></i>
+                    <span>Configuración Visual</span>
                 </a>
+
 
                 <!-- ACTIVO -->
                 <a href="{{ route('admin.ConfiguracionVisual.index') }}" 

@@ -30,6 +30,7 @@ class ConfiguracionVisualController extends Controller
             $nombre = time() . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('carrusel'), $nombre);
         }
+    
 
         return back()->with('success', 'Imagen subida correctamente');
     }
