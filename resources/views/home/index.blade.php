@@ -333,4 +333,20 @@
         </div>
     </div>
 
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const slides = document.querySelectorAll(".slide");
+    let current = 0;
+
+    setInterval(() => {
+        slides[current].classList.remove("opacity-100");
+        slides[current].classList.add("opacity-0");
+
+        current = (current + 1) % slides.length;
+
+        slides[current].classList.remove("opacity-0");
+        slides[current].classList.add("opacity-100");
+    }, 3000); // cambia cada 3 segundos
+});
+</script>
 @endsection

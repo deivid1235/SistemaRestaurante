@@ -2,22 +2,48 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class ConfiguracionVisualController extends Controller
 {
     public function index()
-    {
-        $imagenes = File::files(public_path('carrusel'));
+{
+    $imagenes = collect(File::files(public_path('carrusel')))
+        ->map(fn($file) => $file->getFilename())
+        ->values();
 
-        $imagenes = collect($imagenes)->map(function ($file) {
-            return $file->getFilename();
-        })->values();
+    $savedColors = DB::table('settings')
+        ->where('key', 'saved_colors')
+        ->value('value');
 
-        return view('admin.ConfiguracionVisual.index', [
-            'imagenes' => $imagenes
-        ]);
+    $savedColors = $savedColors ? json_decode($savedColors, true) : [];
+
+    if (!is_array($savedColors)) {
+        $savedColors = [];
     }
+
+    $accent = DB::table('settings')
+        ->where('key', 'accent_color')
+        ->value('value');
+
+    // 🔥 SOLO ESTO AGREGAS (PERFIL SIN BD)
+    $logo = null;
+
+    $files = File::files(public_path('perfil'));
+
+    if (count($files) > 0) {
+        $logo = 'perfil/' . $files[0]->getFilename();
+    }
+
+    return view('admin.ConfiguracionVisual.index', compact(
+        'imagenes',
+        'savedColors',
+        'accent',
+        'logo'
+    ));
+}
 
     public function upload(Request $request)
     {
@@ -68,28 +94,57 @@ class ConfiguracionVisualController extends Controller
         return back()->with('success', 'Imagen actualizada correctamente');
     }
 
-    public function guardarTema(Request $request)
+    public function guardarColor(Request $request)
     {
-        // Validación
         $request->validate([
-            'color_mode'   => 'nullable|string|in:light,dark,system',
-            'accent_color' => 'nullable|string',
+            'accent_color' => 'required|string'
         ]);
 
-        // Guardar en sesión
-        session([
-            'color_mode'   => $request->color_mode ?? 'light',
-            'accent_color' => $request->accent_color ?? '#1e88b6',
-        ]);
+        $setting = DB::table('settings')->where('key', 'saved_colors')->first();
 
-        return back()->with('success', 'Tema guardado correctamente');
+        $colores = $setting ? json_decode($setting->value, true) : [];
+
+        if (!in_array($request->accent_color, $colores)) {
+            $colores[] = $request->accent_color;
+        }
+
+        DB::table('settings')->updateOrInsert(
+            ['key' => 'saved_colors'],
+            ['value' => json_encode($colores), 'updated_at' => now(), 'created_at' => now()]
+        );
+
+        DB::table('settings')->updateOrInsert(
+            ['key' => 'accent_color'],
+            ['value' => $request->accent_color, 'updated_at' => now(), 'created_at' => now()]
+        );
+
+        return back();
     }
-
-    public function getTema()
+    
+    public function guardarLogo(Request $request)
     {
-        return [
-            'color_mode'   => session('color_mode', 'light'),
-            'accent_color' => session('accent_color', '#1e88b6'),
-        ];
+        $request->validate([
+            'logo' => 'required|image|mimes:jpg,jpeg,png,svg|max:2048'
+        ]);
+
+        $carpeta = public_path('perfil');
+
+        if (!File::exists($carpeta)) {
+            File::makeDirectory($carpeta, 0777, true);
+        }
+
+        $file = $request->file('logo');
+        $nombre = time() . '.' . $file->getClientOriginalExtension();
+
+        $file->move($carpeta, $nombre);
+
+        // eliminar anteriores
+        foreach (File::files($carpeta) as $img) {
+            if ($img->getFilename() !== $nombre) {
+                File::delete($img);
+            }
+        }
+
+        return back()->with('success', 'Logo guardado correctamente');
     }
 }

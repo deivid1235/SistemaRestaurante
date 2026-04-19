@@ -101,6 +101,7 @@
     </div>
 
 </header>
+
     @yield('content')
     <!-- ================= FOOTER  ================= -->
     <footer id="contacto" class="py-12 border-t" style="background-color:#1f2937; color:#d1d5db;">
@@ -180,5 +181,11 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>    
     @stack('scripts')
+    <script>
+    // Toggle mobile menu
+    document.getElementById('mobile-menu-button')?.addEventListener('click', function () {
+        document.getElementById('mobile-menu')?.classList.toggle('open');
+    });
+</script>
 </body>
 </html>

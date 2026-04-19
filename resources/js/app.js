@@ -57,74 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
 let images = [];
 let idx = 0;
 
-/* CARRUSEL*/
 
-// Seleccionar imagen
-window.selectThumb = function (i) {
-    if (!images || images.length === 0) return;
-
-    // evitar desbordes de índice
-    idx = Math.max(0, Math.min(i, images.length - 1));
-
-    const activeImg   = document.getElementById('activeImg');
-    const counterText = document.getElementById('counterText');
-    const deleteInput = document.getElementById('deleteInput');
-    const btnPrev     = document.getElementById('btnPrev');
-    const btnNext     = document.getElementById('btnNext');
-
-    if (!activeImg || !counterText || !deleteInput) return;
-
-    activeImg.src = images[idx].src;
-    counterText.textContent = (idx + 1) + ' / ' + images.length;
-    deleteInput.value = images[idx].name;
-
-    if (btnPrev) btnPrev.disabled = (idx === 0);
-    if (btnNext) btnNext.disabled = (idx === images.length - 1);
-
-    document.querySelectorAll('.thumb-item').forEach((t, j) => {
-        t.classList.toggle('border-blue-500', j === idx);
-        t.classList.toggle('border-transparent', j !== idx);
-    });
-};
-
-// Navegación
-window.navigate = function (dir) {
-    window.selectThumb(idx + dir);
-};
-
-/* PREVIEW UPLOAD */
-
-window.handlePreview = function (input) {
-    const file = input.files[0];
-    if (!file) return;
-
-    const previewImg     = document.getElementById('previewImg');
-    const previewSection = document.getElementById('previewSection');
-    const dropZone       = document.getElementById('dropZone');
-
-    if (!previewImg || !previewSection || !dropZone) return;
-
-    const reader = new FileReader();
-
-    reader.onload = e => {
-        previewImg.src = e.target.result;
-        previewSection.classList.remove('hidden');
-        dropZone.classList.add('hidden');
-    };
-
-    reader.readAsDataURL(file);
-};
-
-// Cancelar subida
-window.cancelUpload = function () {
-    const previewSection = document.getElementById('previewSection');
-    const dropZone       = document.getElementById('dropZone');
-    const fileInput      = document.getElementById('fileInput');
-
-    if (previewSection) previewSection.classList.add('hidden');
-    if (dropZone) dropZone.classList.remove('hidden');
-    if (fileInput) fileInput.value = '';
-};
 
 /* INICIALIZACIÓN */
 document.addEventListener('DOMContentLoaded', () => {
@@ -384,3 +317,114 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 });
+
+//Colores
+
+function applyColor(color) {
+    document.documentElement.style.setProperty('--primary', color);
+
+    const input = document.getElementById('accentColor');
+    if (input) input.value = color;
+
+    const hex = document.getElementById('hexValue');
+    if (hex) hex.value = color;
+}
+
+function guardarColorActual(url, csrf) {
+    const color = document.getElementById('accentColor').value;
+
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = url;
+
+    const token = document.createElement('input');
+    token.type = 'hidden';
+    token.name = '_token';
+    token.value = csrf;
+
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'accent_color';
+    input.value = color;
+
+    form.appendChild(token);
+    form.appendChild(input);
+
+    document.body.appendChild(form);
+    form.submit();
+}
+
+window.applyColor = applyColor;
+window.guardarColorActual = guardarColorActual;
+
+
+// TABS CONFIGURACIÓN
+export function showTab(tabName) {
+    document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.add('hidden');
+    });
+
+    const selectedTab = document.getElementById('tab-' + tabName);
+    if (selectedTab) {
+        selectedTab.classList.remove('hidden');
+    }
+
+    document.querySelectorAll('.tab-button').forEach(btn => {
+        btn.classList.remove('bg-[var(--primary)]', 'text-white');
+        btn.classList.add('hover:bg-gray-100', 'text-gray-700');
+    });
+
+    const activeButton = document.querySelector(`.tab-button[data-tab="${tabName}"]`);
+    if (activeButton) {
+        activeButton.classList.remove('hover:bg-gray-100', 'text-gray-700');
+        activeButton.classList.add('bg-[var(--primary)]', 'text-white');
+    }
+}
+
+export function previewImage(event) {
+    const previewBox = document.getElementById('previewBox');
+    const previewImg = document.getElementById('previewImg');
+
+    if (event.target.files && event.target.files[0]) {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            previewImg.src = e.target.result;
+            previewBox.classList.remove('hidden');
+        };
+
+        reader.readAsDataURL(event.target.files[0]);
+    }
+}
+
+export function previewCompanyLogo(event) {
+    const preview = document.getElementById('companyLogoPreview');
+
+    if (event.target.files && event.target.files[0]) {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            preview.src = e.target.result;
+        };
+
+        reader.readAsDataURL(event.target.files[0]);
+    }
+}
+
+export function previewUserPhoto(event) {
+    const preview = document.getElementById('userPhotoPreview');
+
+    if (event.target.files && event.target.files[0]) {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            preview.src = e.target.result;
+        };
+
+        reader.readAsDataURL(event.target.files[0]);
+    }
+}
+window.showTab = showTab;
+window.previewImage = previewImage;
+window.previewCompanyLogo = previewCompanyLogo;
+window.previewUserPhoto = previewUserPhoto;

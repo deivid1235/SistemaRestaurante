@@ -2,210 +2,178 @@
 @section('title', 'Configuración Visual')
 
 @section('content')
-<div class="bg-white p-4 rounded-2xl shadow-md">
-
-    {{-- TÍTULO --}}
-    <h2 class="text-base font-medium mb-4 flex items-center gap-2">
-        <i class="fa fa-palette text-blue-600 text-sm"></i>
-        Configuración de apariencia
-    </h2>
-
-    {{-- MENSAJE DE ÉXITO --}}
-    @if(session('success'))
-        <div class="bg-green-100 text-green-700 px-3 py-2 rounded-lg mb-4 text-xs">
-            {{ session('success') }}
+<div class="max-w-8xl mx-auto space-y-5 animate-fade-in text-gray-800">
+    <div class="relative overflow-hidden rounded-2xl p-7 text-white shadow-md"
+         style="background: linear-gradient(135deg, var(--primary) 0%, #4fc3f7 100%);">
+        <div class="relative z-10">
+            <div class="flex items-center gap-2 mb-2">
+                <span class="px-2.5 py-1 bg-white/20 backdrop-blur-md rounded-full text-[10px] uppercase tracking-wider font-bold">
+                    SYSTEM CONTROL
+                </span>
+            </div>
+            <h1 class="text-3xl font-extrabold tracking-tight">Configuraciones</h1>
+            <p class="text-base font-light opacity-90 max-w-md">Personaliza la identidad visual y los parámetros globales de tu plataforma.</p>
         </div>
-    @endif
+        <div class="absolute top-[-30%] right-[-5%] w-56 h-56 bg-white/10 rounded-full blur-3xl"></div>
+    </div>
 
-    {{-- GRID 2 COLUMNAS --}}
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
-
-        {{-- COLUMNA IZQUIERDA --}}
-        <div class="border border-gray-200 rounded-xl p-4">
-
-            <div class="flex items-center gap-2 mb-3 pb-2 border-b border-gray-100">
-                <i class="fa fa-images text-blue-600 text-xs"></i>
-                <h3 class="text-xs font-medium text-gray-700">Configuración visual</h3>
-            </div>
-
-            <p class="text-xs text-gray-400 mb-1">Subir imagen</p>
-
-            <div id="dropZone"
-                 class="border border-dashed border-gray-300 rounded-lg bg-gray-50 py-3
-                        text-center cursor-pointer hover:border-blue-400 transition"
-                 onclick="document.getElementById('fileInput').click()">
-                <i class="fa fa-upload text-gray-300 text-base mb-1 block"></i>
-                <p class="text-xs text-gray-400">Clic para seleccionar</p>
-                <p class="text-xs text-gray-300 mt-0.5">JPG, PNG o SVG · 747 × 547 px</p>
-            </div>
-
-            <form action="{{ route('config.visual.upload') }}" method="POST"
-                  enctype="multipart/form-data" id="uploadForm">
-                @csrf
-                <input type="file" id="fileInput" name="imagen"
-                       accept="image/png,image/jpeg,image/jpg,image/svg+xml"
-                       class="hidden" onchange="handlePreview(this)">
-            </form>
-
-            <div id="previewSection" class="hidden mt-2">
-                <p class="text-xs text-gray-400 mb-1">Vista previa</p>
-                <img id="previewImg" src="" alt="preview"
-                     class="w-full max-w-sm mx-auto h-28 object-cover rounded-lg mb-2 block">
-                <div class="flex gap-2 justify-end">
-                    <button type="button" onclick="cancelUpload()"
-                            class="text-xs text-red-400 border border-red-200 rounded-md
-                                   px-2 py-1 hover:bg-red-50 transition">
-                        <i class="fa fa-xmark"></i> Cancelar
-                    </button>
-                    <button type="button"
-                            onclick="document.getElementById('uploadForm').submit()"
-                            class="text-xs text-white bg-blue-600 rounded-md px-2 py-1
-                                   hover:bg-blue-700 transition flex items-center gap-1">
-                        <i class="fa fa-check"></i> Guardar
-                    </button>
-                </div>
-            </div>
-
-            {{-- Galería --}}
-            <div class="mt-3 pt-3 border-t border-gray-100">
-                <p class="text-xs text-gray-400 mb-2">Imágenes del carrusel</p>
-
-                @php
-                $imgs = collect($imagenes)->values();
-                @endphp
-
-                @if($imgs->count() > 0)
-
-                    {{-- Preview principal con flechas superpuestas --}}
-                    <div class="relative w-full max-w-sm mx-auto mb-1">
-
-                        <img id="activeImg"
-                             src="{{ asset('carrusel/' . $imgs[0]) }}"
-                             class="w-full h-32 object-cover rounded-lg block">
-
-                        <button type="button" id="btnPrev" onclick="navigate(-1)"
-                                class="absolute left-1.5 top-1/2 -translate-y-1/2
-                                       w-6 h-6 bg-white border border-gray-200 rounded-full
-                                       flex items-center justify-center shadow-sm
-                                       hover:bg-gray-50 disabled:opacity-30
-                                       disabled:cursor-not-allowed transition">
-                            <i class="fa fa-chevron-left text-gray-500" style="font-size:9px"></i>
-                        </button>
-
-                        <button type="button" id="btnNext" onclick="navigate(1)"
-                                class="absolute right-1.5 top-1/2 -translate-y-1/2
-                                       w-6 h-6 bg-white border border-gray-200 rounded-full
-                                       flex items-center justify-center shadow-sm
-                                       hover:bg-gray-50 disabled:opacity-30
-                                       disabled:cursor-not-allowed transition">
-                            <i class="fa fa-chevron-right text-gray-500" style="font-size:9px"></i>
-                        </button>
-
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-5">
+        <div class="lg:col-span-1">
+            <div class="bg-white border border-gray-100 rounded-2xl p-4 sticky top-6 shadow-sm">
+                <p class="text-[10px] font-black text-gray-400 mb-4 tracking-widest uppercase px-1 text-center">Navegación</p>
+                <nav class="space-y-1.5">
+                    <div onclick="showTab('login')" data-tab="login"
+                         class="tab-button group flex items-center gap-3 p-3.5 rounded-xl cursor-pointer transition-all bg-[var(--primary)] text-white shadow-md shadow-primary/20">
+                        <div class="w-6 h-6 flex items-center justify-center rounded bg-white/20">
+                            <i class="fa fa-right-to-bracket text-xs"></i>
+                        </div>
+                        <span class="text-sm font-bold">Configuración del Login</span>
                     </div>
 
-                    {{-- Contador --}}
-                    <p class="text-xs text-gray-400 text-center mb-2 max-w-sm mx-auto"
-                       id="counterText">
-                        1 / {{ $imgs->count() }}
-                    </p>
+                    <div onclick="showTab('empresa')" data-tab="empresa"
+                         class="tab-button group flex items-center gap-3 p-3.5 rounded-xl cursor-pointer transition-all hover:bg-gray-50 text-gray-600 hover:text-[var(--primary)]">
+                        <div class="w-6 h-6 flex items-center justify-center rounded bg-gray-100 group-hover:bg-primary/10 transition-colors">
+                            <i class="fa fa-user text-xs"></i>
+                        </div>
+                        <span class="text-sm font-semibold">Perfil de Usuario</span>
+                    </div>
 
-                    {{-- Eliminar --}}
-                    <div class="flex justify-end max-w-sm mx-auto mb-2">
-                        <form id="deleteForm" action="{{ route('config.visual.delete') }}"
-                              method="POST" onsubmit="return confirm('¿Eliminar imagen?')">
+                    <div onclick="showTab('apariencia')" data-tab="apariencia"
+                         class="tab-button group flex items-center gap-3 p-3.5 rounded-xl cursor-pointer transition-all hover:bg-gray-50 text-gray-600 hover:text-[var(--primary)]">
+                        <div class="w-6 h-6 flex items-center justify-center rounded bg-gray-100 group-hover:bg-primary/10 transition-colors">
+                            <i class="fa fa-palette text-xs"></i>
+                        </div>
+                        <span class="text-sm font-semibold">Tema Visual</span>
+                    </div>
+                </nav>
+            </div>
+        </div>
+
+        <div class="lg:col-span-3 space-y-5">
+            
+            <div id="tab-login" class="tab-content bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="p-6 border-b border-gray-50">
+                    <h3 class="text-xl font-bold text-gray-800">Galería del Carrusel</h3>
+                    <p class="text-sm text-gray-500">Optimiza la primera impresión visual de tus usuarios.</p>
+                </div>
+                
+                <div class="p-6 grid md:grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                        <form action="{{ route('config.visual.upload') }}" method="POST" enctype="multipart/form-data">
                             @csrf
-                            @method('DELETE')
-                            <input type="hidden" name="imagen" id="deleteInput"
-                                   value="{{ $imgs[0] }}">
-                            <button type="submit"
-                                    class="text-xs text-red-400 border border-red-200 rounded-md
-                                           px-2 py-1 hover:bg-red-50 transition">
-                                <i class="fa fa-trash"></i> Eliminar
+                            <label class="group relative flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-gray-200 rounded-2xl cursor-pointer bg-gray-50/50 hover:bg-blue-50/50 hover:border-blue-300 transition-all">
+                                <div class="flex flex-col items-center justify-center py-6">
+                                    <i class="fa fa-cloud-arrow-up text-2xl text-blue-500 mb-3 group-hover:scale-110 transition-transform"></i>
+                                    <p class="text-sm text-gray-700 font-bold">Haz clic para subir</p>
+                                    <p class="text-[10px] text-gray-400 mt-1 uppercase">PNG, JPG o WEBP (Máx. 2MB)</p>
+                                </div>
+                                <input type="file" name="imagen" class="hidden" accept="image/*" onchange="previewImage(event)" required />
+                            </label>
+
+                            <button type="submit" class="mt-4 w-full py-3.5 bg-[#1e293b] text-white rounded-xl font-bold shadow-lg hover:bg-black transition-all flex items-center justify-center gap-2 text-sm uppercase tracking-wide">
+                                <i class="fa fa-plus-circle"></i> Confirmar Subida
                             </button>
                         </form>
                     </div>
 
-                    {{-- Miniaturas --}}
-                    <div class="flex gap-1.5 flex-wrap max-w-sm mx-auto" id="thumbRow">
-                        @foreach($imgs as $i => $img)
-                            <div class="thumb-item cursor-pointer rounded-md overflow-hidden
-                                        border-2 transition shrink-0
-                                        {{ $i === 0 ? 'border-blue-500' : 'border-transparent' }}"
-                                 onclick="selectThumb({{ $i }})">
-                                <img src="{{ asset('carrusel/' . $img) }}"
-                                     class="w-12 h-9 object-cover block">
-                            </div>
-                        @endforeach
-                    </div>
+                    <div class="bg-gray-50/80 rounded-2xl p-5 border border-gray-100">
+                        <div class="flex items-center justify-between mb-6 px-1">
+                            <span class="text-sm font-bold text-gray-700 flex items-center gap-2">
+                                <i class="fa fa-images text-blue-500"></i> Biblioteca Actual
+                            </span>
+                            <span class="text-[9px] text-gray-400 font-bold uppercase tracking-widest">Recientes primero</span>
+                        </div>
 
-                @else
-                    <p class="text-xs text-gray-300 italic">No hay imágenes en el carrusel.</p>
-                @endif
+                        <div class="grid grid-cols-2 gap-4 max-h-[350px] overflow-y-auto pr-2 custom-scrollbar">
+                            {{-- Se usa reverse() para que la última subida esté al inicio --}}
+                            @forelse(collect($imagenes ?? [])->reverse() as $img)
+                                <div class="relative bg-white rounded-2xl border border-gray-100 p-2 shadow-sm flex flex-col group animate-scale-up">
+                                    <div class="flex items-center justify-between mb-2 px-1">
+                                        <span class="text-[10px] font-bold text-blue-600 uppercase tracking-tighter">Imagen</span>
+                                        <form action="{{ route('config.visual.delete') }}" method="POST">
+                                            @csrf 
+                                            @method('DELETE')
+                                            <input type="hidden" name="imagen" value="{{ $img }}">
+                                            <button type="submit" class="w-6 h-6 rounded-full bg-red-50 text-red-500 flex items-center justify-center hover:bg-red-500 hover:text-white transition-all shadow-sm">
+                                                <i class="fa fa-times text-[10px] font-black"></i>
+                                            </button>
+                                        </form>
+                                    </div>
 
-                <button type="button"
-                        onclick="document.getElementById('fileInput').click()"
-                        class="mt-2 w-full max-w-sm mx-auto flex items-center justify-center
-                               gap-1 text-xs border border-gray-200 rounded-md py-1.5
-                               hover:bg-gray-50 transition text-gray-500">
-                    <i class="fa fa-plus text-xs"></i> Agregar imagen
-                </button>
-            </div>
-
-        </div>
-
-        {{-- COLUMNA DERECHA: Modo de Color --}}
-        <div class="border border-gray-200 rounded-xl p-4">
-            <div class="flex items-center gap-2 mb-3 pb-2 border-b border-gray-100">
-                <i class="fa fa-circle-half-stroke text-purple-600 text-xs"></i>
-                <h3 class="text-xs font-medium text-gray-700">Modo de color</h3>
-            </div>
-
-            <p class="text-xs text-gray-400 mb-2">Tema de la interfaz</p>
-
-            <form action="{{ route('config.visual.tema') }}" method="POST">
-                @csrf
-
-                {{-- COLOR PICKER --}}
-                <div class="pt-3 border-t border-gray-100 mb-3">
-                    <p class="text-xs text-gray-400 mb-2">Color de acento</p>
-
-                    {{-- PICKER + LABEL en una fila --}}
-                    <div class="flex items-center gap-3">
-                        <input type="color"
-                            name="accent_color"
-                            id="colorPicker"
-                            value="{{ session('accent_color', '#1e88b6') }}"
-                            class="w-10 h-10 cursor-pointer rounded-lg border border-gray-300 p-0.5">
-
-                        <span class="text-xs text-gray-500">Elige el color del menú</span>
+                                    <div class="rounded-xl overflow-hidden aspect-video border border-gray-50 shadow-inner">
+                                        <img src="{{ asset('carrusel/' . $img) }}" class="w-full h-full object-cover">
+                                    </div>
+                                </div>
+                            @empty
+                                <div class="col-span-2 py-12 text-center text-gray-400 italic text-xs bg-white rounded-2xl border border-dashed">
+                                    No hay imágenes registradas.
+                                </div>
+                            @endforelse
+                        </div>
                     </div>
                 </div>
+            </div>
 
-                {{-- BOTÓN PEQUEÑO Y A LA DERECHA --}}
-                <div class="flex justify-end">
-                    <button type="submit"
-                            class="mt-2 w-full max-w-sm mx-auto flex items-center justify-center
-                               gap-1 text-xs border border-gray-200 rounded-md py-1.5
-                               hover:bg-gray-50 transition text-gray-500">
-                        Guardar
+            <div id="tab-empresa" class="tab-content hidden animate-fade-in bg-white rounded-2xl shadow-sm border border-gray-100 p-8 flex flex-col items-center">
+                <h3 class="text-xl font-bold text-gray-800 mb-8 self-start">Ajustes del Perfil</h3>
+                <div class="relative group">
+                    <div class="w-40 h-40 rounded-full ring-4 ring-gray-50 overflow-hidden shadow-2xl transition-transform group-hover:scale-105 duration-500">
+                        <img id="companyLogoPreview" 
+                             src="{{ $logo ? asset($logo) : asset('perfil/default.png') }}" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <button onclick="document.getElementById('companyLogo').click()" 
+                            class="absolute bottom-2 right-2 w-10 h-10 bg-white text-gray-700 rounded-full shadow-lg border border-gray-100 flex items-center justify-center hover:bg-primary hover:text-white transition-all">
+                        <i class="fa fa-camera text-sm"></i>
                     </button>
                 </div>
+                
+                <form action="{{ route('config.perfil.logo') }}" method="POST" enctype="multipart/form-data" class="mt-10 w-full max-w-xs">
+                    @csrf
+                    <input type="file" name="logo" id="companyLogo" class="hidden" onchange="previewCompanyLogo(event)">
+                    <button type="submit" class="w-full py-4 bg-[#0a4d8c] text-white rounded-xl font-bold shadow-md hover:brightness-110 transition-all text-sm uppercase tracking-widest">
+                        Actualizar Foto
+                    </button>
+                </form>
+            </div>
 
-            </form>
+            <div id="tab-apariencia" class="tab-content hidden animate-fade-in bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+                <h3 class="text-xl font-bold text-gray-800 mb-6">Paleta de Colores</h3>
+                <div class="bg-gray-50 rounded-3xl p-8 flex items-center gap-10 border border-gray-100">
+                    <input type="color" id="accentColor" value="{{ $accent ?? '#040710' }}" 
+                           class="w-28 h-28 rounded-3xl border-0 cursor-pointer shadow-xl bg-transparent"
+                           oninput="applyColor(this.value)">
+
+                    <div class="flex-1 space-y-5">
+                        <div>
+                            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-1">Color Seleccionado</label>
+                            <input type="text" id="hexValue" value="{{ $accent ?? '#040710' }}" 
+                                   class="text-3xl font-mono font-bold bg-transparent border-none focus:ring-0 p-0 text-gray-800 uppercase"
+                                   oninput="applyColor(this.value)">
+                        </div>
+                        
+                        <button onclick="guardarColorActual('{{ route('config.visual.color') }}', '{{ csrf_token() }}')"
+                                class="px-8 py-3 bg-[#111827] text-white rounded-xl font-bold text-sm flex items-center gap-3 hover:bg-black transition-all shadow-lg">
+                            Guardar Configuración <i class="fa fa-arrow-right text-[10px]"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mt-10 px-2">
+                    <p class="text-[11px] font-bold text-gray-400 uppercase mb-5 tracking-widest">Historial de Temas</p>
+                    <div class="flex flex-wrap gap-4">
+                        @foreach($savedColors ?? [] as $color)
+                            <div class="w-12 h-12 rounded-xl cursor-pointer shadow-md hover:scale-110 transition-all border-2 border-white ring-1 ring-gray-100"
+                                 style="background: {{ $color }}"
+                                 onclick="applyColor('{{ $color }}')"></div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+
         </div>
-
     </div>
 </div>
-@push('scripts')
-<script>
-    window.carruselImages = @json(
-        collect($imagenes)->values()->map(function ($img) {
-            return [
-                'src' => asset('carrusel/' . $img),
-                'name' => $img
-            ];
-        })
-    );
-</script>
-@endpush
+
+
 @endsection

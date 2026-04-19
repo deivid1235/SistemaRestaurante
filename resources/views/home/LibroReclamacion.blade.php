@@ -7,7 +7,7 @@
 @endif
 <section class="max-w-6xl mx-auto px-6 py-6">
     
-    <h2 class="text-3xl md:text-4xl font-bold text-red-500 uppercase tracking-wider">
+    <h2 class="text-3xl md:text-4xl font-bold text-black-500 uppercase tracking-wider">
         Libro de Reclamaciones 
     </h2>
 
