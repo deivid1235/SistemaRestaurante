@@ -5,7 +5,7 @@
 <div class="p-4 md:p-8 bg-gray-100 min-h-full transition-all duration-500">
     
     <div class="rounded-t-3xl p-6 text-white shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4 relative overflow-hidden" 
-        style="background: linear-gradient(135deg, #1e4b7a 0%, #4fc3f7 100%);">
+        style="background: linear-gradient(135deg, var(--primary) 0%, #4fc3f7 100%);">
         <div class="flex items-center gap-4 z-10">
             <div class="w-12 h-12 md:w-16 md:h-16 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/30 transition-transform hover:rotate-6">
                 <i class="fa fa-cog text-2xl md:text-3xl text-white"></i>
