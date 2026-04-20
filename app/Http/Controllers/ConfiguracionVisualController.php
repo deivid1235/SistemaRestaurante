@@ -9,41 +9,40 @@ use Illuminate\Http\Request;
 class ConfiguracionVisualController extends Controller
 {
     public function index()
-{
-    $imagenes = collect(File::files(public_path('carrusel')))
-        ->map(fn($file) => $file->getFilename())
-        ->values();
+    {
+        $imagenes = collect(File::files(public_path('carrusel')))
+            ->map(fn($file) => $file->getFilename())
+            ->values();
 
-    $savedColors = DB::table('settings')
-        ->where('key', 'saved_colors')
-        ->value('value');
+        $savedColors = DB::table('settings')
+            ->where('key', 'saved_colors')
+            ->value('value');
 
-    $savedColors = $savedColors ? json_decode($savedColors, true) : [];
+        $savedColors = $savedColors ? json_decode($savedColors, true) : [];
 
-    if (!is_array($savedColors)) {
-        $savedColors = [];
+        if (!is_array($savedColors)) {
+            $savedColors = [];
+        }
+
+        $accent = DB::table('settings')
+            ->where('key', 'accent_color')
+            ->value('value');
+
+        $logo = null;
+
+        $files = File::files(public_path('perfil'));
+
+        if (count($files) > 0) {
+            $logo = 'perfil/' . $files[0]->getFilename();
+        }
+
+        return view('admin.ConfiguracionVisual.index', compact(
+            'imagenes',
+            'savedColors',
+            'accent',
+            'logo'
+        ));
     }
-
-    $accent = DB::table('settings')
-        ->where('key', 'accent_color')
-        ->value('value');
-
-    // 🔥 SOLO ESTO AGREGAS (PERFIL SIN BD)
-    $logo = null;
-
-    $files = File::files(public_path('perfil'));
-
-    if (count($files) > 0) {
-        $logo = 'perfil/' . $files[0]->getFilename();
-    }
-
-    return view('admin.ConfiguracionVisual.index', compact(
-        'imagenes',
-        'savedColors',
-        'accent',
-        'logo'
-    ));
-}
 
     public function upload(Request $request)
     {
@@ -58,7 +57,7 @@ class ConfiguracionVisualController extends Controller
         }
     
 
-        return back()->with('success', 'Imagen subida correctamente');
+        return redirect()->back()->with('success', 'Imagen subida correctamente');
     }
      
     public function delete(Request $request)
@@ -69,7 +68,8 @@ class ConfiguracionVisualController extends Controller
             File::delete($ruta);
         }
 
-        return back()->with('success', 'Imagen eliminada correctamente');
+        return redirect()->back()->with('success', 'Imagen eliminada correctamente');
+        
     }
 
     
@@ -91,7 +91,7 @@ class ConfiguracionVisualController extends Controller
         $nombre = time() . '.' . $file->getClientOriginalExtension();
         $file->move(public_path('carrusel'), $nombre);
 
-        return back()->with('success', 'Imagen actualizada correctamente');
+        return redirect()->back()->with('success', 'Imagen actualizada correctamente');
     }
 
     public function guardarColor(Request $request)
@@ -118,7 +118,7 @@ class ConfiguracionVisualController extends Controller
             ['value' => $request->accent_color, 'updated_at' => now(), 'created_at' => now()]
         );
 
-        return back();
+       return redirect()->back()->with('success', 'Modalidad guardada correctamente');
     }
     
     public function guardarLogo(Request $request)
@@ -145,6 +145,6 @@ class ConfiguracionVisualController extends Controller
             }
         }
 
-        return back()->with('success', 'Logo guardado correctamente');
+        return redirect()->back()->with('success', 'Logo guardado correctamente');
     }
 }

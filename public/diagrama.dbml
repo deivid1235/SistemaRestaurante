@@ -1,3 +1,9 @@
+
+Table tipo_pagos{
+    id bigint [pk, increment, note: 'ID único autoincrementable']
+    descripcion varchar 
+}
+
 Table reclamos {
     id bigint [pk, increment, note: 'ID único autoincrementable']
     tipo_documento varchar [note: 'DNI, CE, RUC, Pasaporte']

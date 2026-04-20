@@ -6,6 +6,8 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ConfiguracionVisualController;
 use App\Http\Controllers\LibroReclamacionController;
+use App\Http\Controllers\AdministracionGeneralController;
+use App\Http\Controllers\MetodopagoController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -26,14 +28,19 @@ Route::middleware('auth')->group(function () {
     Route::delete('/configuracionVisual/delete', [ConfiguracionVisualController::class, 'delete'])->name('config.visual.delete');
     Route::post('/configuracionVisual/guardarTema', [ConfiguracionVisualController::class, 'guardarTema'])->name('config.visual.tema');
     // Configuración Empresa
-Route::post('/config/empresa/logo', [ConfiguracionVisualController::class, 'logo'])->name('config.empresa.logo');
-Route::post('/config/empresa/info', [ConfiguracionVisualController::class, 'info'])->name('config.empresa.info');
+    Route::post('/config/empresa/logo', [ConfiguracionVisualController::class, 'logo'])->name('config.empresa.logo');
+    Route::post('/config/empresa/info', [ConfiguracionVisualController::class, 'info'])->name('config.empresa.info');
 
-// Configuración Usuario
-Route::post('/config/usuario/foto', [ConfiguracionVisualController::class, 'foto'])->name('config.usuario.foto');
-Route::post('/configuracion/color', [ConfiguracionVisualController::class, 'guardarColor'])->name('config.visual.color');
-
-Route::post('/config/perfil-personal/logo', [ConfiguracionVisualController::class, 'guardarLogo'])
-    ->name('config.perfil.logo');
+    // Configuración Usuario
+    Route::post('/config/usuario/foto', [ConfiguracionVisualController::class, 'foto'])->name('config.usuario.foto');
+    Route::post('/configuracion/color', [ConfiguracionVisualController::class, 'guardarColor'])->name('config.visual.color');
+    Route::post('/config/perfil-personal/logo', [ConfiguracionVisualController::class, 'guardarLogo'])->name('config.perfil.logo');
     // Rutas para Libro de Reclamaciones
+    Route::get('/admin/LibroReclamacion', [LibroReclamacionController::class, 'index'])->name('admin.LibroReclamacion.index');
+    Route::get('/admin/LibroReclamacion/{libroReclamacion}', [LibroReclamacionController::class, 'show'])->name('admin.LibroReclamacion.show');
+    // Rutas para Administración General
+    Route::get('/admin/AdministracionGeneral', [AdministracionGeneralController::class, 'index'])->name('admin.AdministracionGeneral.index');
+    Route::post('/admin/MetodoPago', [MetodopagoController::class, 'store'])->name('admin.Metodopago.store');
+  
+    
 });

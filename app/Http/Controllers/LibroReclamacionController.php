@@ -13,8 +13,9 @@ class LibroReclamacionController extends Controller
     public function index()
     {
         //
-        return view('home.LibroReclamacion');
-
+        $libroReclamaciones = LibroReclamacion::latest()->get();
+        return view('admin.LibroReclamacion.index', compact('libroReclamaciones'));
+       
     }
 
     /**
@@ -96,15 +97,15 @@ class LibroReclamacionController extends Controller
      */
     public function show(LibroReclamacion $libroReclamacion)
     {
-        //
+        return view('admin.LibroReclamacion.show', compact('libroReclamacion'));
     }
-
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(LibroReclamacion $libroReclamacion)
     {
         //
+        
     }
 
     /**

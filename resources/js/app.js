@@ -381,22 +381,6 @@ export function showTab(tabName) {
     }
 }
 
-export function previewImage(event) {
-    const previewBox = document.getElementById('previewBox');
-    const previewImg = document.getElementById('previewImg');
-
-    if (event.target.files && event.target.files[0]) {
-        const reader = new FileReader();
-
-        reader.onload = function (e) {
-            previewImg.src = e.target.result;
-            previewBox.classList.remove('hidden');
-        };
-
-        reader.readAsDataURL(event.target.files[0]);
-    }
-}
-
 export function previewCompanyLogo(event) {
     const preview = document.getElementById('companyLogoPreview');
 
@@ -425,6 +409,39 @@ export function previewUserPhoto(event) {
     }
 }
 window.showTab = showTab;
-window.previewImage = previewImage;
+
 window.previewCompanyLogo = previewCompanyLogo;
 window.previewUserPhoto = previewUserPhoto;
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const input = document.getElementById("fileInput");
+    const preview = document.getElementById("preview");
+    const container = document.getElementById("previewContainer");
+    const removeBtn = document.getElementById("removePreview");
+
+    if (!input || !preview || !container) return;
+
+    input.addEventListener("change", function () {
+
+        const file = this.files[0];
+
+        if (!file) return;
+
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            preview.src = e.target.result;
+            container.classList.remove("hidden");
+        };
+
+        reader.readAsDataURL(file);
+    });
+
+    removeBtn.addEventListener("click", function () {
+        input.value = "";
+        preview.src = "";
+        container.classList.add("hidden");
+    });
+
+});

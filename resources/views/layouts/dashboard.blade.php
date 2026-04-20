@@ -488,10 +488,16 @@
 
     <!-- USUARIO -->
     <div class="user-card">
+
         <div class="user-avatar">
-            <img src="{{ asset('imagen/user-info.jpg') }}" alt="user"
-                onerror="this.parentElement.innerHTML='<i class=\'fa fa-user\' style=\'font-size:13px;color:#fff\'></i>'">
+
+           <img src="{{ isset($logo) && $logo 
+            ? asset($logo) 
+            : asset('perfil/default.png') }}"
+            alt="user">
+            
         </div>
+
         <div class="user-info">
             <div class="name">{{ auth()->user()->name ?? 'Administrador' }}</div>
             <div class="role">{{ auth()->user()->email ?? 'admin@aosc.com' }}</div>
@@ -550,29 +556,28 @@
         <p class="sidebar-section">Configuración</p>
 
         <a href="#" onclick="toggleAjustes()" class="submenu-trigger flex items-center
-            {{ request()->routeIs('admin.ConfiguracionVisual.*') ? 'active-link' : '' }}">
+            {{ request()->routeIs('admin.ConfiguracionVisual.*', 'admin.LibroReclamacion.*', 'admin.AdministracionGeneral.*') ? 'active-link' : '' }}">
             <span class="nav-icon"><i class="fa fa-cog"></i></span>
             <span class="nav-text">Ajustes</span>
             <i class="fa fa-chevron-right chevron
-                {{ request()->routeIs('admin.ConfiguracionVisual.*') ? 'rotate-90' : '' }}"></i>
+                {{ request()->routeIs('admin.ConfiguracionVisual.*', 'admin.LibroReclamacion.*', 'admin.AdministracionGeneral.*') ? 'rotate-90' : '' }}"></i>
         </a>
 
         <div id="submenu-ajustes"
-            class="{{ request()->routeIs('admin.ConfiguracionVisual.*') ? '' : 'hidden' }}">
+            class="{{ request()->routeIs('admin.ConfiguracionVisual.*', 'admin.LibroReclamacion.*', 'admin.AdministracionGeneral.*') ? '' : 'hidden' }}">
 
-            <a href="#" class="flex items-center {{ request()->routeIs('admin.sistema.*') ? 'active-link' : '' }}">
+            <a href="{{ route('admin.AdministracionGeneral.index') }}" class="flex items-center {{ request()->routeIs('admin.AdministracionGeneral.*') ? 'active-link' : '' }}">
                 <span class="nav-icon"><i class="fa fa-user-cog"></i></span>
-                <span class="nav-text">Sistema</span>
+                <span class="nav-text">Administración General</span>
             </a>
 
-            <a href="#" class="flex items-center {{ request()->routeIs('admin.empresa.*') ? 'active-link' : '' }}">
-                <span class="nav-icon"><i class="fa fa-building"></i></span>
-                <span class="nav-text">Empresa</span>
-            </a>
 
-            <a href="#" class="flex items-center {{ request()->routeIs('admin.restaurante.*') ? 'active-link' : '' }}">
-                <span class="nav-icon"><i class="fa fa-print"></i></span>
-                <span class="nav-text">Restaurante</span>
+            <a href="{{ route('admin.LibroReclamacion.index') }}" 
+                class="flex items-center {{ request()->routeIs('admin.LibroReclamacion.*') ? 'active-link' : '' }}">
+                <span class="nav-icon">
+                    <i class="fa fa-book"></i>
+                </span>
+                <span class="nav-text">Libro de Reclamaciones</span>
             </a>
 
             <a href="{{ route('admin.ConfiguracionVisual.index') }}"
