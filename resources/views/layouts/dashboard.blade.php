@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>@yield('title', 'CorporationAOSC')</title>
 
-<link rel="icon" href="{{ asset('iconos/logotipo.png') }}">
+<link rel="icon" href="{{ asset('iconos/logotipo.svg') }}">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
@@ -41,9 +41,7 @@
     .bg-primary   { background-color: var(--primary) !important; }
     .text-primary { color: var(--primary) !important; }
 
-    /* ══════════════════════════════
-       OVERLAY MÓVIL
-    ══════════════════════════════ */
+   
     #overlay {
         position: fixed;
         inset: 0;
@@ -59,9 +57,7 @@
         pointer-events: all;
     }
 
-    /* ══════════════════════════════
-       SIDEBAR BASE (móvil primero)
-    ══════════════════════════════ */
+    
     #sidebar {
         position: fixed;
         top: 0;
@@ -81,12 +77,10 @@
                     width    0.3s cubic-bezier(.4,0,.2,1);
     }
 
-    /* Abierto en móvil */
     #sidebar.sidebar-open {
         transform: translateX(0);
     }
 
-    /* En escritorio: siempre visible y estático */
     @media (min-width: 1024px) {
         #sidebar {
             position: static;
@@ -94,7 +88,6 @@
         }
     }
 
-    /* MINI SIDEBAR (escritorio) */
     .sidebar-mini {
         width: 68px !important;
     }
@@ -114,7 +107,6 @@
         display: none !important;
     }
 
-    /* ── LOGO ── */
     .logo-area {
         padding: 16px 14px;
         border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -129,7 +121,6 @@
         object-fit: contain;
     }
 
-    /* ── USER CARD ── */
     .user-card {
         margin: 12px 10px;
         padding: 10px 12px;
@@ -179,7 +170,6 @@
         font-size: 10.5px;
     }
 
-    /* ── NAV ── */
     nav.nav-primary {
         flex: 1;
         padding: 4px 10px;
@@ -199,7 +189,6 @@
         user-select: none;
     }
 
-    /* ── ITEMS NAV ── */
     nav.nav-primary a {
         position: relative;
         display: flex;
@@ -296,7 +285,6 @@
 
     nav.nav-primary a:hover .chevron { color: rgba(255,255,255,0.8); }
 
-    /* ── SUBMENÚ ── */
     #submenu-ajustes {
         overflow: hidden;
         transition: max-height 0.35s cubic-bezier(.4,0,.2,1), opacity 0.3s ease;
@@ -326,7 +314,6 @@
     #submenu-ajustes a:hover  { color: #fff !important; }
     #submenu-ajustes a.active-link { color: #fff !important; }
 
-    /* ── FOOTER LOGOUT ── */
     .sidebar-footer {
         padding: 10px 12px 14px;
         border-top: 1px solid rgba(255,255,255,0.1);
@@ -364,9 +351,6 @@
         background: rgba(255,80,80,0.25);
     }
 
-    /* ══════════════════════════════
-       HEADER
-    ══════════════════════════════ */
     .top-header {
         height: 56px;
         background: #fff;
@@ -432,9 +416,6 @@
         flex-shrink: 0;
     }
 
-    /* ══════════════════════════════
-       CONTENIDO PRINCIPAL
-    ══════════════════════════════ */
     #main-wrapper {
         flex: 1;
         display: flex;
@@ -450,7 +431,6 @@
         background: var(--bg);
     }
 
-    /* botón hamburguesa: visible solo en móvil */
     .btn-mobile-menu  { display: flex; }
     .btn-desktop-menu { display: none; }
 
@@ -463,7 +443,6 @@
 
 <body>
 
-<!-- OVERLAY -->
 <div id="overlay" onclick="closeSidebar()"></div>
 
 <!-- ═══ SIDEBAR ═══ -->
@@ -490,12 +469,7 @@
     <div class="user-card">
 
         <div class="user-avatar">
-
-           <img src="{{ isset($logo) && $logo 
-            ? asset($logo) 
-            : asset('perfil/default.png') }}"
-            alt="user">
-            
+            <img src="{{ session('logo')  ? asset(session('logo'))  : asset('perfil/default.png') }}" alt="user">
         </div>
 
         <div class="user-info">
@@ -591,28 +565,66 @@
     </nav>
 
     <!-- LOGOUT -->
-    <div class="sidebar-footer">
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <button type="submit" class="btn-logout">
-                <span class="nav-icon"><i class="fa fa-power-off"></i></span>
-                <span>Cerrar sesión</span>
-            </button>
-        </form>
-    </div>
+   <form method="POST" action="{{ route('logout') }}" style="margin:0;">
+        @csrf
+        <button type="submit" class="btn-logout">
+            <span class="nav-icon"><i class="fa fa-power-off"></i></span>
+            <span class="nav-text">Cerrar sesión</span>
+        </button>
+    </form>
 
 </aside>
 
-<!-- ═══ CONTENIDO ═══ -->
+@if(session('success'))
+<div class="fixed top-4 inset-x-0 flex justify-center z- pointer-events-none animate-fade-in-down">
+    <div class="
+        bg-green-50 text-green-700 
+        border border-green-200
+        px-4 py-2 
+        rounded-2xl
+        text-sm font-bold
+        flex items-center gap-3
+        shadow-xl shadow-green-900/5
+        backdrop-blur-sm
+        pointer-events-auto
+    ">
+        <div class="w-6 h-6 bg-green-500 rounded-lg flex items-center justify-center text-white shadow-sm">
+            <i class="fa fa-check text-xs"></i>
+        </div>
+        <span>{{ session('success') }}</span>
+    </div>
+</div>
+
+<style>
+    @keyframes fade-in-down {
+        0% { opacity: 0; transform: translateY(-20px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in-down {
+        animation: fade-in-down 0.5s ease-out;
+    }
+</style>
+
+<script>
+    setTimeout(() => {
+        const alert = document.querySelector('.animate-fade-in-down');
+        if (alert) {
+            alert.style.opacity = '0';
+            alert.style.transition = 'opacity 0.5s ease';
+            setTimeout(() => alert.remove(), 500);
+        }
+    }, 3000);
+</script>
+@endif
+
 <div id="main-wrapper">
 
     <header class="top-header">
         <div style="display:flex;align-items:center;gap:10px;">
-            <!-- Botón móvil -->
+           
             <button class="header-btn btn-mobile-menu" onclick="openSidebar()">
                 <i class="fa fa-bars"></i>
             </button>
-            <!-- Botón escritorio (colapsar mini) -->
             <button class="header-btn btn-desktop-menu" onclick="toggleMiniSidebar()">
                 <i class="fa fa-bars"></i>
             </button>
@@ -639,6 +651,8 @@
     </main>
 
 </div>
+
+
 
 <script>
     /* ── Abrir sidebar en móvil ── */

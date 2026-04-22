@@ -13,6 +13,8 @@ class TipoPagoController extends Controller
     public function index()
     {
         //
+        $TipoPagos = TipoPago::all();
+        return view('admin.AdministracionGeneral.index', compact('TipoPagos'));
     }
 
     /**
@@ -29,6 +31,16 @@ class TipoPagoController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+        'descripcion' => 'required|string|max:100'
+        ]);
+
+        TipoPago::create([
+            'descripcion' => $request->descripcion
+        ]);
+
+        return redirect()->back()->with('success', 'Tipo de pago agregado correctamente');
+
     }
 
     /**
@@ -50,16 +62,28 @@ class TipoPagoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, TipoPago $tipoPago)
+    public function update($id, Request $request)
     {
         //
+          $request->validate([
+            'descripcion' => 'required|max:100'
+        ]);
+
+        $tipoPago = TipoPago::findOrFail($id);
+        $tipoPago->update([
+            'descripcion' => $request->descripcion
+        ]);
+         return redirect()->back()->with('success', 'Tipo de pago actualizado correctamente');
+
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(TipoPago $tipoPago)
+    public function destroy($id)
     {
         //
+        TipoPago::findOrFail($id)->delete();
+         return redirect()->back()->with('success', 'Tipo de pago eliminado correctamente');
     }
 }

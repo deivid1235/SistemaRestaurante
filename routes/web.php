@@ -8,6 +8,9 @@ use App\Http\Controllers\ConfiguracionVisualController;
 use App\Http\Controllers\LibroReclamacionController;
 use App\Http\Controllers\AdministracionGeneralController;
 use App\Http\Controllers\MetodopagoController;
+use App\Http\Controllers\TipoPagoController;
+use App\Http\Controllers\EmpresaController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -38,9 +41,27 @@ Route::middleware('auth')->group(function () {
     // Rutas para Libro de Reclamaciones
     Route::get('/admin/LibroReclamacion', [LibroReclamacionController::class, 'index'])->name('admin.LibroReclamacion.index');
     Route::get('/admin/LibroReclamacion/{libroReclamacion}', [LibroReclamacionController::class, 'show'])->name('admin.LibroReclamacion.show');
+    Route::get('/admin/LibroReclamacion/{libroReclamacion}/pdf', [LibroReclamacionController::class, 'pdf'])->name('admin.LibroReclamacion.pdf');
+    Route::get('/admin/LibroReclamacion/{libroReclamacion}/print', [LibroReclamacionController::class, 'print'])->name('admin.LibroReclamacion.print');
+
     // Rutas para Administración General
     Route::get('/admin/AdministracionGeneral', [AdministracionGeneralController::class, 'index'])->name('admin.AdministracionGeneral.index');
-    Route::post('/admin/MetodoPago', [MetodopagoController::class, 'store'])->name('admin.Metodopago.store');
-  
+   // Empresa
+    Route::get('/admin/Empresa', [EmpresaController::class, 'index'])->name('admin.Empresa.index');
+    Route::get('/admin/Empresa/{id}/edit', [EmpresaController::class, 'edit'])->name('admin.Empresa.edit');
+    Route::put('/admin/Empresa/{id}', [EmpresaController::class, 'update'])->name('admin.Empresa.update');
+
+    // Rutas del tipo de pago
+    Route::post('/admin/TipoPago', [TipoPagoController::class, 'store'])->name('admin.TipoPago.store');
+    Route::put('/admin/TipoPago/{id}', [TipoPagoController::class, 'update'])->name('admin.TipoPago.update');
+    Route::delete('/admin/TipoPago/{id}', [TipoPagoController::class, 'destroy'])->name('admin.TipoPago.destroy');
+    // Rutas del método de pago
+    Route::get('/admin/MetodoPago', [MetodopagoController::class, 'index'])->name('admin.MetodoPago.index');
+    Route::post('/admin/MetodoPago', [MetodopagoController::class, 'store'])->name('admin.MetodoPago.store');
+    Route::put('/admin/MetodoPago/{id}', [MetodopagoController::class, 'update'])->name('admin.MetodoPago.update');
+    Route::delete('/admin/MetodoPago/{id}', [MetodopagoController::class, 'destroy'])->name('admin.MetodoPago.destroy');
+    Route::post('/admin/MetodoPago/toggle/{id}', [MetodopagoController::class, 'toggleEstado'])->name('admin.MetodoPago.toggle');
+    
+
     
 });

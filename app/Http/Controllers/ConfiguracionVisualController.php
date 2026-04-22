@@ -78,15 +78,13 @@ class ConfiguracionVisualController extends Controller
         $request->validate([
             'imagen' => 'required|image|mimes:jpg,jpeg,png,svg|max:2048'
         ]);
-
-        // eliminar imagen antigua
+       
         $ruta = public_path('carrusel/' . $request->old);
 
         if (File::exists($ruta)) {
             File::delete($ruta);
         }
 
-        // guardar nueva
         $file = $request->file('imagen');
         $nombre = time() . '.' . $file->getClientOriginalExtension();
         $file->move(public_path('carrusel'), $nombre);
@@ -138,12 +136,13 @@ class ConfiguracionVisualController extends Controller
 
         $file->move($carpeta, $nombre);
 
-        // eliminar anteriores
         foreach (File::files($carpeta) as $img) {
             if ($img->getFilename() !== $nombre) {
                 File::delete($img);
             }
         }
+
+        session(['logo' => 'perfil/' . $nombre]);
 
         return redirect()->back()->with('success', 'Logo guardado correctamente');
     }

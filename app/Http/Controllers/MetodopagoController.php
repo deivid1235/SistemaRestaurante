@@ -2,17 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Metodopago;
+use App\Models\MetodoPago;
+use App\Models\TipoPago;
 use Illuminate\Http\Request;
 
-class MetodopagoController extends Controller
+class MetodoPagoController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-       //
+        //
+        $metodos = MetodoPago::with('tipoPago')->latest()->get();
+        $tipos = TipoPago::all();
+
+        return view('admin.MetodoPago.index', compact('metodos', 'tipos'));
     }
 
     /**
@@ -29,13 +34,26 @@ class MetodopagoController extends Controller
     public function store(Request $request)
     {
         //
-       
+        
+        $request->validate([
+            'tipo_pago_id' => 'required|exists:tipo_pagos,id',
+            'descripcion' => 'required|string|max:255',
+        ]);
+
+        MetodoPago::create([
+            'tipo_pago_id' => $request->tipo_pago_id,
+            'descripcion' => $request->descripcion,
+            'estado' => true,
+        ]);
+
+        return redirect()->back()->with('success', 'Método de pago creado correctamente');
+        
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Metodopago $metodopago)
+    public function show(MetodoPago $metodoPago)
     {
         //
     }
@@ -43,7 +61,7 @@ class MetodopagoController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Metodopago $metodopago)
+    public function edit(MetodoPago $metodoPago)
     {
         //
     }
@@ -51,16 +69,50 @@ class MetodopagoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Metodopago $metodopago)
+    public function update(Request $request, $id)
     {
         //
+        $request->validate([
+            'tipo_pago_id' => 'required|exists:tipo_pagos,id',
+            'descripcion' => 'required|string|max:255',
+            'estado' => 'required|boolean',
+        ]);
+
+        $metodo = MetodoPago::findOrFail($id);
+
+        $metodo->update([
+            'tipo_pago_id' => $request->tipo_pago_id,
+            'descripcion' => $request->descripcion,
+            'estado' => $request->estado,
+        ]);
+
+        return redirect()->back()->with('success', 'Método de pago actualizado');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Metodopago $metodopago)
+    public function destroy($id)
     {
         //
+        $metodo = MetodoPago::findOrFail($id);
+        $metodo->delete();
+
+        return redirect()->back()->with('success', 'Método de pago eliminado');
     }
+
+    public function toggleEstado($id)
+    {
+        $metodo = MetodoPago::findOrFail($id);
+
+        $metodo->estado = !$metodo->estado;
+        $metodo->save();
+
+        return response()->json([
+            'success' => true,
+            'estado' => $metodo->estado
+        ]);
+    }
+
+    
 }

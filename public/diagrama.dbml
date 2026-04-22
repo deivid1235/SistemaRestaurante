@@ -2,7 +2,49 @@
 Table tipo_pagos{
     id bigint [pk, increment, note: 'ID único autoincrementable']
     descripcion varchar 
+
+    created_at timestamp
+    updated_at timestamp
 }
+Table metodopagos{
+    id bigint [pk, increment, note: 'ID único autoincrementable']
+    tipo_pago_id bigint [not null, ref: > tipo_pagos.id]
+    estado enum('activo','inactivo') [default: 'activo']
+    descripcion varchar 
+
+    created_at timestamp
+    updated_at timestamp
+}
+
+Table empresas {
+    id bigint [pk, increment]
+
+    ruc char(11) [not null, unique]
+    razon_social varchar(255) [not null]
+    nombre_comercial varchar(255)
+
+    direccion_comercial varchar(255)
+    direccion_fiscal varchar(255)
+
+    ubigeo char(6)
+    departamento varchar(100)
+    provincia varchar(100)
+    distrito varchar(100)
+
+    modo enum('produccion','beta') [default: 'beta']
+
+    usuariosol varchar(100)
+    clave_sol text
+    clavecertificado text
+
+    logo varchar(255)
+    celular varchar(20)
+    email varchar(150)
+
+    created_at timestamp
+    updated_at timestamp
+}
+
 
 Table reclamos {
     id bigint [pk, increment, note: 'ID único autoincrementable']
@@ -27,5 +69,8 @@ Table reclamos {
     detalle_solicitud text
     pedido_concreto text
     acepto_politicas boolean [default: true]
+
+    created_at timestamp
+    updated_at timestamp
 }
 

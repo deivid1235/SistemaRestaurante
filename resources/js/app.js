@@ -9,7 +9,7 @@ function setupMobileMenu() {
 
 document.addEventListener('DOMContentLoaded', setupMobileMenu);
 
-// Login del sistema
+// login del sistema 
 document.addEventListener('DOMContentLoaded', function () {
     const modal = document.getElementById('login-modal');
     const closeBtn = document.getElementById('close-login-modal');
@@ -57,9 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
 let images = [];
 let idx = 0;
 
-
-
-/* INICIALIZACIÓN */
+// Inicializacion
 document.addEventListener('DOMContentLoaded', () => {
 
     images = window.carruselImages || [];
@@ -86,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Libro de reclamaciones Departamentos → provincia → distrito
+// Libro de reclamaciones 
 document.addEventListener('DOMContentLoaded', function() {
 
     let ubigeoData = {};
@@ -170,65 +168,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 });
 
-// Mostrar mensaje de éxito en el libro de reclamaciones
-document.addEventListener('DOMContentLoaded', function () {
 
-    const successElement = document.getElementById('flash-success-message');
 
-    if (successElement) {
-        const mensaje = successElement.getAttribute('data-message');
 
-        Swal.fire({
-            showConfirmButton: true,
-            confirmButtonText: 'Continuar',
-            buttonsStyling: false,
-
-            // ⏱ TIEMPO AUTOMÁTICO
-            timer: 3000, // 3 segundos
-            timerProgressBar: true,
-
-            background: '#ffffff',
-            backdrop: `rgba(15, 23, 42, 0.5)`,
-
-            html: `
-                <div class="flex flex-col items-center py-6 px-4">
-
-                    <div class="w-24 h-24 rounded-full bg-emerald-100 flex items-center justify-center shadow-inner mb-6">
-                        <div class="w-16 h-16 rounded-full bg-emerald-200 flex items-center justify-center">
-                            <svg class="w-10 h-10 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                        </div>
-                    </div>
-
-                    <h2 class="text-3xl font-extrabold text-slate-900 mb-2">
-                        ¡Excelente!
-                    </h2>
-
-                    <p class="text-slate-500 text-center text-sm px-4 leading-relaxed">
-                        ${mensaje}
-                    </p>
-
-                </div>
-            `,
-
-            customClass: {
-                popup: 'rounded-3xl shadow-2xl border border-slate-100 w-[26rem]',
-                confirmButton: `
-                    bg-emerald-500 hover:bg-emerald-600 text-white
-                    font-bold px-6 py-3 rounded-xl w-full
-                    shadow-lg shadow-emerald-500/30
-                    transition-all duration-300
-                    hover:-translate-y-1 active:scale-95
-                    focus:ring-4 focus:ring-emerald-200
-                `
-            }
-        });
-    }
-
-});
-
-// Validación de formulario en el libro de reclamaciones
 document.addEventListener('DOMContentLoaded', function () {
 
     const tipoDoc = document.getElementById('tipo_documento');
@@ -318,8 +260,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 });
 
-//Colores
-
+//Modo color
 function applyColor(color) {
     document.documentElement.style.setProperty('--primary', color);
 
@@ -358,7 +299,7 @@ window.applyColor = applyColor;
 window.guardarColorActual = guardarColorActual;
 
 
-// TABS CONFIGURACIÓN
+// Tabs configuracion
 export function showTab(tabName) {
     document.querySelectorAll('.tab-content').forEach(content => {
         content.classList.add('hidden');
@@ -443,5 +384,171 @@ document.addEventListener("DOMContentLoaded", function () {
         preview.src = "";
         container.classList.add("hidden");
     });
+
+});
+
+
+//Modal Tipo pago
+document.addEventListener('DOMContentLoaded', function () {
+
+    const modal = document.getElementById('modalPago');
+    const btnAbrir = document.getElementById('btnAbrirModal');
+    const btnCerrar = document.getElementById('btnCerrarModal');
+    const form = document.getElementById('formTipoPago');
+
+    // ABRIR MODAL
+    btnAbrir.addEventListener('click', function () {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    });
+
+    // CERRAR MODAL
+    btnCerrar.addEventListener('click', function () {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    });
+
+    // CERRAR AL HACER CLICK FUERA
+    window.addEventListener('click', function (e) {
+        if (e.target === modal) {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+    });
+
+    // EDITAR
+    document.querySelectorAll('.btnEditar').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const id = this.dataset.id;
+            const descripcion = this.dataset.descripcion;
+
+            document.getElementById('tipoPagoId').value = id;
+            document.getElementById('descripcion').value = descripcion;
+
+            form.action = '/admin/TipoPago/' + id;
+
+            if (!document.getElementById('methodField')) {
+                let input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = '_method';
+                input.value = 'PUT';
+                input.id = 'methodField';
+                form.appendChild(input);
+            }
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        });
+    });
+
+});
+
+// Cambiar pestañas
+window.switchTab = function(event, tabId) {
+    event.preventDefault();
+
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+
+    const tab = document.getElementById('tab-' + tabId);
+    if (tab) tab.classList.remove('hidden');
+
+    document.querySelectorAll('.nav-btn').forEach(b => {
+        b.classList.remove('active-tab');
+        b.classList.add('text-slate-500');
+    });
+
+    event.currentTarget.classList.add('active-tab');
+    event.currentTarget.classList.remove('text-slate-500');
+};
+
+
+// Cambiar modo (Producción / Beta)
+window.toggleModo = function(checkbox) {
+    const textEl = document.getElementById('modo-label');
+
+    if (!textEl) return;
+
+    if (checkbox.checked) {
+        textEl.innerText = "Modo Producción";
+    } else {
+        textEl.innerText = "Modo Beta (Pruebas)";
+    }
+};
+
+
+//Modal de metodo de pago
+document.addEventListener('DOMContentLoaded', function () {
+
+    const modal = document.getElementById('paymentModal');
+    const modalIcon = document.getElementById('modalIcon');
+    const btnUp = document.getElementById('btnBackToTop');
+
+    window.openModal = function (mode, data = null) {
+
+        if (!modal) return;
+
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+
+        const form = document.getElementById('paymentForm');
+        const title = document.getElementById('modalTitle');
+        const methodField = document.getElementById('methodField');
+
+        if (mode === 'create') {
+
+            title.innerText = 'Nuevo Método';
+
+            modalIcon.innerHTML = '<i class="fa fa-plus"></i>';
+            modalIcon.className = "w-12 h-12 bg-emerald-50 text-emerald-500 rounded-2xl flex items-center justify-center text-xl";
+
+            form.action = "/admin/MetodoPago";
+
+            methodField.innerHTML = '';
+            form.reset();
+
+            document.getElementById('inputTipo').value = "";
+            document.getElementById('inputEstado').value = "";
+
+        } else {
+
+            title.innerText = 'Editar Método';
+
+            modalIcon.innerHTML = '<i class="fa fa-edit"></i>';
+            modalIcon.className = "w-12 h-12 bg-blue-50 text-[#0096D9] rounded-2xl flex items-center justify-center text-xl";
+
+            form.action = `/admin/MetodoPago/${data.id}`;
+
+            methodField.innerHTML = '<input type="hidden" name="_method" value="PUT">';
+
+            document.getElementById('inputDescripcion').value = data.descripcion;
+            document.getElementById('inputTipo').value = data.tipo_pago_id;
+            document.getElementById('inputEstado').value = data.estado;
+        }
+    };
+
+    window.closeModal = function () {
+        if (!modal) return;
+
+        modal.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    };
+
+    
+    if (btnUp) {
+        window.addEventListener('scroll', function () {
+
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                btnUp.classList.remove('opacity-0', 'invisible');
+                btnUp.classList.add('opacity-100', 'visible');
+            } else {
+                btnUp.classList.add('opacity-0', 'invisible');
+                btnUp.classList.remove('opacity-100', 'visible');
+            }
+
+        });
+    }
+    window.scrollToTop = function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
 
 });

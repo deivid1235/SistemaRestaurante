@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>@yield('title', 'CorporationAOSC - Experiencia Gourmet Minimalista')</title>
-    <link rel="icon" type="image/svg+xml" href="{{ asset('iconos/logotipo.png') }}">
+    <link rel="icon" type="image/svg+xml" href="{{ asset('iconos/logotipo.svg') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
@@ -147,27 +147,40 @@
                         <li><a href="#" class="hover:text-yellow-500 transition">Política de Privacidad</a></li>
                         <li>
                             <a href="{{ route('libro.reclamacion') }}" 
-                            class="hover:text-yellow-500 transition block">
-                                📖 Libro de Reclamaciones
+                            class="hover:text-yellow-500 transition flex items-center gap-2">
+                            
+                                <img src="{{ asset('imagen/libroReclamaciones.png') }}" 
+                                    alt="Libro" 
+                                    class="w-70 h-9 object-contain">
+
+                                <span>Libro de Reclamaciones</span>
+
                             </a>
                         </li>
                     </ul>
                 </div>
                 <!-- REDES -->
-                <div>
-                    <h4 class="text-xl font-semibold text-white mb-4">Síguenos</h4>
-                    <div class="flex space-x-4 text-white">
-                        <a href="#" class="p-2 bg-gray-700 rounded-full hover:bg-yellow-500 hover:text-gray-900 transition shadow-md">
-                            <i class="fab fa-facebook-f"></i>
+                <div class="reveal">
+                    <h4 class="text-xs font-black uppercase tracking-[0.3em] text-white mb-6">Síguenos</h4>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#" class="group relative w-12 h-12 flex items-center justify-center rounded-2xl bg-white/5 border border-white/10 shadow-lg transition-all duration-500 hover:bg-[#1877F2] hover:-translate-y-2 hover:shadow-[#1877F2]/40">
+                            <i class="fab fa-facebook-f text-white text-lg transition-transform duration-500 group-hover:scale-110"></i>
+                            <span class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-white rounded-full opacity-0 group-hover:opacity-100 transition-all"></span>
                         </a>
-                        <a href="#" class="p-2 bg-gray-700 rounded-full hover:bg-yellow-500 hover:text-gray-900 transition shadow-md">
-                            <i class="fab fa-instagram"></i>
+
+                        <a href="#" class="group relative w-12 h-12 flex items-center justify-center rounded-2xl bg-white/5 border border-white/10 shadow-lg transition-all duration-500 hover:bg-gradient-to-tr hover:from-[#f9ce34] hover:via-[#ee2a7b] hover:to-[#6228d7] hover:-translate-y-2 hover:shadow-[#ee2a7b]/40">
+                            <i class="fab fa-instagram text-white text-lg transition-transform duration-500 group-hover:scale-110"></i>
+                            <span class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-white rounded-full opacity-0 group-hover:opacity-100 transition-all"></span>
                         </a>
-                        <a href="#" class="p-2 bg-gray-700 rounded-full hover:bg-yellow-500 hover:text-gray-900 transition shadow-md">
-                            <i class="fab fa-tiktok"></i>
+
+                        <a href="#" class="group relative w-12 h-12 flex items-center justify-center rounded-2xl bg-white/5 border border-white/10 shadow-lg transition-all duration-500 hover:bg-black hover:-translate-y-2 hover:shadow-cyan-400/20 hover:border-cyan-400/50">
+                            <i class="fab fa-tiktok text-white text-lg transition-transform duration-500 group-hover:scale-110"></i>
+                            <span class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-white rounded-full opacity-0 group-hover:opacity-100 transition-all"></span>
                         </a>
-                        <a href="#" class="p-2 bg-gray-700 rounded-full hover:bg-yellow-500 hover:text-gray-900 transition shadow-md">
-                            <i class="fab fa-whatsapp"></i>
+
+                        <a href="#" class="group relative w-12 h-12 flex items-center justify-center rounded-2xl bg-white/5 border border-white/10 shadow-lg transition-all duration-500 hover:bg-[#25D366] hover:-translate-y-2 hover:shadow-[#25D366]/40">
+                            <i class="fab fa-whatsapp text-white text-lg transition-transform duration-500 group-hover:scale-110"></i>
+                            <span class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-white rounded-full opacity-0 group-hover:opacity-100 transition-all"></span>
                         </a>
                     </div>
                 </div>

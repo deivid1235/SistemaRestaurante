@@ -4,9 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Metodopago extends Model
+class MetodoPago extends Model
 {
     //
-    protected $table = 'metodos_pago';
-    protected $fillable = ['descripcion'];
+    protected $table = 'metodo_pagos';
+
+    protected $fillable = [
+        'nombre',
+        'descripcion',
+        'tipo_pago_id',
+        'estado'
+    ];
+
+    public function tipoPago()
+    {
+        return $this->belongsTo(TipoPago::class, 'tipo_pago_id');
+    }
 }

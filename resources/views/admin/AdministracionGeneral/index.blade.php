@@ -1,8 +1,8 @@
 @extends('layouts.dashboard')
 @section('title', 'Ajustes')
-
 @section('content')
-<div class="p-4 md:p-8 bg-gray-100 min-h-full transition-all duration-500">
+
+<div class="w-full md:p-8 bg-gray-100 min-h-full transition-all duration-500">
     
     <div class="rounded-t-3xl p-6 text-white shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4 relative overflow-hidden" 
         style="background: linear-gradient(135deg, var(--primary) 0%, #4fc3f7 100%);">
@@ -64,7 +64,7 @@
                 </div>
 
                 <div class="flex flex-col gap-3">
-                    <a href="{{ url('/empresa-datos') }}" class="group flex items-center gap-4 p-4 rounded-2xl border border-gray-100 shadow-sm transition-all duration-300 hover:bg-blue-50 hover:shadow-md hover:-translate-y-1 hover:border-blue-200">
+                    <a href="{{ route('admin.Empresa.index') }}" class="group flex items-center gap-4 p-4 rounded-2xl border border-gray-100 shadow-sm transition-all duration-300 hover:bg-blue-50 hover:shadow-md hover:-translate-y-1 hover:border-blue-200">
                         <div class="w-11 h-11 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-inner group-hover:rotate-12 transition-transform">
                             <i class="fa fa-hotel"></i>
                         </div>
@@ -94,7 +94,7 @@
                         </div>
                     </a>
 
-                    <a href="{{ url('/pagos-tipos') }}" class="group flex items-center gap-4 p-4 rounded-2xl border border-gray-100 shadow-sm transition-all duration-300 hover:bg-blue-50 hover:shadow-md hover:-translate-y-1 hover:border-blue-200">
+                    <a id="btnAbrirModal" class="group flex items-center gap-4 p-4 rounded-2xl border border-gray-100 shadow-sm transition-all duration-300 hover:bg-blue-50 hover:shadow-md hover:-translate-y-1 hover:border-blue-200">
                         <div class="w-11 h-11 bg-blue-700 rounded-xl flex items-center justify-center text-white shadow-inner group-hover:rotate-12 transition-transform">
                             <i class="fa fa-credit-card"></i>
                         </div>
@@ -104,7 +104,7 @@
                         </div>
                     </a>
 
-                    <a href="{{ url('/metodos-pago') }}" class="group flex items-center gap-4 p-4 rounded-2xl border border-gray-100 shadow-sm transition-all duration-300 hover:bg-blue-50 hover:shadow-md hover:-translate-y-1 hover:border-blue-200">
+                    <a href="{{ url('/admin/MetodoPago') }}" class="group flex items-center gap-4 p-4 rounded-2xl border border-gray-100 shadow-sm transition-all duration-300 hover:bg-blue-50 hover:shadow-md hover:-translate-y-1 hover:border-blue-200">
                         <div class="w-11 h-11 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-inner group-hover:rotate-12 transition-transform">
                             <i class="fa fa-credit-card"></i>
                         </div>
@@ -177,4 +177,96 @@
         </div>
     </div>
 </div>
+
+<div id="modalPago" class="fixed inset-0 hidden items-center justify-center z-50 transition-all duration-300">
+    <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity"></div>
+
+    <div class="relative bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden transform transition-all">
+        
+        <div class="p-6 text-white flex justify-between items-center" 
+             style="background: linear-gradient(135deg, var(--primary) 0%, #4fc3f7 100%);">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center border border-white/30">
+                    <i class="fa fa-credit-card text-lg"></i>
+                </div>
+                <h2 class="text-xl font-black tracking-tight uppercase">Tipos de Pago</h2>
+            </div>
+            <button id="btnCerrarModal" class="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors">
+                <i class="fa fa-times"></i>
+            </button>
+        </div>
+
+        <div class="p-6 bg-gray-50">
+            <form id="formTipoPago" action="{{ route('admin.TipoPago.store') }}" method="POST" class="mb-6 group">
+                @csrf
+                <input type="hidden" name="id" id="tipoPagoId">
+                
+                <label class="block text-[10px] font-black uppercase text-gray-400 tracking-widest mb-1 ml-1">Nuevo Método</label>
+                <div class="flex gap-2">
+                    <div class="relative flex-1">
+                        <i class="fa fa-edit absolute left-3 top-3.5 text-gray-300 group-focus-within:text-blue-500 transition-colors"></i>
+                        <input type="text" name="descripcion" id="descripcion"
+                            placeholder="Ej: YAPE, PLIN, EFECTIVO"
+                            class="w-full pl-10 pr-4 py-3 rounded-2xl border-none ring-1 ring-gray-200 focus:ring-2 focus:ring-blue-500 bg-white shadow-sm transition-all outline-none text-gray-700"
+                            required>
+                    </div>
+                    <button type="submit" id="btnGuardar"
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-2xl font-bold shadow-lg shadow-blue-200 transition-all active:scale-95 flex items-center gap-2">
+                        <i class="fa fa-save"></i>
+                        <span>Guardar</span>
+                    </button>
+                </div>
+            </form>
+
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                <div class="max-h-72 overflow-y-auto custom-scrollbar">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50 border-b border-gray-100">
+                            <tr>
+                                <th class="px-4 py-3 text-[10px] font-black text-gray-400 uppercase tracking-widest text-center italic w-16">ID</th>
+                                <th class="px-4 py-3 text-[10px] font-black text-gray-400 uppercase tracking-widest">Descripción</th>
+                                <th class="px-4 py-3 text-[10px] font-black text-gray-400 uppercase tracking-widest text-right">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-50">
+                            @forelse($TipoPagos ?? [] as $tipoPago)
+                            <tr class="hover:bg-blue-50/30 transition-colors">
+                                <td class="px-4 py-3 text-xs font-bold text-gray-400 text-center">{{ $tipoPago->id }}</td>
+                                <td class="px-4 py-3 text-sm font-bold text-gray-700 uppercase">{{ $tipoPago->descripcion }}</td>
+                                <td class="px-4 py-3">
+                                    <div class="flex justify-end gap-2">
+                                        <button 
+                                            class="btnEditar w-8 h-8 flex items-center justify-center rounded-lg bg-amber-100 text-amber-600 hover:bg-amber-500 hover:text-white transition-all shadow-sm"
+                                            data-id="{{ $tipoPago->id }}"
+                                            data-descripcion="{{ $tipoPago->descripcion }}">
+                                            <i class="fa fa-pen text-xs"></i>
+                                        </button>
+
+                                        <form action="{{ route('admin.TipoPago.destroy', $tipoPago->id) }}" method="POST"
+                                              onsubmit="return confirm('¿Eliminar este registro?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="w-8 h-8 flex items-center justify-center rounded-lg bg-red-100 text-red-600 hover:bg-red-500 hover:text-white transition-all shadow-sm">
+                                                <i class="fa fa-trash text-xs"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="3" class="px-4 py-10 text-center">
+                                    <i class="fa fa-folder-open text-gray-200 text-3xl mb-2 block"></i>
+                                    <span class="text-xs text-gray-400 font-medium">No hay métodos registrados</span>
+                                </td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection

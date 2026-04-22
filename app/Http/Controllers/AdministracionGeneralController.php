@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
+use App\Models\TipoPago;
 
 class AdministracionGeneralController extends Controller
 {
@@ -12,7 +12,10 @@ class AdministracionGeneralController extends Controller
     public function index()
     {
         //
-        return view('admin.AdministracionGeneral.index');
+        
+        $TipoPagos = TipoPago::all();
+        return view('admin.AdministracionGeneral.index', compact('TipoPagos'));
+
     }
 
     /**

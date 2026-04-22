@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\LibroReclamacion;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class LibroReclamacionController extends Controller
 {
@@ -123,4 +124,17 @@ class LibroReclamacionController extends Controller
     {
         //
     }
+
+
+    public function pdf(LibroReclamacion $libroReclamacion)
+    {
+        $pdf = Pdf::loadView('admin.LibroReclamacion.PDF', compact('libroReclamacion'));
+        return $pdf->download('reclamo-'.$libroReclamacion->id.'.pdf');
+    }
+    
+    public function print(LibroReclamacion $libroReclamacion)
+    {
+        return view('admin.LibroReclamacion.PDF', compact('libroReclamacion'));
+    }
+   
 }
