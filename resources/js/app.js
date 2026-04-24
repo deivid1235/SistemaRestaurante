@@ -11,46 +11,47 @@ document.addEventListener('DOMContentLoaded', setupMobileMenu);
 
 // login del sistema 
 document.addEventListener('DOMContentLoaded', function () {
+    const button = document.getElementById('mobile-menu-button');
+    const menu = document.getElementById('mobile-menu-Celular');
+
+    if (button && menu) {
+        button.addEventListener('click', () => {
+            menu.classList.toggle('open');
+        });
+    }
+
+    
+    const openBtn = document.getElementById('open-login-modal');
+    const openBtnMobile = document.getElementById('open-login-modal-Celular');
+
     const modal = document.getElementById('login-modal');
     const closeBtn = document.getElementById('close-login-modal');
-    const openBtns = document.querySelectorAll('.open-login');
-    openBtns.forEach(btn => {
-        btn.addEventListener('click', function (e) {
-            if (!window.location.href.includes('inicio')) return;
 
+    if (openBtn && modal) {
+        openBtn.addEventListener('click', (e) => {
             e.preventDefault();
-
-            if (modal) {
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
-            }
-        });
-    });
-
-    if (closeBtn) {
-        closeBtn.addEventListener('click', function () {
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        });
-    }
-
-    if (modal) {
-        modal.addEventListener('click', function (e) {
-            if (e.target === modal) {
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
-            }
-        });
-    }
-
-    const params = new URLSearchParams(window.location.search);
-
-    if (params.get('login') === 'true') {
-        if (modal) {
             modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        }
+        });
     }
+
+    if (openBtnMobile && modal) {
+        openBtnMobile.addEventListener('click', (e) => {
+            e.preventDefault();
+            modal.classList.remove('hidden');
+        });
+    }
+
+    if (closeBtn && modal) {
+        closeBtn.addEventListener('click', () => {
+            modal.classList.add('hidden');
+        });
+    }
+
+    window.addEventListener('click', (e) => {
+        if (modal && e.target === modal) {
+            modal.classList.add('hidden');
+        }
+    });
 
 });
 
