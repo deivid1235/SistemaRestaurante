@@ -33,7 +33,7 @@
     {{-- CONTENEDOR DE DOS COLUMNAS --}}
     <div class="flex flex-col lg:flex-row gap-6">
         
-        {{-- COLUMNA IZQUIERDA: TABLA --}}
+
         <div class="flex-1 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden animate-in fade-in slide-in-from-left duration-700">
             <div class="p-5 border-b flex items-center justify-between bg-white">
                 <div class="flex items-center gap-3">
@@ -123,8 +123,7 @@
 </div>
 
 {{-- MODAL DINÁMICO CENTRADO --}}
-<div id="paymentModal" class="fixed inset-0 z- hidden">
-    {{-- Fondo oscuro --}}
+<div id="paymentModal" class="fixed inset-0 z-50  hidden">
     <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onclick="closeModal()"></div>
     
     <div class="flex min-h-full items-center justify-center p-4 text-center">
@@ -139,7 +138,6 @@
                 @csrf
                 <div id="methodField"></div>
 
-                {{-- Campo Descripción --}}
                 <div class="space-y-1">
                     <label class="text-[10px] font-black text-slate-400 uppercase ml-2 tracking-widest">Descripción</label>
                     <div class="relative">
@@ -149,7 +147,6 @@
                     </div>
                 </div>
                 
-                {{-- Campo Tipo de Pago --}}
                 <div class="space-y-1">
                     <label class="text-[10px] font-black text-slate-400 uppercase ml-2 tracking-widest">Tipo de Pago</label>
                     <div class="relative">
@@ -164,7 +161,6 @@
                     </div>
                 </div>
 
-                {{-- Campo Estado --}}
                 <div class="space-y-1">
                     <label class="text-[10px] font-black text-slate-400 uppercase ml-2 tracking-widest">Estado</label>
                     <div class="relative">
@@ -179,13 +175,11 @@
                 </div>
 
                 <div class="flex gap-4 pt-6">
-                    {{-- Botón Cancelar: Estilo sutil --}}
                     <button type="button" onclick="closeModal()" 
                         class="flex-1 py-4 bg-slate-100 hover:bg-slate-200 rounded-2xl font-black text-[11px] text-slate-500 uppercase transition-all active:scale-95">
                         CANCELAR
                     </button>
 
-                    {{-- Botón Guardar: Con el gradiente exacto --}}
                     <button type="submit" 
                         class="flex-1 py-4 rounded-2xl font-black text-[11px] text-white uppercase shadow-lg shadow-blue-200 transition-all active:scale-95 hover:opacity-90"
                         style="background: linear-gradient(135deg, var(--primary) 0%, #0096D9 100%);">

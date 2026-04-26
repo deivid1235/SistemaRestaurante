@@ -10,6 +10,7 @@ use App\Http\Controllers\AdministracionGeneralController;
 use App\Http\Controllers\MetodopagoController;
 use App\Http\Controllers\TipoPagoController;
 use App\Http\Controllers\EmpresaController;
+use App\Http\Controllers\TipoDocumentoController;
 
 
 Route::get('/', function () {
@@ -46,7 +47,7 @@ Route::middleware('auth')->group(function () {
 
     // Rutas para Administración General
     Route::get('/admin/AdministracionGeneral', [AdministracionGeneralController::class, 'index'])->name('admin.AdministracionGeneral.index');
-   // Empresa
+    // Empresa
     Route::get('/admin/Empresa', [EmpresaController::class, 'index'])->name('admin.Empresa.index');
     Route::get('/admin/Empresa/{id}/edit', [EmpresaController::class, 'edit'])->name('admin.Empresa.edit');
     Route::put('/admin/Empresa/{id}', [EmpresaController::class, 'update'])->name('admin.Empresa.update');
@@ -61,7 +62,22 @@ Route::middleware('auth')->group(function () {
     Route::put('/admin/MetodoPago/{id}', [MetodopagoController::class, 'update'])->name('admin.MetodoPago.update');
     Route::delete('/admin/MetodoPago/{id}', [MetodopagoController::class, 'destroy'])->name('admin.MetodoPago.destroy');
     Route::post('/admin/MetodoPago/toggle/{id}', [MetodopagoController::class, 'toggleEstado'])->name('admin.MetodoPago.toggle');
-    
+    // Rutas del tipo de documento
+
+Route::get('/admin/TipoDocumento', [TipoDocumentoController::class, 'index'])
+    ->name('admin.TipoDocumento.index');
+
+Route::post('/admin/TipoDocumento', [TipoDocumentoController::class, 'store'])
+    ->name('admin.TipoDocumento.store');
+
+Route::get('/admin/TipoDocumento/{id}/edit', [TipoDocumentoController::class, 'edit'])
+    ->name('admin.TipoDocumento.edit');
+
+Route::put('/admin/TipoDocumento/{id}', [TipoDocumentoController::class, 'update'])
+    ->name('admin.TipoDocumento.update');
+
+Route::delete('/admin/TipoDocumento/{id}', [TipoDocumentoController::class, 'destroy'])
+    ->name('admin.TipoDocumento.destroy');
 
     
 });

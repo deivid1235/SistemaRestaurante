@@ -553,3 +553,54 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
 });
+
+// Modal de tipo de documento
+document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('modalDocumento');
+    const overlay = document.getElementById('modalOverlay');
+    const content = document.getElementById('modalContent');
+    const form = document.getElementById('formDocumento');
+    const modalTitle = document.getElementById('modalTitle');
+
+    const storeUrl = "/admin/TipoDocumento"; 
+
+    const openModal = (edit = false, data = null) => {
+        modal.classList.replace('hidden', 'flex');
+
+        setTimeout(() => {
+            overlay.classList.replace('opacity-0', 'opacity-100');
+            content.classList.replace('opacity-0', 'opacity-100');
+            content.classList.replace('scale-90', 'scale-100');
+        }, 10);
+
+        if (edit) {
+            modalTitle.innerText = 'Editar Documento';
+            form.action = `/admin/TipoDocumento/${data.id}`;
+            document.getElementById('methodField').value = 'PUT';
+            document.getElementById('inputDesc').value = data.descripcion;
+            document.getElementById('inputSerie').value = data.serie;
+            document.getElementById('inputNum').value = data.numero;
+            document.getElementById('inputEstado').value = data.estado;
+        } else {
+            modalTitle.innerText = 'Nuevo Documento';
+            form.action = storeUrl; 
+            document.getElementById('methodField').value = 'POST';
+            form.reset();
+        }
+    };
+
+    const closeModal = () => {
+        overlay.classList.replace('opacity-100', 'opacity-0');
+        content.classList.replace('opacity-100', 'opacity-0');
+        content.classList.replace('scale-100', 'scale-90');
+
+        setTimeout(() => modal.classList.replace('flex', 'hidden'), 300);
+    };
+
+    document.getElementById('btnNuevo')?.addEventListener('click', () => openModal(false));
+    document.getElementById('btnCerrar')?.addEventListener('click', closeModal);
+    document.getElementById('btnCancelar')?.addEventListener('click', closeModal);
+    overlay?.addEventListener('click', closeModal);
+
+    window.editarDocumento = (data) => openModal(true, data);
+});

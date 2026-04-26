@@ -84,7 +84,7 @@
                         </div>
                     </a>
 
-                    <a href="{{ url('/documentos-tipos') }}" class="group flex items-center gap-4 p-4 rounded-2xl border border-gray-100 shadow-sm transition-all duration-300 hover:bg-blue-50 hover:shadow-md hover:-translate-y-1 hover:border-blue-200">
+                    <a href="{{ url('/admin/TipoDocumento') }}" class="group flex items-center gap-4 p-4 rounded-2xl border border-gray-100 shadow-sm transition-all duration-300 hover:bg-blue-50 hover:shadow-md hover:-translate-y-1 hover:border-blue-200">
                         <div class="w-11 h-11 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-inner group-hover:rotate-12 transition-transform">
                             <i class="fa fa-file-alt"></i>
                         </div>
