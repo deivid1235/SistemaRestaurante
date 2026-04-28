@@ -1,3 +1,20 @@
+Table salons {
+    id_salon int [pk, increment]
+    nombre varchar(100) [not null]
+    estado enum('activo', 'inactivo')
+    created_at timestamp
+    updated_at timestamp
+}
+
+Table mesa {
+    id_mesa int [pk, increment]
+    id_salon int [ref: > salons.id_salon]
+    nombre varchar(10) // M01, M02...
+    estado enum('activo', 'ocupado', 'inactivo')
+    created_at timestamp
+    updated_at timestamp
+}
+
 Table inpresoras {
     id bigint [pk, increment, note: 'ID único autoincrementable']
     nombre varchar(100) [not null, note: 'Ej: EPSON TM-T20II']

@@ -12,6 +12,7 @@ use App\Http\Controllers\TipoPagoController;
 use App\Http\Controllers\EmpresaController;
 use App\Http\Controllers\TipoDocumentoController;
 use App\Http\Controllers\InpresoraController;
+use App\Http\Controllers\SalonController;
 
 
 Route::get('/', function () {
@@ -74,6 +75,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/admin/Inpresora', [InpresoraController::class, 'store'])->name('admin.Inpresora.store');
     Route::put('/admin/Inpresora/{id}', [InpresoraController::class, 'update'])->name('admin.Inpresora.update');
     Route::delete('/admin/Inpresora/{id}', [InpresoraController::class, 'destroy'])->name('admin.Inpresora.destroy');
-
+    //Rutas para Salón
+    Route::get('/admin/Salon', [SalonController::class, 'index'])->name('admin.Salon.index');
+    Route::post('/admin/Salon', [SalonController::class, 'store'])->name('admin.Salon.store');
+    Route::put('/admin/Salon/{id}', [SalonController::class, 'update'])->name('admin.Salon.update');
+    Route::delete('/admin/Salon/{id}', [SalonController::class, 'destroy'])->name('admin.Salon.destroy');
     
 });

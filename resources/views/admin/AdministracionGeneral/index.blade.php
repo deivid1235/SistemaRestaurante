@@ -142,7 +142,7 @@
                         </div>
                     </a>
 
-                    <a href="{{ url('/mesas') }}" class="group flex items-center gap-4 p-4 rounded-2xl border border-gray-100 shadow-sm transition-all duration-300 hover:bg-emerald-50 hover:shadow-md hover:-translate-y-1 hover:border-emerald-200">
+                    <a href="{{ url('/admin/Salon') }}" class="group flex items-center gap-4 p-4 rounded-2xl border border-gray-100 shadow-sm transition-all duration-300 hover:bg-emerald-50 hover:shadow-md hover:-translate-y-1 hover:border-emerald-200">
                         <div class="w-11 h-11 bg-emerald-500 rounded-xl flex items-center justify-center text-white shadow-inner group-hover:rotate-12 transition-transform">
                             <i class="fa fa-chair"></i>
                         </div>
