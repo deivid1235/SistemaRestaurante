@@ -11,6 +11,7 @@ use App\Http\Controllers\MetodopagoController;
 use App\Http\Controllers\TipoPagoController;
 use App\Http\Controllers\EmpresaController;
 use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\InpresoraController;
 
 
 
@@ -72,6 +73,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/{id}',    [UsuarioController::class, 'edit'])->name('edit');
     Route::put('/{id}',    [UsuarioController::class, 'update'])->name('update');
     Route::delete('/{id}', [UsuarioController::class, 'destroy'])->name('destroy');
+    });
+
+    // Rutas para impresoras
+    Route::prefix('impresoras')->name('admin.Inpresora.')->group(function () {
+        Route::get('/',        [InpresoraController::class, 'index'])->name('index');
+        Route::get('/crear',   [InpresoraController::class, 'create'])->name('create');
+        Route::post('/',       [InpresoraController::class, 'store'])->name('store');
+        Route::get('/{id}',    [InpresoraController::class, 'edit'])->name('edit');
+        Route::put('/{id}',    [InpresoraController::class, 'update'])->name('update');
+        Route::delete('/{id}', [InpresoraController::class, 'destroy'])->name('destroy');
     });
 
 
