@@ -20,7 +20,7 @@
 
 <style>
     :root {
-        --primary: {{ DB::table('settings')->where('key','accent_color')->value('value') ?? '#dc2626' }};
+        --primary: {{ DB::table('settings')->where('key','accent_color')->value('value') ?? '#30b1e4' }};
         --bg:        #f0f4f8;
         --text:      #1a2332;
         --sidebar-w: 248px;
@@ -66,12 +66,13 @@
         width: var(--sidebar-w);
         height: 100vh;
         background: var(--primary);
+        
         background-image: radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px);
         background-size: 22px 22px;
         display: flex;
         flex-direction: column;
         border-right: 1px solid rgba(255,255,255,0.12);
-        /* OCULTO por defecto en móvil */
+        
         transform: translateX(-100%);
         transition: transform 0.3s cubic-bezier(.4,0,.2,1),
                     width    0.3s cubic-bezier(.4,0,.2,1);
@@ -113,6 +114,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        background: rgba(255, 255, 255, 0.05);
     }
 
     .logo-area img {
@@ -124,8 +126,8 @@
     .user-card {
         margin: 12px 10px;
         padding: 10px 12px;
-        background: rgba(255,255,255,0.1);
-        border: 1px solid rgba(255,255,255,0.15);
+        background: rgba(255,255,255,0.15);
+        border: 1px solid rgba(255,255,255,0.2);
         border-radius: 12px;
         display: flex;
         align-items: center;
@@ -136,8 +138,8 @@
         width: 34px;
         height: 34px;
         border-radius: 50%;
-        background: rgba(255,255,255,0.2);
-        border: 1.5px solid rgba(255,255,255,0.35);
+        background: rgba(255,255,255,0.25);
+        border: 1.5px solid rgba(255,255,255,0.4);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -166,7 +168,7 @@
     }
 
     .user-info .role {
-        color: rgba(255,255,255,0.5);
+        color: rgba(255,255,255,0.7);
         font-size: 10.5px;
     }
 
@@ -183,7 +185,7 @@
         font-weight: 700;
         letter-spacing: 0.12em;
         text-transform: uppercase;
-        color: rgba(255,255,255,0.35);
+        color: rgba(255,255,255,0.5);
         padding: 14px 8px 4px;
         margin: 0;
         user-select: none;
@@ -197,7 +199,7 @@
         padding: 9px 10px;
         margin-bottom: 2px;
         border-radius: 10px;
-        color: rgba(255,255,255,0.72);
+        color: rgba(255,255,255,0.85);
         font-size: 13px;
         font-weight: 500;
         text-decoration: none;
@@ -225,7 +227,7 @@
     }
 
     nav.nav-primary a:hover::before {
-        background: rgba(255,255,255,0.14);
+        background: rgba(255,255,255,0.2);
     }
 
     nav.nav-primary a::after {
@@ -253,37 +255,37 @@
         align-items: center;
         justify-content: center;
         border-radius: 8px;
-        background: rgba(255,255,255,0.1);
+        background: rgba(255,255,255,0.15);
         flex-shrink: 0;
         font-size: 13px;
         transition: background 0.18s ease, transform 0.2s cubic-bezier(.34,1.56,.64,1);
     }
 
     nav.nav-primary a:hover .nav-icon {
-        background: rgba(255,255,255,0.22);
+        background: rgba(255,255,255,0.3);
         transform: scale(1.1);
     }
 
     nav.nav-primary a.active-link {
         color: #fff;
-        background: rgba(255,255,255,0.18);
+        background: rgba(255,255,255,0.25);
         box-shadow: inset 0 1px 0 rgba(255,255,255,0.15),
-                    0 2px 8px rgba(0,0,0,0.12);
+                    0 2px 8px rgba(0,0,0,0.08);
     }
 
     nav.nav-primary a.active-link .nav-icon {
-        background: rgba(255,255,255,0.25);
+        background: rgba(255,255,255,0.35);
     }
 
     .chevron {
         margin-left: auto;
         font-size: 10px;
-        color: rgba(255,255,255,0.4);
+        color: rgba(255,255,255,0.5);
         transition: transform 0.3s ease, color 0.2s;
         flex-shrink: 0;
     }
 
-    nav.nav-primary a:hover .chevron { color: rgba(255,255,255,0.8); }
+    nav.nav-primary a:hover .chevron { color: rgba(255,255,255,0.9); }
 
     #submenu-ajustes {
         overflow: hidden;
@@ -292,7 +294,7 @@
         opacity: 1;
         margin: 2px 0 4px 14px;
         padding-left: 12px;
-        border-left: 1.5px solid rgba(255,255,255,0.18);
+        border-left: 1.5px solid rgba(255,255,255,0.25);
     }
 
     #submenu-ajustes.hidden {
@@ -305,7 +307,7 @@
     #submenu-ajustes a {
         font-size: 12px !important;
         font-weight: 400 !important;
-        color: rgba(255,255,255,0.62) !important;
+        color: rgba(255,255,255,0.75) !important;
         padding: 7px 10px !important;
         border-radius: 8px !important;
         margin-bottom: 1px !important;
@@ -316,7 +318,7 @@
 
     .sidebar-footer {
         padding: 10px 12px 14px;
-        border-top: 1px solid rgba(255,255,255,0.1);
+        border-top: 1px solid rgba(255,255,255,0.15);
     }
 
     .btn-logout {
@@ -326,7 +328,7 @@
         gap: 10px;
         padding: 9px 10px;
         border-radius: 10px;
-        color: rgba(255,255,255,0.6);
+        color: rgba(255,255,255,0.8);
         font-size: 12.5px;
         font-weight: 500;
         font-family: 'Plus Jakarta Sans', sans-serif;
@@ -337,18 +339,13 @@
     }
 
     .btn-logout:hover {
-        background: rgba(255,80,80,0.2);
-        color: #fca5a5;
+        background: rgba(255,255,255,0.2);
+        color: #fff;
         transform: translateX(3px);
     }
 
     .btn-logout .nav-icon {
-        background: rgba(255,255,255,0.08);
-        transition: background 0.18s ease;
-    }
-
-    .btn-logout:hover .nav-icon {
-        background: rgba(255,80,80,0.25);
+        background: rgba(255,255,255,0.1);
     }
 
     .top-header {

@@ -1,3 +1,20 @@
+Table inpresoras {
+    id bigint [pk, increment, note: 'ID único autoincrementable']
+    nombre varchar(100) [not null, note: 'Ej: EPSON TM-T20II']
+    estado enum('activo','inactivo') [default: 'activo']
+    created_at timestamp
+    updated_at timestamp
+}
+
+Table tipo_documentos {
+    id bigint [pk, increment, note: 'ID único autoincrementable']
+    descripcion varchar [note: 'Ej: BOLETA, FACTURA, NOTA DE CREDITO']
+    serie varchar [note: 'Ej: B001, F001']
+    numero varchar [note: 'Correlativo del documento']
+    estado enum('activo','inactivo') [default: 'activo']
+    created_at timestamp
+    updated_at timestamp
+}
 
 Table tipo_pagos{
     id bigint [pk, increment, note: 'ID único autoincrementable']
@@ -70,6 +87,14 @@ Table reclamos {
     pedido_concreto text
     acepto_politicas boolean [default: true]
 
+    created_at timestamp
+    updated_at timestamp
+}
+
+Table settings {
+    id bigint [pk, increment]
+    key varchar(255) [not null]
+    value text
     created_at timestamp
     updated_at timestamp
 }
