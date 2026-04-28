@@ -11,6 +11,7 @@ use App\Http\Controllers\MetodopagoController;
 use App\Http\Controllers\TipoPagoController;
 use App\Http\Controllers\EmpresaController;
 use App\Http\Controllers\TipoDocumentoController;
+use App\Http\Controllers\InpresoraController;
 
 
 Route::get('/', function () {
@@ -63,21 +64,16 @@ Route::middleware('auth')->group(function () {
     Route::delete('/admin/MetodoPago/{id}', [MetodopagoController::class, 'destroy'])->name('admin.MetodoPago.destroy');
     Route::post('/admin/MetodoPago/toggle/{id}', [MetodopagoController::class, 'toggleEstado'])->name('admin.MetodoPago.toggle');
     // Rutas del tipo de documento
-
-Route::get('/admin/TipoDocumento', [TipoDocumentoController::class, 'index'])
-    ->name('admin.TipoDocumento.index');
-
-Route::post('/admin/TipoDocumento', [TipoDocumentoController::class, 'store'])
-    ->name('admin.TipoDocumento.store');
-
-Route::get('/admin/TipoDocumento/{id}/edit', [TipoDocumentoController::class, 'edit'])
-    ->name('admin.TipoDocumento.edit');
-
-Route::put('/admin/TipoDocumento/{id}', [TipoDocumentoController::class, 'update'])
-    ->name('admin.TipoDocumento.update');
-
-Route::delete('/admin/TipoDocumento/{id}', [TipoDocumentoController::class, 'destroy'])
-    ->name('admin.TipoDocumento.destroy');
+    Route::get('/admin/TipoDocumento', [TipoDocumentoController::class, 'index'])->name('admin.TipoDocumento.index');
+    Route::post('/admin/TipoDocumento', [TipoDocumentoController::class, 'store'])->name('admin.TipoDocumento.store');
+    Route::get('/admin/TipoDocumento/{id}/edit', [TipoDocumentoController::class, 'edit'])->name('admin.TipoDocumento.edit');
+    Route::put('/admin/TipoDocumento/{id}', [TipoDocumentoController::class, 'update'])->name('admin.TipoDocumento.update');
+    Route::delete('/admin/TipoDocumento/{id}', [TipoDocumentoController::class, 'destroy'])->name('admin.TipoDocumento.destroy');
+    // Rutas para Inpresora
+    Route::get('/admin/Inpresora', [InpresoraController::class, 'index'])->name('admin.Inpresora.index');
+    Route::post('/admin/Inpresora', [InpresoraController::class, 'store'])->name('admin.Inpresora.store');
+    Route::put('/admin/Inpresora/{id}', [InpresoraController::class, 'update'])->name('admin.Inpresora.update');
+    Route::delete('/admin/Inpresora/{id}', [InpresoraController::class, 'destroy'])->name('admin.Inpresora.destroy');
 
     
 });

@@ -552,55 +552,138 @@ document.addEventListener('DOMContentLoaded', function () {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
+    const buscador = document.getElementById('buscador');
+
+    buscador.addEventListener('keyup', function () {
+        const filtro = this.value.toLowerCase();
+        const filas = document.querySelectorAll('#tablaMetodos tr');
+
+        filas.forEach(fila => {
+            const texto = fila.innerText.toLowerCase();
+
+            if (texto.includes(filtro)) {
+                fila.style.display = '';
+            } else {
+                fila.style.display = 'none';
+            }
+        });
+    });
+
+
 });
 
 // Modal de tipo de documento
 document.addEventListener('DOMContentLoaded', () => {
+
     const modal = document.getElementById('modalDocumento');
     const overlay = document.getElementById('modalOverlay');
     const content = document.getElementById('modalContent');
     const form = document.getElementById('formDocumento');
     const modalTitle = document.getElementById('modalTitle');
+    const buscador = document.getElementById('buscador');
 
-    const storeUrl = "/admin/TipoDocumento"; 
+    const storeUrl = "/admin/TipoDocumento";
+
+    if (!modal || !overlay || !content || !form) {
+        console.error(" ERROR: No se encontraron elementos del modal");
+        return;
+    }
 
     const openModal = (edit = false, data = null) => {
-        modal.classList.replace('hidden', 'flex');
+
+        modal.classList.remove('hidden');
 
         setTimeout(() => {
-            overlay.classList.replace('opacity-0', 'opacity-100');
-            content.classList.replace('opacity-0', 'opacity-100');
-            content.classList.replace('scale-90', 'scale-100');
+            overlay.classList.remove('opacity-0');
+            overlay.classList.add('opacity-100');
+
+            content.classList.remove('opacity-0', 'scale-90');
+            content.classList.add('opacity-100', 'scale-100');
         }, 10);
 
-        if (edit) {
+        if (edit && data) {
             modalTitle.innerText = 'Editar Documento';
             form.action = `/admin/TipoDocumento/${data.id}`;
+
             document.getElementById('methodField').value = 'PUT';
-            document.getElementById('inputDesc').value = data.descripcion;
-            document.getElementById('inputSerie').value = data.serie;
-            document.getElementById('inputNum').value = data.numero;
-            document.getElementById('inputEstado').value = data.estado;
+            document.getElementById('inputDesc').value = data.descripcion ?? '';
+            document.getElementById('inputSerie').value = data.serie ?? '';
+            document.getElementById('inputNum').value = data.numero ?? '';
+            document.getElementById('inputEstado').value = data.estado.toUpperCase();
+
         } else {
             modalTitle.innerText = 'Nuevo Documento';
-            form.action = storeUrl; 
+            form.action = storeUrl;
+
             document.getElementById('methodField').value = 'POST';
             form.reset();
         }
     };
 
     const closeModal = () => {
-        overlay.classList.replace('opacity-100', 'opacity-0');
-        content.classList.replace('opacity-100', 'opacity-0');
-        content.classList.replace('scale-100', 'scale-90');
+        overlay.classList.remove('opacity-100');
+        overlay.classList.add('opacity-0');
 
-        setTimeout(() => modal.classList.replace('flex', 'hidden'), 300);
+        content.classList.remove('opacity-100', 'scale-100');
+        content.classList.add('opacity-0', 'scale-90');
+
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 300);
     };
 
-    document.getElementById('btnNuevo')?.addEventListener('click', () => openModal(false));
-    document.getElementById('btnCerrar')?.addEventListener('click', closeModal);
-    document.getElementById('btnCancelar')?.addEventListener('click', closeModal);
+    const btnNuevo = document.getElementById('btnNuevo');
+    const btnCerrar = document.getElementById('btnCerrar');
+    const btnCancelar = document.getElementById('btnCancelar');
+
+    if (btnNuevo) {
+        btnNuevo.addEventListener('click', () => openModal(false));
+    } else {
+        console.error(" No existe #btnNuevo");
+    }
+
+    btnCerrar?.addEventListener('click', closeModal);
+    btnCancelar?.addEventListener('click', closeModal);
     overlay?.addEventListener('click', closeModal);
 
-    window.editarDocumento = (data) => openModal(true, data);
+    window.editarDocumento = (data) => {
+        openModal(true, data);
+    };
+
+    window.eliminarDocumento = function(id) {
+        if (!confirm('¿Seguro que deseas eliminar este documento?')) return;
+
+        const formDelete = document.createElement('form');
+        formDelete.method = 'POST';
+        formDelete.action = `/admin/TipoDocumento/${id}`;
+
+        const csrf = document.createElement('input');
+        csrf.type = 'hidden';
+        csrf.name = '_token';
+        csrf.value = document.querySelector('meta[name="csrf-token"]').content;
+
+        const method = document.createElement('input');
+        method.type = 'hidden';
+        method.name = '_method';
+        method.value = 'DELETE';
+
+        formDelete.appendChild(csrf);
+        formDelete.appendChild(method);
+
+        document.body.appendChild(formDelete);
+        formDelete.submit();
+    };
+
+    if (buscador) {
+        buscador.addEventListener('keyup', function () {
+            const filtro = this.value.toLowerCase();
+            const filas = document.querySelectorAll('#tablaTipos tr');
+
+            filas.forEach(fila => {
+                const texto = fila.innerText.toLowerCase();
+                fila.style.display = texto.includes(filtro) ? '' : 'none';
+            });
+        });
+    }
+
 });

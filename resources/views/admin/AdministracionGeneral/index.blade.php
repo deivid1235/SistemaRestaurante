@@ -46,7 +46,7 @@
                         </div>
                     </a>
 
-                    <a href="{{ url('/impresoras') }}" class="group flex items-center gap-4 p-4 rounded-2xl border border-gray-100 shadow-sm transition-all duration-300 hover:bg-orange-50 hover:shadow-md hover:-translate-y-1 hover:border-orange-200">
+                    <a href="{{ route('admin.Inpresora.index') }}" class="group flex items-center gap-4 p-4 rounded-2xl border border-gray-100 shadow-sm transition-all duration-300 hover:bg-orange-50 hover:shadow-md hover:-translate-y-1 hover:border-orange-200">
                         <div class="w-11 h-11 bg-orange-400 rounded-xl flex items-center justify-center text-white shadow-inner group-hover:rotate-12 transition-transform">
                             <i class="fa fa-print"></i>
                         </div>
@@ -211,7 +211,8 @@
                             required>
                     </div>
                     <button type="submit" id="btnGuardar"
-                        class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-2xl font-bold shadow-lg shadow-blue-200 transition-all active:scale-95 flex items-center gap-2">
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-2xl font-bold shadow-lg shadow-blue-200 transition-all active:scale-95 flex items-center gap-2"
+                        style="background: linear-gradient(135deg, var(--primary) 0%, #0096D9 100%);">
                         <i class="fa fa-save"></i>
                         <span>Guardar</span>
                     </button>

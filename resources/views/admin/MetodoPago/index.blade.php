@@ -18,7 +18,6 @@
                 </p>
             </div>
 
-            {{-- BOTÓN VOLVER AL MENÚ --}}
             <a href="{{ route('admin.AdministracionGeneral.index') }}" 
             class="flex items-center justify-center gap-2 px-5 py-2.5 bg-white/20 backdrop-blur-md border border-white/30 rounded-xl font-bold text-sm transition-all hover:bg-white hover:text-[#0096D9] active:scale-95 w-fit">
                 <i class="fa fa-arrow-left text-xs"></i>
@@ -26,11 +25,9 @@
             </a>
         </div>
 
-        {{-- Decoración de fondo --}}
         <div class="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-3xl group-hover:bg-white/20 transition-colors"></div>
     </div>
 
-    {{-- CONTENEDOR DE DOS COLUMNAS --}}
     <div class="flex flex-col lg:flex-row gap-6">
         
 
@@ -42,10 +39,19 @@
                     </div>
                     <h2 class="font-bold text-slate-800 text-lg">Lista de Métodos</h2>
                 </div>
-                <button onclick="openModal('create')" class="group px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-bold text-sm transition-all shadow-sm flex items-center gap-2 active:scale-95">
+                <button onclick="openModal('create')" class="group px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-bold text-sm transition-all shadow-sm flex items-center gap-2 active:scale-95"
+                    style="background: linear-gradient(135deg, var(--primary) 0%, #0096D9 100%);">
                     <i class="fa fa-plus-circle group-hover:rotate-90 transition-transform"></i>
                     Nuevo Método
                 </button>
+            </div>
+            <div class="px-5 py-4 bg-gray-50/30">
+                <div class="relative flex max-w-sm ml-auto">
+                   <input type="text" id="buscador" placeholder="Buscar Metodo de Pago..." class="w-full border border-gray-200 rounded-l-md px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-400">
+                    <button class="bg-white border border-l-0 border-gray-200 rounded-r-md px-3 text-gray-400">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
             </div>
 
             <div class="overflow-x-auto">
@@ -58,7 +64,7 @@
                             <th class="px-6 py-4 text-center">Acciones</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-100">
+                    <tbody id="tablaMetodos" class="divide-y divide-slate-100">
                         @forelse($metodos as $metodo)
                         <tr class="hover:bg-blue-50/30 transition-colors group">
                             <td class="px-6 py-4 font-bold text-slate-700 uppercase tracking-tight">{{ $metodo->descripcion }}</td>
@@ -123,74 +129,98 @@
 </div>
 
 {{-- MODAL DINÁMICO CENTRADO --}}
-<div id="paymentModal" class="fixed inset-0 z-50  hidden">
-    <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onclick="closeModal()"></div>
+<div id="paymentModal" class="fixed inset-0 z-50 hidden transition-all duration-300">
+    <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeModal()"></div>
     
-    <div class="flex min-h-full items-center justify-center p-4 text-center">
-        <div class="relative transform overflow-hidden rounded-[2.5rem] bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-md animate-in zoom-in duration-300 p-8">
+    <div class="flex min-h-full items-center justify-center p-4">
+        <div class="relative transform overflow-visible rounded-[2.5rem] bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-sm p-8 pt-12">
             
+            <button type="button" onclick="closeModal()" class="absolute right-7 top-7 text-slate-300 hover:text-slate-500 transition-colors">
+                <i class="fa fa-times text-lg"></i>
+            </button>
+
             <div class="flex items-center gap-4 mb-8">
-                <div id="modalIcon" class="w-12 h-12 rounded-2xl flex items-center justify-center text-xl"></div>
-                <h3 id="modalTitle" class="text-2xl font-black text-slate-800 uppercase tracking-tight"></h3>
+                <div id="modalIconContainer" class="flex-shrink-0 w-14 h-14 rounded-2xl bg-[#00A3E0] flex items-center justify-center text-white shadow-lg shadow-blue-100"
+                style="background: linear-gradient(135deg, var(--primary) 0%, #0096D9 100%);">
+                    <i id="modalIcon" class="fa fa-credit-card text-2xl"></i>
+                </div>
+                
+                <div class="pt-1">
+                    <h3 id="modalTitle" class="text-xl font-extrabold text-slate-800 leading-none tracking-tight">Nuevo Método de Pago</h3>
+                    <p class="text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1.5">Configuración de Método</p>
+                </div>
             </div>
 
-            <form id="paymentForm" method="POST" class="space-y-5">
+            <form id="paymentForm" method="POST" class="space-y-6">
                 @csrf
                 <div id="methodField"></div>
 
-                <div class="space-y-1">
-                    <label class="text-[10px] font-black text-slate-400 uppercase ml-2 tracking-widest">Descripción</label>
-                    <div class="relative">
-                        <i class="fa fa-pencil absolute left-5 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                        <input type="text" name="descripcion" id="inputDescripcion" required placeholder="EJ: YAPE, PLIN..." 
-                            class="w-full pl-12 pr-5 py-4 bg-slate-50 border-2 border-transparent rounded-2xl outline-none focus:border-[#0096D9] focus:bg-white font-bold text-slate-700 transition-all uppercase placeholder:text-slate-300">
+                <div class="space-y-1.5">
+                    <label class="flex items-center gap-2 text-[10px] font-black text-[#0096D9] uppercase tracking-widest ml-1">
+                        <i class="fa fa-tag text-[8px]"></i> Nombre del Método
+                    </label>
+                    <div class="relative group">
+                        <div class="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center w-8 h-8 bg-slate-50 rounded-lg group-focus-within:bg-blue-50 transition-colors">
+                            <i class="fa fa-keyboard text-[12px] text-slate-400 group-focus-within:text-[#0096D9]"></i>
+                        </div>
+                        <input type="text" name="descripcion" id="inputDescripcion" required 
+                            placeholder="EJ: TARJETA CRÉDITO" 
+                            class="w-full pl-14 pr-5 py-4 bg-white border-2 border-slate-50 rounded-2xl outline-none focus:border-[#0096D9] font-bold text-slate-700 placeholder:text-slate-200 text-xs transition-all uppercase">
                     </div>
                 </div>
                 
-                <div class="space-y-1">
-                    <label class="text-[10px] font-black text-slate-400 uppercase ml-2 tracking-widest">Tipo de Pago</label>
-                    <div class="relative">
-                        <i class="fa fa-layer-group absolute left-5 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                        <select name="tipo_pago_id" id="inputTipo" required class="w-full pl-12 pr-5 py-4 bg-slate-50 border-2 border-transparent rounded-2xl outline-none focus:border-[#0096D9] focus:bg-white font-bold text-slate-700 appearance-none transition-all uppercase">
-                            <option value="" disabled selected>Seleccione una opción</option>
-                            @foreach($tipos as $tipo)
-                                <option value="{{ $tipo->id }}">{{ $tipo->descripcion }}</option>
-                            @endforeach
+                <div class="space-y-1.5">
+                    <label class="flex items-center gap-2 text-[10px] font-black text-[#0096D9] uppercase tracking-widest ml-1">
+                        <i class="fa fa-th-large text-[8px]"></i> Categoría de Pago
+                    </label>
+                    <div class="relative group">
+                        <div class="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center w-8 h-8 bg-slate-50 rounded-lg group-focus-within:bg-blue-50 transition-colors">
+                            <i class="fa fa-layer-group text-[12px] text-slate-400 group-focus-within:text-[#0096D9]"></i>
+                        </div>
+                        <select name="tipo_pago_id" id="inputTipo" required 
+                            class="w-full pl-14 pr-10 py-4 bg-white border-2 border-slate-50 rounded-2xl outline-none focus:border-[#0096D9] font-bold text-slate-700 appearance-none transition-all uppercase text-xs cursor-pointer">
+                            <option value="" disabled selected>SELECCIONE OPCIÓN</option>
+                            <option value="1">TARJETA VISA</option>
+                            <option value="2">EFECTIVO</option>
                         </select>
-                        <i class="fa fa-chevron-down absolute right-5 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none text-xs"></i>
+                        <i class="fa fa-chevron-down absolute right-5 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none text-[10px]"></i>
                     </div>
                 </div>
 
-                <div class="space-y-1">
-                    <label class="text-[10px] font-black text-slate-400 uppercase ml-2 tracking-widest">Estado</label>
-                    <div class="relative">
-                        <i class="fa fa-toggle-on absolute left-5 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                        <select name="estado" id="inputEstado" required class="w-full pl-12 pr-5 py-4 bg-slate-50 border-2 border-transparent rounded-2xl outline-none focus:border-[#0096D9] focus:bg-white font-bold text-slate-700 appearance-none transition-all uppercase">
-                            <option value="" disabled selected>Seleccione una opción</option>
+                <div class="space-y-1.5">
+                    <label class="flex items-center gap-2 text-[10px] font-black text-[#0096D9] uppercase tracking-widest ml-1">
+                        <i class="fa fa-toggle-on text-[8px]"></i> Estado del Método
+                    </label>
+                    <div class="relative group">
+                        <div class="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center w-8 h-8 bg-slate-50 rounded-lg group-focus-within:bg-blue-50 transition-colors">
+                            <i class="fa fa-power-off text-[12px] text-slate-400 group-focus-within:text-[#0096D9]"></i>
+                        </div>
+                        <select name="estado" id="inputEstado" required 
+                            class="w-full pl-14 pr-10 py-4 bg-white border-2 border-slate-50 rounded-2xl outline-none focus:border-[#0096D9] font-bold text-slate-700 appearance-none transition-all uppercase text-xs cursor-pointer">
                             <option value="1">ACTIVO</option>
                             <option value="0">INACTIVO</option>
                         </select>
-                        <i class="fa fa-chevron-down absolute right-5 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none text-xs"></i>
+                        <i class="fa fa-chevron-down absolute right-5 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none text-[10px]"></i>
                     </div>
                 </div>
 
-                <div class="flex gap-4 pt-6">
+                <div class="flex items-center justify-between gap-4 pt-4">
                     <button type="button" onclick="closeModal()" 
-                        class="flex-1 py-4 bg-slate-100 hover:bg-slate-200 rounded-2xl font-black text-[11px] text-slate-500 uppercase transition-all active:scale-95">
+                        class="px-2 text-[11px] font-bold text-slate-400 uppercase tracking-widest hover:text-slate-600 transition-colors">
                         CANCELAR
                     </button>
 
                     <button type="submit" 
-                        class="flex-1 py-4 rounded-2xl font-black text-[11px] text-white uppercase shadow-lg shadow-blue-200 transition-all active:scale-95 hover:opacity-90"
+                        class="flex-1 flex items-center justify-center gap-3 py-4 rounded-2xl font-black text-[11px] text-white uppercase tracking-widest shadow-xl shadow-blue-900/20 transition-all active:scale-95 bg-gradient-to-r from-[#001D3D] to-[#003459] hover:brightness-110"
                         style="background: linear-gradient(135deg, var(--primary) 0%, #0096D9 100%);">
-                        <i class="fa fa-save mr-1"></i> GUARDAR DATOS
+                        <i class="fa fa-save text-sm"></i> 
+                        GUARDAR MÉTODO
                     </button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-
 {{-- BOTÓN VOLVER ARRIBA --}}
 <button id="btnBackToTop" onclick="scrollToTop()" class="fixed bottom-6 right-6 w-12 h-12 bg-[#0096D9] text-white rounded-full shadow-2xl flex items-center justify-center opacity-0 invisible transition-all duration-300 hover:scale-110 active:scale-90 z-">
     <i class="fa fa-chevron-up"></i>
