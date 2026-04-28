@@ -10,6 +10,8 @@ use App\Http\Controllers\AdministracionGeneralController;
 use App\Http\Controllers\MetodopagoController;
 use App\Http\Controllers\TipoPagoController;
 use App\Http\Controllers\EmpresaController;
+use App\Http\Controllers\UsuarioController;
+
 
 
 Route::get('/', function () {
@@ -61,7 +63,17 @@ Route::middleware('auth')->group(function () {
     Route::put('/admin/MetodoPago/{id}', [MetodopagoController::class, 'update'])->name('admin.MetodoPago.update');
     Route::delete('/admin/MetodoPago/{id}', [MetodopagoController::class, 'destroy'])->name('admin.MetodoPago.destroy');
     Route::post('/admin/MetodoPago/toggle/{id}', [MetodopagoController::class, 'toggleEstado'])->name('admin.MetodoPago.toggle');
-    
 
-    
+    //Rutas para usuarios y roles
+    Route::prefix('usuarios-roles')->name('usuarios.')->group(function () {
+    Route::get('/',        [UsuarioController::class, 'index'])->name('index');
+    Route::get('/crear',   [UsuarioController::class, 'create'])->name('create');
+    Route::post('/',       [UsuarioController::class, 'store'])->name('store');
+    Route::get('/{id}',    [UsuarioController::class, 'edit'])->name('edit');
+    Route::put('/{id}',    [UsuarioController::class, 'update'])->name('update');
+    Route::delete('/{id}', [UsuarioController::class, 'destroy'])->name('destroy');
+    });
+
+
+
 });
