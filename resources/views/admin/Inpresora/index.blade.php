@@ -42,7 +42,7 @@
                         <p class="text-xs text-gray-400">Estado actual de las ticketeras</p>
                     </div>
                 </div>
-                <button id="btnNueva" class="bg-[#00B5E2] hover:bg-[#0096D9] text-white px-6 py-2.5 rounded-full font-bold text-sm flex items-center gap-2 transition-all shadow-md active:scale-95"  style="background: linear-gradient(135deg, var(--primary) 0%, #0096D9 100%);">
+                <button id="btnNueva" data-url="{{ route('admin.Inpresora.store') }}" class="bg-[#00B5E2] hover:bg-[#0096D9] text-white px-6 py-2.5 rounded-full font-bold text-sm flex items-center gap-2 transition-all shadow-md active:scale-95"  style="background: linear-gradient(135deg, var(--primary) 0%, #0096D9 100%);">
                     <i class="fa fa-plus"></i> Nueva Impresora
                 </button>
             </div>
@@ -242,59 +242,4 @@
     </div>
 </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-
-    const modal = document.getElementById('modal');
-    const form = document.getElementById('form');
-    const method = document.getElementById('method');
-
-    // ABRIR NUEVO
-    document.getElementById('btnNueva').addEventListener('click', () => {
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-        form.action = "{{ route('admin.Inpresora.store') }}";
-        method.innerHTML = "";
-        form.reset();
-        document.getElementById('modalTitle').innerText = "Nueva Impresora";
-    });
-
-    // CERRAR
-    document.getElementById('btnCerrar').addEventListener('click', () => {
-        modal.classList.add('hidden');
-    });
-
-    // EDITAR
-    document.querySelectorAll('.btnEditar').forEach(btn => {
-        btn.addEventListener('click', function () {
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            form.action = "/admin/Inpresora/" + this.dataset.id;
-            method.innerHTML = '@method("PUT")';
-            document.getElementById('nombre').value = this.dataset.nombre;
-            document.getElementById('estado').value = this.dataset.estado;
-            document.getElementById('modalTitle').innerText = "Editar Impresora";
-        });
-    });
-
-    // 🔍 BUSCADOR (AQUÍ VA)
-    const buscador = document.getElementById('buscador');
-
-    buscador.addEventListener('keyup', function () {
-        const filtro = this.value.toLowerCase();
-        const filas = document.querySelectorAll('#tablaImpresoras tr');
-
-        filas.forEach(fila => {
-            const texto = fila.innerText.toLowerCase();
-
-            if (texto.includes(filtro)) {
-                fila.style.display = '';
-            } else {
-                fila.style.display = 'none';
-            }
-        });
-    });
-
-});
-</script>
 @endsection

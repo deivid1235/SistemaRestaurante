@@ -687,3 +687,59 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 });
+
+//Modal de impresora
+document.addEventListener('DOMContentLoaded', function () {
+
+    const modal = document.getElementById('modal');
+    const form = document.getElementById('form');
+    const method = document.getElementById('method');
+
+    const storeUrl = document.getElementById('btnNueva')?.dataset.url;
+
+    document.getElementById('btnNueva')?.addEventListener('click', () => {
+
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+
+        form.action = storeUrl; 
+        method.innerHTML = "";
+
+        form.reset();
+
+        document.getElementById('modalTitle').innerText = "Nueva Impresora";
+    });
+
+    document.getElementById('btnCerrar')?.addEventListener('click', () => {
+        modal.classList.add('hidden');
+    });
+
+    document.querySelectorAll('.btnEditar').forEach(btn => {
+        btn.addEventListener('click', function () {
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            form.action = "/admin/Inpresora/" + this.dataset.id;
+            method.innerHTML = '<input type="hidden" name="_method" value="PUT">';
+            document.getElementById('nombre').value = this.dataset.nombre;
+            document.getElementById('estado').value = this.dataset.estado;
+
+            document.getElementById('modalTitle').innerText = "Editar Impresora";
+        });
+    });
+
+    const buscador = document.getElementById('buscador');
+
+    if (buscador) {
+        buscador.addEventListener('keyup', function () {
+
+            const filtro = this.value.toLowerCase();
+            const filas = document.querySelectorAll('#tablaImpresoras tr');
+
+            filas.forEach(fila => {
+                const texto = fila.innerText.toLowerCase();
+                fila.style.display = texto.includes(filtro) ? '' : 'none';
+            });
+        });
+    }
+
+});
