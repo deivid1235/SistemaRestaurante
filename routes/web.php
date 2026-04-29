@@ -10,9 +10,11 @@ use App\Http\Controllers\AdministracionGeneralController;
 use App\Http\Controllers\MetodopagoController;
 use App\Http\Controllers\TipoPagoController;
 use App\Http\Controllers\EmpresaController;
-use App\Http\Controllers\TipoDocumentoController;
+use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\InpresoraController;
 use App\Http\Controllers\SalonController;
+use App\Http\Controllers\TipoDocumentoController;
+
 
 
 Route::get('/', function () {
@@ -49,7 +51,7 @@ Route::middleware('auth')->group(function () {
 
     // Rutas para Administración General
     Route::get('/admin/AdministracionGeneral', [AdministracionGeneralController::class, 'index'])->name('admin.AdministracionGeneral.index');
-    // Empresa
+   // Empresa
     Route::get('/admin/Empresa', [EmpresaController::class, 'index'])->name('admin.Empresa.index');
     Route::get('/admin/Empresa/{id}/edit', [EmpresaController::class, 'edit'])->name('admin.Empresa.edit');
     Route::put('/admin/Empresa/{id}', [EmpresaController::class, 'update'])->name('admin.Empresa.update');
@@ -64,6 +66,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/admin/MetodoPago/{id}', [MetodopagoController::class, 'update'])->name('admin.MetodoPago.update');
     Route::delete('/admin/MetodoPago/{id}', [MetodopagoController::class, 'destroy'])->name('admin.MetodoPago.destroy');
     Route::post('/admin/MetodoPago/toggle/{id}', [MetodopagoController::class, 'toggleEstado'])->name('admin.MetodoPago.toggle');
+  
     // Rutas del tipo de documento
     Route::get('/admin/TipoDocumento', [TipoDocumentoController::class, 'index'])->name('admin.TipoDocumento.index');
     Route::post('/admin/TipoDocumento', [TipoDocumentoController::class, 'store'])->name('admin.TipoDocumento.store');
@@ -80,5 +83,16 @@ Route::middleware('auth')->group(function () {
     Route::post('/admin/Salon', [SalonController::class, 'store'])->name('admin.Salon.store');
     Route::put('/admin/Salon/{id}', [SalonController::class, 'update'])->name('admin.Salon.update');
     Route::delete('/admin/Salon/{id}', [SalonController::class, 'destroy'])->name('admin.Salon.destroy');
+
+    //Rutas para usuarios y roles
+    Route::prefix('usuarios-roles')->name('usuarios.')->group(function () {
+    Route::get('/',        [UsuarioController::class, 'index'])->name('index');
+    Route::get('/crear',   [UsuarioController::class, 'create'])->name('create');
+    Route::post('/',       [UsuarioController::class, 'store'])->name('store');
+    Route::get('/{id}',    [UsuarioController::class, 'edit'])->name('edit');
+    Route::put('/{id}',    [UsuarioController::class, 'update'])->name('update');
+    Route::delete('/{id}', [UsuarioController::class, 'destroy'])->name('destroy');
+    });
     
 });
+
