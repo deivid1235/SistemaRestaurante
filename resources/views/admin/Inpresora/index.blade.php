@@ -80,12 +80,11 @@
                                             data-id="{{ $imp->id }}" data-nombre="{{ $imp->nombre }}" data-estado="{{ $imp->estado }}">
                                         <i class="fa fa-edit text-lg"></i>
                                     </button>
-                                    <form action="{{ route('admin.Inpresora.destroy',$imp->id) }}" method="POST" class="inline">
-                                        @csrf @method('DELETE')
-                                        <button class="text-red-400 hover:text-red-600 transition-colors">
-                                            <i class="fa fa-trash-alt text-lg"></i>
-                                        </button>
-                                    </form>
+                                    <button class="btnEliminarImpresora"
+                                        data-id="{{ $imp->id }}"
+                                        data-nombre="{{ $imp->nombre }}">
+                                        <i class="fa fa-trash text-red-500"></i>
+                                    </button>
                                 </div>
                             </td>
                         </tr>
@@ -95,11 +94,14 @@
             </div>
 
             <div class="p-5 flex justify-between items-center text-[13px] text-gray-500 border-t border-gray-50 bg-gray-50/20">
-                <p>Mostrando 1 a {{ count($impresoras) }} de {{ count($impresoras) }} elementos</p>
-                <div class="flex gap-1">
-                    <button class="px-2 py-1 text-gray-300 hover:text-gray-500"><i class="fa fa-chevron-left text-xs"></i></button>
-                    <button class="w-8 h-8 bg-gray-600 text-white rounded flex items-center justify-center font-bold">1</button>
-                    <button class="px-2 py-1 text-gray-300 hover:text-gray-500"><i class="fa fa-chevron-right text-xs"></i></button>
+                <p>
+                    Mostrando {{ $impresoras->firstItem() }} 
+                    a {{ $impresoras->lastItem() }} 
+                    de {{ $impresoras->total() }} elementos
+                </p>
+
+                <div class="flex gap-1 items-center">
+                    {{ $impresoras->onEachSide(1)->links('pagination::tailwind') }}
                 </div>
             </div>
         </div>
@@ -237,6 +239,24 @@
                 style="background: linear-gradient(135deg, var(--primary) 0%, #0096D9 100%);">
                     <i class="fa fa-save"></i> GUARDAR CAMBIOS
                 </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="modalEliminar" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-black/50 backdrop-blur-sm transition-all">
+    <div class="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl p-8 text-center">
+        <div class="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+            <i class="fa fa-trash"></i>
+        </div>
+        <h3 class="text-lg font-bold text-gray-800">¿Eliminar Impresora?</h3>
+        <p class="text-gray-500 mt-2 mb-6 text-xs">Esta acción eliminará la impresora <span id="delete_nombre" class="font-bold text-red-600"></span> y no se puede deshacer.</p>
+        <form id="formEliminar" method="POST">
+            @csrf
+            @method('DELETE')
+            <div class="flex gap-3">
+                <button type="button" onclick="cerrarModal('modalEliminar')" class="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-xl font-bold hover:bg-gray-200 text-xs transition-all">No, volver</button>
+                <button type="submit" class="flex-1 px-4 py-2 bg-[#e74c3c] text-white rounded-xl font-bold hover:bg-red-700 shadow-lg shadow-red-100 text-xs transition-all">Sí, eliminar</button>
             </div>
         </form>
     </div>

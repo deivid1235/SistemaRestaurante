@@ -90,6 +90,6 @@ class SalonController extends Controller
         //
         $salon = Salon::findOrFail($id);
         $salon->delete();
-        return redirect()->back()->with('success', 'Salón eliminado');
+        return redirect()->back()->with('delete', 'Salón eliminado correctamente');
     }
 }

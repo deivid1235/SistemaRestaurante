@@ -92,9 +92,10 @@
                                         <i class="fas fa-edit text-lg"></i>
                                     </button>
                                     
-                                    <button onclick="eliminarDocumento({{ $item->id }})" 
-                                        class="text-red-400 hover:text-red-600 hover:bg-red-50 p-2 rounded-lg transition-colors" title="Eliminar">
-                                        <i class="fas fa-trash-alt text-lg"></i>
+                                    <button class="btnEliminarDocumento"
+                                        data-id="{{ $item->id }}"
+                                        data-nombre="{{ $item->descripcion }}">
+                                        <i class="fa fa-trash text-red-500"></i>
                                     </button>
                                 </div>
                             </td>
@@ -223,6 +224,23 @@
                 </div>
             </form>
         </div>
+    </div>
+</div>
+<div id="modalEliminar"  class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-black/50 backdrop-blur-sm transition-all">
+    <div class="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl p-8 text-center">
+        <div class="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+            <i class="fa fa-trash"></i>
+        </div>
+        <h3 class="text-lg font-bold text-gray-800">¿Eliminar Tipo de Documento?</h3>
+        <p class="text-gray-500 mt-2 mb-6 text-xs">Esta acción eliminará el tipo de documento <span id="delete_nombre" class="font-bold text-red-600"></span> y no se puede deshacer.</p>
+        <form id="formEliminar" method="POST" action="">
+            @csrf
+            @method('DELETE')
+            <div class="flex gap-3">
+                <button type="button" onclick="cerrarModal('modalEliminar')" class="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-xl font-bold hover:bg-gray-200 text-xs transition-all">No, volver</button>
+                <button type="submit" class="flex-1 px-4 py-2 bg-[#e74c3c] text-white rounded-xl font-bold hover:bg-red-700 shadow-lg shadow-red-100 text-xs transition-all">Sí, eliminar</button>
+            </div>
+        </form>
     </div>
 </div>
 @endsection

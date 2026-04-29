@@ -442,10 +442,8 @@
 
 <div id="overlay" onclick="closeSidebar()"></div>
 
-<!-- ═══ SIDEBAR ═══ -->
 <aside id="sidebar">
 
-    <!-- LOGO -->
     <div class="logo-area">
         <img src="{{ asset('iconos/logotipo.png') }}" alt="Logo AOSC"
             onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='flex'">
@@ -572,8 +570,10 @@
 
 </aside>
 
+
 @if(session('success'))
-<div class="fixed top-4 inset-x-0 flex justify-center z- pointer-events-none animate-fade-in-down">
+<div id="alertSuccess" class="fixed top-4 inset-x-0 flex justify-center z-[100] pointer-events-none animate-fade-in-down">
+    
     <div class="
         bg-green-50 text-green-700 
         border border-green-200
@@ -588,9 +588,13 @@
         <div class="w-6 h-6 bg-green-500 rounded-lg flex items-center justify-center text-white shadow-sm">
             <i class="fa fa-check text-xs"></i>
         </div>
+
         <span>{{ session('success') }}</span>
     </div>
+
 </div>
+@endif
+
 
 <style>
     @keyframes fade-in-down {
@@ -612,7 +616,7 @@
         }
     }, 3000);
 </script>
-@endif
+
 
 <div id="main-wrapper">
 

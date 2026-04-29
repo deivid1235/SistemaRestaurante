@@ -397,19 +397,17 @@ document.addEventListener('DOMContentLoaded', function () {
     const btnCerrar = document.getElementById('btnCerrarModal');
     const form = document.getElementById('formTipoPago');
 
-    // ABRIR MODAL
+
     btnAbrir.addEventListener('click', function () {
         modal.classList.remove('hidden');
         modal.classList.add('flex');
     });
 
-    // CERRAR MODAL
     btnCerrar.addEventListener('click', function () {
         modal.classList.add('hidden');
         modal.classList.remove('flex');
     });
 
-    // CERRAR AL HACER CLICK FUERA
     window.addEventListener('click', function (e) {
         if (e.target === modal) {
             modal.classList.add('hidden');
@@ -417,7 +415,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // EDITAR
     document.querySelectorAll('.btnEditar').forEach(btn => {
         btn.addEventListener('click', function () {
             const id = this.dataset.id;
@@ -439,6 +436,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
             modal.classList.remove('hidden');
             modal.classList.add('flex');
+        });
+    });
+    document.querySelectorAll('.btnEliminarTipoPago').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const id = this.dataset.id;
+            const nombre = this.dataset.nombre;
+
+            const m = document.getElementById('modalEliminar');
+            const f = document.getElementById('formEliminar');
+
+            f.action = `/admin/TipoPago/${id}`;
+            document.getElementById('delete_nombre').innerText = nombre;
+
+            m.classList.remove('hidden');
+            m.classList.add('flex');
         });
     });
 
@@ -568,6 +580,22 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
+    document.querySelectorAll('.btnEliminarMetodoPago').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const id = this.dataset.id;
+            const nombre = this.dataset.nombre;
+
+            const m = document.getElementById('modalEliminar');
+            const f = document.getElementById('formEliminar');
+
+            f.action = `/admin/MetodoPago/${id}`;
+            document.getElementById('delete_nombre').innerText = nombre;
+
+            m.classList.remove('hidden');
+            m.classList.add('flex');
+        });
+    });
+
 
 
 });
@@ -631,6 +659,22 @@ document.addEventListener('DOMContentLoaded', () => {
             modal.classList.add('hidden');
         }, 300);
     };
+
+    document.querySelectorAll('.btnEliminarDocumento').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const id = this.dataset.id;
+            const nombre = this.dataset.nombre;
+
+            const m = document.getElementById('modalEliminar');
+            const f = document.getElementById('formEliminar');
+
+            f.action = `/admin/TipoDocumento/${id}`;
+            document.getElementById('delete_nombre').innerText = nombre;
+
+            m.classList.remove('hidden');
+            m.classList.add('flex');
+        });
+    });
 
     const btnNuevo = document.getElementById('btnNuevo');
     const btnCerrar = document.getElementById('btnCerrar');
@@ -698,13 +742,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const storeUrl = document.getElementById('btnNueva')?.dataset.url;
 
     document.getElementById('btnNueva')?.addEventListener('click', () => {
-
         modal.classList.remove('hidden');
         modal.classList.add('flex');
 
         form.action = storeUrl; 
         method.innerHTML = "";
-
         form.reset();
 
         document.getElementById('modalTitle').innerText = "Nueva Impresora";
@@ -727,11 +769,26 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    document.querySelectorAll('.btnEliminarImpresora').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const id = this.dataset.id;
+            const nombre = this.dataset.nombre;
+
+            const m = document.getElementById('modalEliminar');
+            const f = document.getElementById('formEliminar');
+
+            f.action = `/admin/Inpresora/${id}`;
+            document.getElementById('delete_nombre').innerText = nombre;
+
+            m.classList.remove('hidden');
+            m.classList.add('flex');
+        });
+    });
+
     const buscador = document.getElementById('buscador');
 
     if (buscador) {
         buscador.addEventListener('keyup', function () {
-
             const filtro = this.value.toLowerCase();
             const filas = document.querySelectorAll('#tablaImpresoras tr');
 
@@ -742,4 +799,10 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-});
+}); 
+
+window.cerrarModal = function(id) {
+    const modal = document.getElementById(id);
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+}

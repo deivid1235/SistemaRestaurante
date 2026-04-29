@@ -13,7 +13,7 @@ class InpresoraController extends Controller
     public function index()
     {
         //
-        $impresoras = Inpresora::all();
+       $impresoras = Inpresora::paginate(3);
         return view('admin.Inpresora.index', compact('impresoras'));;
     }
 

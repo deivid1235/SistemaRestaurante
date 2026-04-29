@@ -84,12 +84,11 @@
                                     <button onclick='openModal("edit", @json($metodo))' class="p-2 text-blue-400 hover:bg-blue-50 rounded-lg transition-all hover:scale-110">
                                         <i class="fa fa-edit text-lg"></i>
                                     </button>
-                                    <form action="{{ route('admin.MetodoPago.destroy', $metodo->id) }}" method="POST" class="inline" onsubmit="return confirm('¿Eliminar registro?')">
-                                        @csrf @method('DELETE')
-                                        <button class="p-2 text-rose-400 hover:bg-rose-50 rounded-lg transition-all hover:scale-110">
-                                            <i class="fa fa-trash-alt text-lg"></i>
-                                        </button>
-                                    </form>
+                                    <button class="btnEliminarMetodoPago"
+                                        data-id="{{ $metodo->id }}"
+                                        data-nombre="{{ $metodo->descripcion }}">
+                                        <i class="fa fa-trash text-red-500"></i>
+                                    </button>
                                 </div>
                             </td>
                         </tr>
@@ -177,11 +176,17 @@
                         <div class="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center w-8 h-8 bg-slate-50 rounded-lg group-focus-within:bg-blue-50 transition-colors">
                             <i class="fa fa-layer-group text-[12px] text-slate-400 group-focus-within:text-[#0096D9]"></i>
                         </div>
-                        <select name="tipo_pago_id" id="inputTipo" required 
+                       <select name="tipo_pago_id" id="inputTipo" required 
                             class="w-full pl-14 pr-10 py-4 bg-white border-2 border-slate-50 rounded-2xl outline-none focus:border-[#0096D9] font-bold text-slate-700 appearance-none transition-all uppercase text-xs cursor-pointer">
+
                             <option value="" disabled selected>SELECCIONE OPCIÓN</option>
-                            <option value="1">TARJETA VISA</option>
-                            <option value="2">EFECTIVO</option>
+
+                            @foreach($tipos as $tipo)
+                                <option value="{{ $tipo->id }}">
+                                    {{ strtoupper($tipo->descripcion) }}
+                                </option>
+                            @endforeach
+
                         </select>
                         <i class="fa fa-chevron-down absolute right-5 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none text-[10px]"></i>
                     </div>
@@ -226,5 +231,22 @@
     <i class="fa fa-chevron-up"></i>
 </button>
 
+<div id="modalEliminar"  class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-black/50 backdrop-blur-sm transition-all">
+    <div class="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl p-8 text-center">
+        <div class="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+            <i class="fa fa-trash"></i>
+        </div>
+        <h3 class="text-lg font-bold text-gray-800">¿Eliminar Método de Pago?</h3>
+        <p class="text-gray-500 mt-2 mb-6 text-xs">Esta acción eliminará el método de pago <span id="delete_nombre" class="font-bold text-red-600"></span> y no se puede deshacer.</p>
+        <form id="formEliminar" method="POST" action="">
+            @csrf
+            @method('DELETE')
+            <div class="flex gap-3">
+                <button type="button" onclick="document.getElementById('modalEliminar').classList.add('hidden')" class="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-xl font-bold hover:bg-gray-200 text-xs transition-all">No, volver</button>
+                <button type="submit" class="flex-1 px-4 py-2 bg-[#e74c3c] text-white rounded-xl font-bold hover:bg-red-700 shadow-lg shadow-red-100 text-xs transition-all">Sí, eliminar</button>
+            </div>
+        </form>
+    </div>
+</div>
 
 @endsection
