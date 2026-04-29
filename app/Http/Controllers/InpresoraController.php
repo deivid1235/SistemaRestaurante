@@ -42,7 +42,7 @@ class InpresoraController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Inpresora $inpresora)
+    public function show(int $id)
     {
         //
     }
@@ -50,7 +50,7 @@ class InpresoraController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Inpresora $inpresora)
+    public function edit(int $id)
     {
         //
     }
@@ -58,7 +58,7 @@ class InpresoraController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
         //
         $impresora = Inpresora::findOrFail($id);
@@ -74,7 +74,7 @@ class InpresoraController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         //
         $impresora = Inpresora::findOrFail($id);

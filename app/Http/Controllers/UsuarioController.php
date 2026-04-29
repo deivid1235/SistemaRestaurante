@@ -83,7 +83,7 @@ class UsuarioController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function edit(int $id)
     {
         $usuario = Usuario::findOrFail($id);
         $roles   = ['ADMINISTRADOR', 'CAJERO', 'PRODUCCION', 'MOZO', 'REPARTIDOR', 'PERSONALIZADO'];
@@ -93,7 +93,7 @@ class UsuarioController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
         $usuario = Usuario::findOrFail($id);
 
@@ -143,7 +143,7 @@ class UsuarioController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $usuario = Usuario::findOrFail($id);
 

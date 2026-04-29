@@ -53,7 +53,7 @@ class MetodoPagoController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(MetodoPago $metodoPago)
+    public function show(int $id)
     {
         //
     }
@@ -69,7 +69,7 @@ class MetodoPagoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
         //
         $request->validate([
@@ -92,7 +92,7 @@ class MetodoPagoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         //
         $metodo = MetodoPago::findOrFail($id);
@@ -101,7 +101,7 @@ class MetodoPagoController extends Controller
         return redirect()->back()->with('success', 'Método de pago eliminado');
     }
 
-    public function toggleEstado($id)
+    public function toggleEstado(int $id)
     {
         $metodo = MetodoPago::findOrFail($id);
 

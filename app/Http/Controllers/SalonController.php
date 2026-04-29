@@ -47,7 +47,7 @@ class SalonController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Salon $salon)
+    public function show(int $id)
     {
         //
     }
@@ -55,7 +55,7 @@ class SalonController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function edit(int $id)
     {
         //
     }
@@ -63,7 +63,7 @@ class SalonController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
         //
         $salon = Salon::findOrFail($id);
@@ -85,7 +85,7 @@ class SalonController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         //
         $salon = Salon::findOrFail($id);

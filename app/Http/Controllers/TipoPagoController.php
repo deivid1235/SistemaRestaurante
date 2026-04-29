@@ -62,7 +62,7 @@ class TipoPagoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update($id, Request $request)
+    public function update(int $id, Request $request)
     {
         //
           $request->validate([
@@ -80,7 +80,7 @@ class TipoPagoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         //
         TipoPago::findOrFail($id)->delete();
