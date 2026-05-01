@@ -12,4 +12,9 @@ class Salon extends Model
         'nombre',
         'estado',
     ];
+
+    public function mesas()
+    {
+        return $this->hasMany(Mesa::class);
+    }
 }

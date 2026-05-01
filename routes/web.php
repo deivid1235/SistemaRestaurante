@@ -14,6 +14,8 @@ use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\InpresoraController;
 use App\Http\Controllers\SalonController;
 use App\Http\Controllers\TipoDocumentoController;
+use App\Http\Controllers\MesaController;
+
 
 
 
@@ -83,6 +85,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/admin/Salon', [SalonController::class, 'store'])->name('admin.Salon.store');
     Route::put('/admin/Salon/{id}', [SalonController::class, 'update'])->name('admin.Salon.update');
     Route::delete('/admin/Salon/{id}', [SalonController::class, 'destroy'])->name('admin.Salon.destroy');
+    //Rutas de Mesas
+    Route::post('/admin/mesa', [MesaController::class, 'store'])->name('admin.mesa.store');
+    Route::delete('/admin/mesa/{id}', [MesaController::class, 'destroy'])->name('admin.mesa.destroy');
+    Route::put('/admin/mesa/{id}', [MesaController::class, 'update'])->name('admin.mesa.update'); 
+
+
 
     //Rutas para usuarios y roles
     Route::prefix('usuarios-roles')->name('usuarios.')->group(function () {
@@ -93,6 +101,8 @@ Route::middleware('auth')->group(function () {
     Route::put('/{id}',    [UsuarioController::class, 'update'])->name('update');
     Route::delete('/{id}', [UsuarioController::class, 'destroy'])->name('destroy');
     });
+   
+
     
 });
 

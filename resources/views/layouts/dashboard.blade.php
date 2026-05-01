@@ -445,7 +445,7 @@
 <aside id="sidebar">
 
     <div class="logo-area">
-        <img src="{{ asset('iconos/logotipo.png') }}" alt="Logo AOSC"
+        <img src="{{ asset('iconos/logotipo.jpg') }}" alt="Logo AOSC"
             onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='flex'">
         <div id="logo-fallback"
             style="display:none; align-items:center; gap:8px;">

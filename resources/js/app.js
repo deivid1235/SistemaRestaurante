@@ -806,3 +806,109 @@ window.cerrarModal = function(id) {
     modal.classList.add('hidden');
     modal.classList.remove('flex');
 }
+
+
+// SALONES Y MESAS
+let salonSeleccionado = null;
+
+window.seleccionarSalon = function (id, nombre) {
+    salonSeleccionado = id;
+    document.getElementById('tituloMesas').innerText = nombre;
+
+    document.querySelectorAll('tbody tr').forEach(tr =>
+        tr.classList.remove('bg-blue-50', 'border-l-4', 'border-blue-500')
+    );
+
+    const fila = document.getElementById(`fila-salon-${id}`);
+    if (fila) fila.classList.add('bg-blue-50', 'border-l-4', 'border-blue-500');
+
+    document.querySelectorAll('.mesa').forEach(mesa => {
+        mesa.classList.toggle('hidden', mesa.dataset.salon != id);
+    });
+};
+
+window.abrirEliminar = function (id, nombre, tipo) {
+    const form = document.getElementById('formEliminar');
+
+    let baseUrl = (tipo === 'mesa')
+        ? '/admin/mesa/'
+        : '/admin/Salon/';
+
+    form.action = baseUrl + id;
+
+    document.getElementById('delete_nombre').innerText = nombre;
+
+    const modal = document.getElementById('modalEliminar');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+};
+
+window.abrirCrearSalon = function () {
+    const form = document.getElementById('formSalon');
+
+    form.action = '/admin/Salon';
+    document.getElementById('methodSalon').value = 'POST';
+    document.getElementById('modalSalonTitulo').innerText = 'Nuevo Salón';
+
+    form.reset();
+    document.getElementById('modalSalon').classList.replace('hidden', 'flex');
+};
+
+window.abrirEditarSalon = function (id, nombre, estado) {
+    const form = document.getElementById('formSalon');
+
+    form.action = '/admin/Salon/' + id;
+
+    document.getElementById('methodSalon').value = 'PUT';
+    document.getElementById('modalSalonTitulo').innerText = 'Editar Salón: ' + nombre;
+    document.getElementById('inputSalonNombre').value = nombre;
+    document.getElementById('inputSalonEstado').value = estado;
+
+    document.getElementById('modalSalon').classList.replace('hidden', 'flex');
+};
+
+window.abrirCrearMesa = function () {
+    if (!salonSeleccionado) {
+        Swal.fire({
+            icon: 'info',
+            title: 'Atención',
+            text: 'Selecciona un salón primero'
+        });
+        return;
+    }
+
+    const form = document.getElementById('formMesa');
+
+    form.action = '/admin/mesa';
+    document.getElementById('methodMesa').value = 'POST';
+    document.getElementById('modalMesaTitulo').innerText = 'Nueva Mesa';
+
+    form.reset();
+    document.getElementById('mesa_salon_id').value = salonSeleccionado;
+
+    document.getElementById('modalMesa').classList.replace('hidden', 'flex');
+};
+
+window.abrirEditarMesa = function (id, nombre, estado, salonId) {
+    const form = document.getElementById('formMesa');
+
+    form.action = '/admin/mesa/' + id;
+
+    document.getElementById('methodMesa').value = 'PUT';
+    document.getElementById('modalMesaTitulo').innerText = 'Editar Mesa ' + nombre;
+
+    document.getElementById('inputMesaNombre').value = nombre;
+    document.getElementById('inputMesaEstado').value = estado;
+    document.getElementById('mesa_salon_id').value = salonId;
+
+    document.getElementById('modalMesa').classList.replace('hidden', 'flex');
+};
+
+window.cerrarModal = function (id) {
+    document.getElementById(id).classList.replace('flex', 'hidden');
+};
+
+window.onload = function () {
+    const primeraFila = document.querySelector('tbody tr');
+    if (primeraFila) primeraFila.click();
+};

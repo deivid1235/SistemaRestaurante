@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Salon;
+use App\Models\Mesa;
+
 use Illuminate\Http\Request;
 
 class SalonController extends Controller
@@ -13,8 +15,10 @@ class SalonController extends Controller
     public function index()
     {
         //
-        $salones = Salon::all();
-        return view('admin.Salon.index', compact('salones'));
+       $salones = Salon::with('mesas')->withCount('mesas')->get();
+        $mesas = Mesa::all();
+
+        return view('admin.Salon.index', compact('salones', 'mesas'));
     }
 
     /**

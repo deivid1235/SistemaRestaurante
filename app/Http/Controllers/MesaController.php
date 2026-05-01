@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Inpresora;
+use App\Models\Mesa;
 use Illuminate\Http\Request;
 
-class InpresoraController extends Controller
+class MesaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,8 +13,6 @@ class InpresoraController extends Controller
     public function index()
     {
         //
-        $impresoras = Inpresora::all();
-        return view('admin.Inpresora.index', compact('impresoras'));;
     }
 
     /**
@@ -31,18 +29,25 @@ class InpresoraController extends Controller
     public function store(Request $request)
     {
         //
-        Inpresora::create([
-        'nombre' => $request->nombre,
-        'estado' => $request->estado
+        $request->validate([
+        'salon_id' => 'required|exists:salons,id',
+        'nombre' => 'required|string|max:50',
+        'estado' => 'required|in:disponible,ocupado,reservado',
         ]);
 
-        return redirect()->back()->with('success', 'Impresora registrada');
+        Mesa::create([
+            'salon_id' => $request->salon_id,
+            'nombre' => $request->nombre,
+            'estado' => $request->estado,
+        ]);
+
+        return redirect()->back()->with('success', 'Mesa creada correctamente');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(int $id)
+    public function show(Mesa $mesa)
     {
         //
     }
@@ -50,7 +55,7 @@ class InpresoraController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(int $id)
+    public function edit(Mesa $mesa)
     {
         //
     }
@@ -61,14 +66,15 @@ class InpresoraController extends Controller
     public function update(Request $request, int $id)
     {
         //
-        $impresora = Inpresora::findOrFail($id);
+        $mesa = Mesa::findOrFail($id);
 
-        $impresora->update([
+        $mesa->update([
             'nombre' => $request->nombre,
-            'estado' => $request->estado
+            'estado' => $request->estado,
+            'salon_id' => $request->salon_id,
         ]);
 
-        return redirect()->back()->with('success', 'Impresora actualizada');
+        return redirect()->back()->with('success', 'Mesa actualizada');
     }
 
     /**
@@ -77,9 +83,9 @@ class InpresoraController extends Controller
     public function destroy(int $id)
     {
         //
-        $impresora = Inpresora::findOrFail($id);
-        $impresora->delete();
-        return redirect()->back()->with('success', 'Impresora eliminada');
+        $mesa = Mesa::findOrFail($id);
+        $mesa->delete();
+        return redirect()->back()->with('delete', 'Mesa eliminado correctamente');
 
     }
 }
