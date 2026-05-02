@@ -6,7 +6,7 @@ Table salons {
     updated_at timestamp
 }
 
-Table mesa {
+Table mesas {
     id_mesa int [pk, increment]
     id_salon int [ref: > salons.id_salon]
     nombre varchar(10) // M01, M02...

@@ -3,28 +3,98 @@
 
 @section('content')
 <div class="p-2 sm:p-6 space-y-4 sm:space-y-6">
-    
-   <div class="relative overflow-hidden rounded-xl sm:rounded-2xl p-5 sm:p-8 text-white shadow-lg transition-all duration-500 ease-out hover:scale-[1.01] hover:shadow-2xl cursor-default"
+    <div class="group relative overflow-hidden rounded-xl sm:rounded-2xl p-4 sm:p-10 text-white shadow-lg transition-all duration-500 ease-out hover:scale-[1.01] hover:shadow-2xl cursor-default"
         style="background: linear-gradient(135deg, var(--primary) 0%, #4fc3f7 100%);">
         
-        <div class="relative z-10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <div>
-                <div class="flex items-center gap-3 group">
-                    <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Documentos Fiscales</h1>
-                    <i class="fas fa-file-invoice text-2xl sm:text-3xl text-white/80 transition-transform duration-500 group-hover:rotate-12 group-hover:scale-110"></i>
+        <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div class="flex items-center gap-5">
+                <div class="relative flex items-center justify-center flex-shrink-0">
+                    <div class="absolute inset-0 rounded-full border-2 border-dashed border-white/40 scale-125 animate-[spin_6s_linear_infinite]"></div>
+                    
+                    <div class="relative w-16 h-16 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/20 shadow-inner animate-[spin_10s_linear_infinite]">
+                        <i class="fas fa-file-invoice text-3xl animate-[pulse_3s_ease-in-out_infinite]"></i>
+                    </div>
                 </div>
-                <p class="text-white/90 mt-1 text-sm sm:text-base font-medium">Configure series y numeración de facturación.</p>
+
+                <div>
+                    <div class="flex items-center gap-3">
+                    <h1 class="text-3xl font-black tracking-tight group-hover:translate-x-1 transition-transform duration-300">
+                            Documentos Fiscales
+                        </h1>
+                    </div>
+                    <p class="text-white/90 mt-1 text-sm sm:text-base font-medium">
+                        Configure series y numeración de facturación.
+                    </p>
+                </div>
             </div>
 
             <a href="{{ route('admin.AdministracionGeneral.index') }}" 
-                class="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-md border border-white/30 rounded-xl font-bold text-xs transition-all hover:bg-white hover:text-[#0096D9] active:scale-95">
-                <i class="fas fa-undo-alt text-sm"></i>
+                class="flex items-center justify-center gap-2 px-5 py-2.5 bg-white/20 backdrop-blur-md border border-white/30 rounded-xl font-bold text-sm transition-all hover:bg-white hover:text-[#0096D9] active:scale-95 w-fit">
+                <i class="fas fa-undo-alt text-xs"></i> 
                 Volver al Menú
             </a>
         </div>
 
-        <div class="absolute top-[-20%] right-[-10%] w-64 h-64 bg-white/10 rounded-full blur-3xl transition-transform duration-700 group-hover:scale-110"></div>
+        <div class="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-3xl transition-transform duration-700 group-hover:scale-150"></div>
     </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        @php
+            $totalDocu = $tipos->count();
+            $activos = $tipos->where('estado', 'activo')->count();
+            $inactivos = $tipos->where('estado', 'inactivo')->count();
+
+            $divisor = $totalDocu > 0 ? $totalDocu : 1;
+            $porcActivo = round(($activos / $divisor) * 100);
+            $porcInactivo = round(($inactivos / $divisor) * 100);
+        @endphp
+
+        <div class="group relative bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex items-center justify-center gap-4 transition-all duration-300 hover:shadow-md hover:-translate-y-1 overflow-hidden">
+            <div class="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center transition-colors duration-300 group-hover:bg-[#00B5E2]">
+                <i class="fa fa-boxes text-[#00B5E2] text-xl transition-colors duration-300 group-hover:text-white"></i>
+            </div>
+            <div class="text-center">
+                <p class="text-2xl font-black text-gray-800 leading-none">{{ $totalDocu }}</p>
+                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-tight mt-1">Total Documentos</p>
+            </div>
+            <div class="absolute bottom-0 left-0 w-full h-1 bg-[#00B5E2] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
+        </div>
+
+        <div class="group relative bg-white p-4 rounded-xl shadow-sm border border-gray-100 transition-all duration-300 hover:shadow-md hover:-translate-y-1 overflow-hidden">
+            <div class="flex items-center gap-3 mb-2">
+                <div class="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center text-green-500 transition-colors duration-300 group-hover:bg-green-500 group-hover:text-white">
+                    <i class="fa fa-check-circle text-lg"></i>
+                </div>
+                <div class="flex flex-col">
+                    <p class="text-2xl font-black text-gray-800 leading-none">{{ $activos }}</p>
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-tight mt-1">Habilitado</p>
+                </div>
+                <span class="ml-auto text-[10px] font-bold bg-green-50 text-green-600 px-2 py-0.5 rounded border border-green-100">{{ $porcActivo }}%</span>
+            </div>
+            <div class="w-full bg-gray-100 h-1 rounded-full overflow-hidden">
+                <div class="bg-green-500 h-full transition-all duration-1000" style="width: {{ $porcActivo }}%"></div>
+            </div>
+            <div class="absolute top-0 left-0 w-full h-1 bg-green-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-center"></div>
+        </div>
+
+        <div class="group relative bg-white p-4 rounded-xl shadow-sm border border-gray-100 transition-all duration-300 hover:shadow-md hover:-translate-y-1 overflow-hidden">
+            <div class="flex items-center gap-3 mb-2">
+                <div class="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center text-red-500 transition-colors duration-300 group-hover:bg-red-500 group-hover:text-white">
+                    <i class="fa fa-times-circle text-lg"></i>
+                </div>
+                <div class="flex flex-col">
+                    <p class="text-2xl font-black text-gray-800 leading-none">{{ $inactivos }}</p>
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-tight mt-1">Inhabilitado</p>
+                </div>
+                <span class="ml-auto text-[10px] font-bold bg-red-50 text-red-600 px-2 py-0.5 rounded border border-red-100">{{ $porcInactivo }}%</span>
+            </div>
+            <div class="w-full bg-gray-100 h-1 rounded-full overflow-hidden">
+                <div class="bg-red-500 h-full transition-all duration-1000" style="width: {{ $porcInactivo }}%"></div>
+            </div>
+            <div class="absolute top-0 left-0 w-full h-1 bg-red-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-center"></div>
+        </div>
+    </div>
+
     <div class="flex flex-col lg:flex-row gap-4 sm:gap-6">
         
         <div class="flex-1 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
@@ -57,7 +127,7 @@
             </div>
 
 
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto overflow-y-auto max-h-[300px]">
                 <table class="w-full text-sm text-left text-gray-500">
                     <thead class="text-[10px] sm:text-[11px] text-gray-400 uppercase bg-gray-50/50 font-bold border-b">
                         <tr>

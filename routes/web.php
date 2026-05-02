@@ -14,7 +14,13 @@ use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\InpresoraController;
 use App\Http\Controllers\SalonController;
 use App\Http\Controllers\TipoDocumentoController;
+<<<<<<< HEAD
 use App\Http\Controllers\CajaController;
+=======
+use App\Http\Controllers\MesaController;
+
+
+>>>>>>> 96c919396f5d315c0b5dce3becbd43f5ed5221a8
 
 
 Route::get('/', function () {
@@ -83,6 +89,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/admin/Salon', [SalonController::class, 'store'])->name('admin.Salon.store');
     Route::put('/admin/Salon/{id}', [SalonController::class, 'update'])->name('admin.Salon.update');
     Route::delete('/admin/Salon/{id}', [SalonController::class, 'destroy'])->name('admin.Salon.destroy');
+    //Rutas de Mesas
+    Route::post('/admin/mesa', [MesaController::class, 'store'])->name('admin.mesa.store');
+    Route::delete('/admin/mesa/{id}', [MesaController::class, 'destroy'])->name('admin.mesa.destroy');
+    Route::put('/admin/mesa/{id}', [MesaController::class, 'update'])->name('admin.mesa.update'); 
+
+
 
     //Rutas para usuarios y roles
     Route::prefix('usuarios-roles')->name('usuarios.')->group(function () {
@@ -93,6 +105,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/{id}',    [UsuarioController::class, 'update'])->name('update');
     Route::delete('/{id}', [UsuarioController::class, 'destroy'])->name('destroy');
     });
+<<<<<<< HEAD
     // Rutas para gestión de cajas
    Route::middleware(['auth'])->group(function () {
     Route::resource('cajas', CajaController::class)->except(['create', 'show']);
@@ -100,5 +113,10 @@ Route::middleware('auth')->group(function () {
     Route::post('cajas/{id}/asignar-usuarios', [CajaController::class, 'asignarUsuarios'])->name('cajas.asignar-usuarios');
     });
 
+=======
+   
+
+    
+>>>>>>> 96c919396f5d315c0b5dce3becbd43f5ed5221a8
 });
 
