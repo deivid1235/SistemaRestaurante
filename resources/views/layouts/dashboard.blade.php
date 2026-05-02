@@ -287,24 +287,24 @@
 
     nav.nav-primary a:hover .chevron { color: rgba(255,255,255,0.9); }
 
-    #submenu-ajustes {
-        overflow: hidden;
-        transition: max-height 0.35s cubic-bezier(.4,0,.2,1), opacity 0.3s ease;
-        max-height: 500px;
-        opacity: 1;
-        margin: 2px 0 4px 14px;
-        padding-left: 12px;
-        border-left: 1.5px solid rgba(255,255,255,0.25);
+    .submenu {
+    overflow: hidden;
+    transition: max-height 0.35s cubic-bezier(.4,0,.2,1), opacity 0.3s ease;
+    max-height: 500px;
+    opacity: 1;
+    margin: 2px 0 4px 14px;
+    padding-left: 12px;
+    border-left: 1.5px solid rgba(255,255,255,0.25);
     }
 
-    #submenu-ajustes.hidden {
+    .submenu.hidden {
         max-height: 0 !important;
         opacity: 0;
         display: flex !important;
         flex-direction: column;
     }
 
-    #submenu-ajustes a {
+    .submenu a {
         font-size: 12px !important;
         font-weight: 400 !important;
         color: rgba(255,255,255,0.75) !important;
@@ -313,13 +313,13 @@
         margin-bottom: 1px !important;
     }
 
-    #submenu-ajustes a:hover  { color: #fff !important; }
-    #submenu-ajustes a.active-link { color: #fff !important; }
-
+    .submenu a:hover { color: #fff !important; }
+    .submenu a.active-link { color: #fff !important; }
     .sidebar-footer {
         padding: 10px 12px 14px;
         border-top: 1px solid rgba(255,255,255,0.15);
     }
+    
 
     .btn-logout {
         width: 100%;
@@ -522,27 +522,33 @@
             <span class="nav-text">Tablero</span>
         </a>
 
-        <p class="sidebar-section">Configuración</p>
+        
+        <!-- AJUSTES-->
+        <p class="sidebar-section">Configuración</p> 
 
-        <a href="#" onclick="toggleAjustes()" class="submenu-trigger flex items-center
-            {{ request()->routeIs('admin.ConfiguracionVisual.*', 'admin.LibroReclamacion.*', 'admin.AdministracionGeneral.*') ? 'active-link' : '' }}">
+        <a href="#" onclick="toggleAjustes('submenu-ajustes', this)" 
+        class="submenu-trigger flex items-center
+        {{ request()->routeIs('admin.ConfiguracionVisual.*', 'admin.LibroReclamacion.*', 'admin.AdministracionGeneral.*') ? 'active-link' : '' }}">
+
             <span class="nav-icon"><i class="fa fa-cog"></i></span>
             <span class="nav-text">Ajustes</span>
+
             <i class="fa fa-chevron-right chevron
-                {{ request()->routeIs('admin.ConfiguracionVisual.*', 'admin.LibroReclamacion.*', 'admin.AdministracionGeneral.*') ? 'rotate-90' : '' }}"></i>
+            {{ request()->routeIs('admin.ConfiguracionVisual.*', 'admin.LibroReclamacion.*', 'admin.AdministracionGeneral.*') ? 'rotate-90' : '' }}">
+            </i>
         </a>
 
         <div id="submenu-ajustes"
-            class="{{ request()->routeIs('admin.ConfiguracionVisual.*', 'admin.LibroReclamacion.*', 'admin.AdministracionGeneral.*') ? '' : 'hidden' }}">
+        class="submenu flex flex-col {{ request()->routeIs('admin.ConfiguracionVisual.*', 'admin.LibroReclamacion.*', 'admin.AdministracionGeneral.*') ? '' : 'hidden' }}">
 
-            <a href="{{ route('admin.AdministracionGeneral.index') }}" class="flex items-center {{ request()->routeIs('admin.AdministracionGeneral.*') ? 'active-link' : '' }}">
+            <a href="{{ route('admin.AdministracionGeneral.index') }}" 
+            class="flex items-center {{ request()->routeIs('admin.AdministracionGeneral.*') ? 'active-link' : '' }}">
                 <span class="nav-icon"><i class="fa fa-user-cog"></i></span>
                 <span class="nav-text">Administración General</span>
             </a>
 
-
             <a href="{{ route('admin.LibroReclamacion.index') }}" 
-                class="flex items-center {{ request()->routeIs('admin.LibroReclamacion.*') ? 'active-link' : '' }}">
+            class="flex items-center {{ request()->routeIs('admin.LibroReclamacion.*') ? 'active-link' : '' }}">
                 <span class="nav-icon">
                     <i class="fa fa-book"></i>
                 </span>
@@ -550,13 +556,12 @@
             </a>
 
             <a href="{{ route('admin.ConfiguracionVisual.index') }}"
-                class="flex items-center {{ request()->routeIs('admin.ConfiguracionVisual.*') ? 'active-link' : '' }}">
+            class="flex items-center {{ request()->routeIs('admin.ConfiguracionVisual.*') ? 'active-link' : '' }}">
                 <span class="nav-icon"><i class="fa fa-palette"></i></span>
                 <span class="nav-text">Config. Visual</span>
             </a>
 
         </div>
-
     </nav>
 
     <!-- LOGOUT -->
@@ -674,11 +679,15 @@
     }
 
     /* ── Submenú Ajustes ── */
-    function toggleAjustes() {
-        const sub  = document.getElementById('submenu-ajustes');
-        const icon = document.querySelector('.submenu-trigger .chevron');
+        function toggleAjustes(id, el) {
+        const sub = document.getElementById(id);
+        const icon = el.querySelector('.chevron');
+
         sub.classList.toggle('hidden');
-        if (icon) icon.classList.toggle('rotate-90');
+
+        if (icon) {
+            icon.classList.toggle('rotate-90');
+        }
     }
 </script>
 @stack('scripts')
