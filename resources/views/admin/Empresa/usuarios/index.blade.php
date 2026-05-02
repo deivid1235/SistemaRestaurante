@@ -17,6 +17,17 @@
         </div>
 
         <div class="flex flex-wrap sm:flex-row gap-4 z-10 w-full lg:w-auto">
+              {{-- Botón volver al menú --}}
+            <a href="{{ route('admin.AdministracionGeneral.index') }}"
+            class="bg-white text-slate-700 hover:bg-slate-50 rounded-2xl p-4 flex items-center gap-3 transition-all duration-300 hover:-translate-y-1 active:scale-95 min-w-[160px] shadow-sm">
+                <div class="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center">
+                    <i class="fa fa-arrow-left text-slate-600 text-base"></i>
+                </div>
+                <div>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Regresar</p>
+                    <p class="text-slate-700 font-black text-sm">Volver al Menú</p>
+                </div>
+            </a>
             {{-- Stat: total usuarios --}}
             <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 flex items-center gap-4 flex-1 min-w-[160px]">
                 <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
@@ -27,7 +38,6 @@
                     <p class="text-white font-black text-xl leading-none">{{ $usuarios->total() }}</p>
                 </div>
             </div>
-
             {{-- Botón nuevo usuario --}}
             <a href="{{ route('usuarios.create') }}"
                class="bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/20 rounded-2xl p-4 flex items-center gap-3 transition-all duration-300 hover:-translate-y-1 active:scale-95 min-w-[160px]">

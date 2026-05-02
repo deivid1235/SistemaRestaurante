@@ -14,6 +14,7 @@ use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\InpresoraController;
 use App\Http\Controllers\SalonController;
 use App\Http\Controllers\TipoDocumentoController;
+use App\Http\Controllers\CajaController;
 use App\Http\Controllers\MesaController;
 
 
@@ -68,7 +69,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/admin/MetodoPago/{id}', [MetodopagoController::class, 'update'])->name('admin.MetodoPago.update');
     Route::delete('/admin/MetodoPago/{id}', [MetodopagoController::class, 'destroy'])->name('admin.MetodoPago.destroy');
     Route::post('/admin/MetodoPago/toggle/{id}', [MetodopagoController::class, 'toggleEstado'])->name('admin.MetodoPago.toggle');
-  
+
     // Rutas del tipo de documento
     Route::get('/admin/TipoDocumento', [TipoDocumentoController::class, 'index'])->name('admin.TipoDocumento.index');
     Route::post('/admin/TipoDocumento', [TipoDocumentoController::class, 'store'])->name('admin.TipoDocumento.store');
@@ -101,6 +102,13 @@ Route::middleware('auth')->group(function () {
     Route::put('/{id}',    [UsuarioController::class, 'update'])->name('update');
     Route::delete('/{id}', [UsuarioController::class, 'destroy'])->name('destroy');
     });
+    // Rutas para gestión de cajas
+   Route::middleware(['auth'])->group(function () {
+    Route::resource('cajas', CajaController::class)->except(['create', 'show']);
+    Route::get('cajas/{id}/usuarios', [CajaController::class, 'usuarios'])->name('cajas.usuarios');
+    Route::post('cajas/{id}/asignar-usuarios', [CajaController::class, 'asignarUsuarios'])->name('cajas.asignar-usuarios');
+    });
+
    
 
     
