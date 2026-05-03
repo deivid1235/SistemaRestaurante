@@ -1,3 +1,19 @@
+Table cajas {
+  id int [pk, increment]
+  nombre varchar
+  estado varchar
+  created_at datetime
+  updated_at datetime
+}
+
+Table caja_usuario {
+  id int [pk, increment]
+  caja_id int [ref: > cajas.id]
+  usuario_id int
+  created_at datetime
+  updated_at datetime
+} 
+
 Table salons {
     id_salon int [pk, increment]
     nombre varchar(100) [not null]

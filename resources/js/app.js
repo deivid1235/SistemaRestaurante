@@ -9,7 +9,7 @@ function setupMobileMenu() {
 
 document.addEventListener('DOMContentLoaded', setupMobileMenu);
 
-// login del sistema 
+// login del sistema
 document.addEventListener('DOMContentLoaded', function () {
     const button = document.getElementById('mobile-menu-button');
     const menu = document.getElementById('mobile-menu-Celular');
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    
+
     const openBtn = document.getElementById('open-login-modal');
     const openBtnMobile = document.getElementById('open-login-modal-Celular');
 
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Libro de reclamaciones 
+// Libro de reclamaciones
 document.addEventListener('DOMContentLoaded', function() {
 
     let ubigeoData = {};
@@ -170,41 +170,39 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-
-
 document.addEventListener('DOMContentLoaded', function () {
 
     const tipoDoc = document.getElementById('tipo_documento');
     const numeroDoc = document.getElementById('numero_documento');
 
     tipoDoc.addEventListener('change', function () {
-        numeroDoc.value = ''; 
+        numeroDoc.value = '';
     });
 
     numeroDoc.addEventListener('input', function () {
         let valor = numeroDoc.value;
         const tipo = tipoDoc.value;
 
-    
+
         if (tipo === 'DNI' || tipo === 'RUC') {
             valor = valor.replace(/\D/g, '');
         }
 
         if (tipo === 'DNI') {
-            numeroDoc.value = valor.slice(0, 8); 
-        } 
+            numeroDoc.value = valor.slice(0, 8);
+        }
         else if (tipo === 'RUC') {
-            numeroDoc.value = valor.slice(0, 11); 
-        } 
+            numeroDoc.value = valor.slice(0, 11);
+        }
         else if (tipo === 'CE') {
-            numeroDoc.value = valor.slice(0, 12); 
-        } 
+            numeroDoc.value = valor.slice(0, 12);
+        }
         else if (tipo === 'Pasaporte') {
             numeroDoc.value = valor.slice(0, 12);
         }
     });
 
-  
+
     const form = numeroDoc.closest('form');
 
     form.addEventListener('submit', function (e) {
@@ -236,7 +234,7 @@ document.addEventListener('DOMContentLoaded', function () {
         'segundo_nombre',
         'primer_apellido',
         'segundo_apellido',
-       
+
     ];
 
     campos.forEach(id => {
@@ -546,7 +544,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.body.style.overflow = 'auto';
     };
 
-    
+
     if (btnUp) {
         window.addEventListener('scroll', function () {
 
@@ -745,7 +743,7 @@ document.addEventListener('DOMContentLoaded', function () {
         modal.classList.remove('hidden');
         modal.classList.add('flex');
 
-        form.action = storeUrl; 
+        form.action = storeUrl;
         method.innerHTML = "";
         form.reset();
 
@@ -799,7 +797,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-}); 
+});
 
 window.cerrarModal = function(id) {
     const modal = document.getElementById(id);
@@ -912,3 +910,408 @@ window.onload = function () {
     const primeraFila = document.querySelector('tbody tr');
     if (primeraFila) primeraFila.click();
 };
+
+// Caja Y usuarios
+
+window.UI = {
+    modals: {
+        crear: document.getElementById('modalCrear'),
+        editar: document.getElementById('modalEditar'),
+        usuarios: document.getElementById('modalUsuarios')
+    },
+
+    toggle(modal, show) {
+        if (!modal) return;
+        modal.classList.toggle('hidden', !show);
+        modal.classList.toggle('flex', show);
+    }
+};
+
+window.abrirModalCrear = function () {
+    window.UI.toggle(window.UI.modals.crear, true);
+};
+
+window.cerrarModalCrear = function () {
+    window.UI.toggle(window.UI.modals.crear, false);
+};
+
+window.abrirModalEditar = function (id, nombre, estado) {
+    const form = document.getElementById('formEditar');
+
+    form.action = `/admin/Caja/${id}`;
+
+    document.getElementById('edit_nombre').value = nombre;
+    document.getElementById('edit_estado').value = estado;
+
+    window.UI.toggle(window.UI.modals.editar, true);
+};
+
+window.cerrarModalEditar = function () {
+    window.UI.toggle(window.UI.modals.editar, false);
+};
+
+window.cajaIdActual = null;
+window.usuariosAsignados = [];
+
+window.abrirModalUsuarios = function (id) {
+    window.cajaIdActual = id;
+
+    document.getElementById('formUsuarios').action =
+        `/admin/Caja/${id}/asignar-usuarios`;
+
+    window.UI.toggle(window.UI.modals.usuarios, true);
+    cargarUsuarios(id);
+};
+
+window.cerrarModalUsuarios = function () {
+    window.UI.toggle(window.UI.modals.usuarios, false);
+};
+
+function cargarUsuarios(id) {
+    const tbody = document.getElementById('tablaUsuariosAsignados');
+
+    tbody.innerHTML = `
+        <tr>
+            <td class="px-4 py-6 text-center text-gray-400 text-xs">
+                <i class="fa fa-spinner fa-spin mr-2"></i> Cargando...
+            </td>
+        </tr>
+    `;
+
+    fetch(`/admin/Caja/${id}/usuarios`)
+        .then(res => res.json())
+        .then(data => {
+
+            window.usuariosAsignados = (data.asignados || []).map(Number);
+
+            const select = document.getElementById('selectUsuarioAñadir');
+            select.innerHTML = '<option value="">Buscar usuario...</option>';
+
+            (data.usuarios || []).forEach(u => {
+                const idNum = Number(u.id);
+
+                if (!window.usuariosAsignados.includes(idNum)) {
+                    select.innerHTML += `
+                        <option value="${idNum}">
+                            ${u.nombre_completo}
+                        </option>
+                    `;
+                }
+            });
+
+            renderTablaAsignados(data.usuarios || []);
+        })
+        .catch(() => {
+            tbody.innerHTML = `
+                <tr>
+                    <td class="px-4 py-6 text-center text-red-400 text-xs">
+                        Error al cargar usuarios
+                    </td>
+                </tr>
+            `;
+        });
+}
+
+function renderTablaAsignados(todos) {
+    const tbody = document.getElementById('tablaUsuariosAsignados');
+
+    const asignados = todos.filter(u =>
+        window.usuariosAsignados.includes(Number(u.id))
+    );
+
+    if (asignados.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td class="px-4 py-6 text-center text-gray-400 text-xs">
+                    Sin usuarios asignados.
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    tbody.innerHTML = asignados.map(u => `
+        <tr class="hover:bg-gray-50 transition-colors">
+            <td class="px-4 py-3 text-sm font-medium text-gray-700">
+                ${u.nombre_completo}
+            </td>
+            <td class="px-4 py-3 text-right">
+                <button type="button"
+                    onclick="quitarUsuario(${u.id})"
+                    class="text-red-400 hover:text-red-600 p-1.5 rounded-lg transition-colors">
+                    <i class="fa fa-trash"></i>
+                </button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+window.añadirUsuario = function () {
+    const select = document.getElementById('selectUsuarioAñadir');
+    const uid = Number(select.value);
+
+    if (!uid) return;
+
+    if (!window.usuariosAsignados.includes(uid)) {
+        window.usuariosAsignados.push(uid);
+    }
+
+    select.value = "";
+    sincronizarYEnviar();
+
+};
+
+window.quitarUsuario = function (uid) {
+    window.usuariosAsignados = window.usuariosAsignados.filter(id =>
+        Number(id) !== Number(uid)
+    );
+
+    sincronizarYEnviar();
+};
+
+function sincronizarYEnviar() {
+    const hiddenDiv = document.getElementById('inputsUsuariosHidden');
+
+    hiddenDiv.innerHTML = window.usuariosAsignados.map(id =>
+        `<input type="hidden" name="usuarios[]" value="${id}">`
+    ).join('');
+
+    document.getElementById('formUsuarios').submit();
+}
+
+window.onclick = function (e) {
+    Object.values(window.UI.modals).forEach(m => {
+        if (e.target === m) {
+            window.UI.toggle(m, false);
+        }
+    });
+};
+
+document.addEventListener('DOMContentLoaded', function () {
+    const buscador = document.getElementById('buscador');
+    if (!buscador) return;
+    buscador.addEventListener('keyup', function () {
+        const filtro = this.value.toLowerCase();
+        const filas = document.querySelectorAll('#tablaCaja tr');
+        filas.forEach(fila => {
+            const texto = fila.textContent.toLowerCase();
+            if (texto.includes(filtro)) {
+                fila.style.display = '';
+            } else {
+                fila.style.display = 'none';
+            }
+
+        });
+
+    });
+
+});
+// ══════════════════════════════════════════════════════════════
+// ÁREAS DE PRODUCCIÓN
+// ══════════════════════════════════════════════════════════════
+
+window.UI_Area = {
+    modals: {
+        crear:    document.getElementById('modalCrearArea'),
+        editar:   document.getElementById('modalEditarArea'),
+        eliminar: document.getElementById('modalEliminarArea'),
+    },
+
+    toggle(modal, show) {
+        if (!modal) return;
+        modal.classList.toggle('hidden', !show);
+        modal.classList.toggle('flex', show);
+    }
+};
+
+// ── Crear ──────────────────────────────────────────────────────
+window.abrirModalCrearArea = function () {
+    window.UI_Area.toggle(window.UI_Area.modals.crear, true);
+};
+
+window.cerrarModalCrearArea = function () {
+    window.UI_Area.toggle(window.UI_Area.modals.crear, false);
+};
+
+// ── Editar ─────────────────────────────────────────────────────
+window.abrirModalEditarArea = function (id, nombre, inpresoraId, estado) {
+    const form = document.getElementById('formEditarArea');
+
+    form.action = `/admin/AreaProduccion/${id}`;
+
+    document.getElementById('editArea_nombre').value    = nombre;
+    document.getElementById('editArea_estado').value    = estado;
+
+    const selectImp = document.getElementById('editArea_inpresora');
+    selectImp.value = inpresoraId ?? '';
+
+    window.UI_Area.toggle(window.UI_Area.modals.editar, true);
+};
+
+window.cerrarModalEditarArea = function () {
+    window.UI_Area.toggle(window.UI_Area.modals.editar, false);
+};
+
+// ── Eliminar ───────────────────────────────────────────────────
+window.abrirModalEliminarArea = function (id, nombre) {
+    const form = document.getElementById('formEliminarArea');
+
+    form.action = `/admin/AreaProduccion/${id}`;
+    document.getElementById('deleteArea_nombre').innerText = nombre;
+
+    window.UI_Area.toggle(window.UI_Area.modals.eliminar, true);
+};
+
+window.cerrarModalEliminarArea = function () {
+    window.UI_Area.toggle(window.UI_Area.modals.eliminar, false);
+};
+
+// ── Cerrar al click en backdrop ────────────────────────────────
+document.addEventListener('click', function (e) {
+    Object.values(window.UI_Area.modals).forEach(m => {
+        if (m && e.target === m) {
+            window.UI_Area.toggle(m, false);
+        }
+    });
+});
+
+// ── Buscador ───────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function () {
+    const buscador = document.getElementById('buscadorArea');
+    if (!buscador) return;
+
+    buscador.addEventListener('keyup', function () {
+        const filtro = this.value.toLowerCase();
+        const filas  = document.querySelectorAll('#tablaAreas tr');
+
+        filas.forEach(fila => {
+            const texto = fila.textContent.toLowerCase();
+            fila.style.display = texto.includes(filtro) ? '' : 'none';
+        });
+    });
+});
+// ══════════════════════════════════════════════════════════════
+// CARTA DIGITAL
+// ══════════════════════════════════════════════════════════════
+
+window.copiarUrl = function () {
+    const input = document.getElementById('inputUrl');
+    if (!input || !input.value) return;
+
+    navigator.clipboard.writeText(input.value).then(() => {
+        // Feedback visual temporal
+        const btn = document.querySelector('[onclick="copiarUrl()"]');
+        if (!btn) return;
+
+        const original = btn.innerHTML;
+        btn.innerHTML = '<i class="fa fa-check text-xs text-emerald-500"></i> <span class="text-emerald-500">Copiado</span>';
+
+        setTimeout(() => {
+            btn.innerHTML = original;
+        }, 2000);
+    }).catch(() => {
+        // Fallback para navegadores sin clipboard API
+        input.select();
+        document.execCommand('copy');
+    });
+};
+
+// Actualizar botón Abrir cuando cambia la URL
+document.addEventListener('DOMContentLoaded', function () {
+    const inputUrl  = document.getElementById('inputUrl');
+    const btnAbrir  = document.getElementById('btnAbrir');
+
+    if (!inputUrl || !btnAbrir) return;
+
+    inputUrl.addEventListener('input', function () {
+        const val = this.value.trim();
+
+        if (val) {
+            btnAbrir.href = val;
+            btnAbrir.classList.remove('pointer-events-none', 'opacity-40');
+        } else {
+            btnAbrir.href = '#';
+            btnAbrir.classList.add('pointer-events-none', 'opacity-40');
+        }
+    });
+});
+// ══════════════════════════════════════════════════════════════
+// CONFIGURACIÓN INICIAL — TABS
+// ══════════════════════════════════════════════════════════════
+
+window.cambiarTab = function (tabId) {
+    // Ocultar todos los contenidos
+    document.querySelectorAll('.config-tab-content').forEach(el => {
+        el.classList.add('hidden');
+    });
+
+    // Desactivar todos los botones
+    document.querySelectorAll('.config-tab-btn').forEach(btn => {
+        btn.classList.remove('active-tab');
+        btn.classList.add('inactive-tab');
+    });
+
+    // Mostrar el tab seleccionado
+    const content = document.getElementById('tab-' + tabId);
+    if (content) content.classList.remove('hidden');
+
+    // Activar el botón seleccionado
+    const btn = document.getElementById('tab-btn-' + tabId);
+    if (btn) {
+        btn.classList.remove('inactive-tab');
+        btn.classList.add('active-tab');
+    }
+};
+
+// Activar primer tab al cargar
+document.addEventListener('DOMContentLoaded', function () {
+    // Solo inicializar si estamos en la página de configuración
+    if (document.getElementById('tab-zona-horaria')) {
+        cambiarTab('zona-horaria');
+    }
+});
+// ══════════════════════════════════════════════════════════════
+// OPTIMIZACIÓN DE PROCESOS
+// ══════════════════════════════════════════════════════════════
+
+// Mapa de acción → ruta POST
+const _optimizacionRoutes = {
+    'optimizar-pedidos':      '/admin/Optimizacion/pedidos',
+    'restaurar-ventas':       '/admin/Optimizacion/ventas',
+    'restaurar-productos':    '/admin/Optimizacion/productos',
+    'restaurar-insumos':      '/admin/Optimizacion/insumos',
+    'restaurar-clientes':     '/admin/Optimizacion/clientes',
+    'restaurar-proveedores':  '/admin/Optimizacion/proveedores',
+    'restaurar-salones':      '/admin/Optimizacion/salones',
+    'restaurar-notas-ventas': '/admin/Optimizacion/notas-ventas',
+};
+
+window.abrirModalOptimizacion = function (accion, mensaje) {
+    const modal   = document.getElementById('modalOptimizacion');
+    const form    = document.getElementById('formOptimizacion');
+    const msgEl   = document.getElementById('modalOptimizacion_mensaje');
+
+    if (!modal || !form || !msgEl) return;
+
+    form.action   = _optimizacionRoutes[accion] ?? '#';
+    msgEl.innerText = mensaje;
+
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+};
+
+window.cerrarModalOptimizacion = function () {
+    const modal = document.getElementById('modalOptimizacion');
+    if (!modal) return;
+
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+};
+
+// Cerrar al click en el backdrop
+document.addEventListener('click', function (e) {
+    const modal = document.getElementById('modalOptimizacion');
+    if (modal && e.target === modal) {
+        cerrarModalOptimizacion();
+    }
+});

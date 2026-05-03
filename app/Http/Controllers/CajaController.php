@@ -10,8 +10,7 @@ class CajaController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Caja::query();
-
+        $query = Caja::with('usuarios'); 
         if ($request->filled('buscar')) {
             $query->where('nombre', 'like', '%' . $request->buscar . '%');
         }
@@ -19,7 +18,7 @@ class CajaController extends Controller
         $cajas = $query->orderBy('nombre')->paginate(10);
         $total = Caja::count();
 
-        return view('admin.Restaurante.Caja.index', compact('cajas', 'total'));
+        return view('admin.Caja.index', compact('cajas', 'total'));
     }
 
     public function store(Request $request)
@@ -34,17 +33,17 @@ class CajaController extends Controller
             'estado' => $request->estado,
         ]);
 
-        return redirect()->route('cajas.index')
+        return redirect()->route('admin.Caja.index')
                          ->with('success', 'Caja creada correctamente.');
     }
 
-    public function edit($id)
+    public function edit(int $id)
     {
         $caja = Caja::findOrFail($id);
         return response()->json($caja);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
         $caja = Caja::findOrFail($id);
 
@@ -58,21 +57,21 @@ class CajaController extends Controller
             'estado' => $request->estado,
         ]);
 
-        return redirect()->route('cajas.index')
+        return redirect()->route('admin.Caja.index')
                          ->with('success', 'Caja actualizada correctamente.');
     }
 
-    public function destroy($id)
+    public function destroy( int $id)
     {
         $caja = Caja::findOrFail($id);
         $caja->delete();
 
-        return redirect()->route('cajas.index')
+        return redirect()->route('admin.Caja.index')
                          ->with('success', 'Caja eliminada correctamente.');
     }
 
     // Mostrar usuarios disponibles y asignados a la caja
-    public function usuarios($id)
+    public function usuarios(int $id)
     {
         $caja = Caja::with('usuarios')->findOrFail($id);
 
@@ -81,20 +80,24 @@ class CajaController extends Controller
             ->get(['id', 'nombres', 'apellido_paterno', 'apellido_materno'])
             ->map(function ($u) {
                 return [
-                    'id'     => $u->id,
-                    'nombre' => trim($u->nombres . ' ' . $u->apellido_paterno . ' ' . $u->apellido_materno),
+                    'id' => $u->id,
+                    'nombre_completo' => trim(
+                        $u->nombres . ' ' .
+                        $u->apellido_paterno . ' ' .
+                        $u->apellido_materno
+                    ),
                 ];
             });
 
         return response()->json([
-            'caja'      => $caja,
-            'usuarios'  => $usuarios,
+            'caja' => $caja,
+            'usuarios' => $usuarios,
             'asignados' => $caja->usuarios->pluck('id')->toArray(),
         ]);
     }
 
     // Guardar usuarios asignados a la caja
-    public function asignarUsuarios(Request $request, $id)
+    public function asignarUsuarios(Request $request, int $id)
     {
         $caja = Caja::findOrFail($id);
 
@@ -103,9 +106,15 @@ class CajaController extends Controller
             'usuarios.*' => 'exists:usuarios,id',
         ]);
 
-        $caja->usuarios()->sync($request->usuarios ?? []);
+        $usuarios = $request->usuarios ?? [];
 
-        return redirect()->route('cajas.index')
-                         ->with('success', 'Usuarios asignados correctamente.');
+        // 🔥 DEBUG OPCIONAL (quitar luego)
+        // dd($usuarios);
+
+        $caja->usuarios()->sync($usuarios);
+
+        return redirect()
+            ->route('admin.Caja.index')
+            ->with('success', 'Usuarios asignados correctamente.');
     }
 }
