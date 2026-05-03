@@ -1,8 +1,7 @@
 <?php
 
 namespace App\Models;
-
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Usuario extends Authenticatable
@@ -39,8 +38,13 @@ class Usuario extends Authenticatable
     }
 
     // Scope: activos
-    public function scopeActivos($query)
+    public function scopeActivos(Builder $query)
     {
         return $query->where('estado', true);
+    }
+
+    public function cajas()
+    {
+        return $this->belongsToMany(Caja::class, 'caja_usuario');
     }
 }

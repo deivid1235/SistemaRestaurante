@@ -170,8 +170,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-
-
 document.addEventListener('DOMContentLoaded', function () {
 
     const tipoDoc = document.getElementById('tipo_documento');
@@ -912,3 +910,199 @@ window.onload = function () {
     const primeraFila = document.querySelector('tbody tr');
     if (primeraFila) primeraFila.click();
 };
+
+// Caja Y usuarios 
+
+window.UI = {
+    modals: {
+        crear: document.getElementById('modalCrear'),
+        editar: document.getElementById('modalEditar'),
+        usuarios: document.getElementById('modalUsuarios')
+    },
+
+    toggle(modal, show) {
+        if (!modal) return;
+        modal.classList.toggle('hidden', !show);
+        modal.classList.toggle('flex', show);
+    }
+};
+
+window.abrirModalCrear = function () {
+    window.UI.toggle(window.UI.modals.crear, true);
+};
+
+window.cerrarModalCrear = function () {
+    window.UI.toggle(window.UI.modals.crear, false);
+};
+
+window.abrirModalEditar = function (id, nombre, estado) {
+    const form = document.getElementById('formEditar');
+
+    form.action = `/admin/Caja/${id}`;
+
+    document.getElementById('edit_nombre').value = nombre;
+    document.getElementById('edit_estado').value = estado;
+
+    window.UI.toggle(window.UI.modals.editar, true);
+};
+
+window.cerrarModalEditar = function () {
+    window.UI.toggle(window.UI.modals.editar, false);
+};
+
+window.cajaIdActual = null;
+window.usuariosAsignados = [];
+
+window.abrirModalUsuarios = function (id) {
+    window.cajaIdActual = id;
+
+    document.getElementById('formUsuarios').action =
+        `/admin/Caja/${id}/asignar-usuarios`;
+
+    window.UI.toggle(window.UI.modals.usuarios, true);
+    cargarUsuarios(id);
+};
+
+window.cerrarModalUsuarios = function () {
+    window.UI.toggle(window.UI.modals.usuarios, false);
+};
+
+function cargarUsuarios(id) {
+    const tbody = document.getElementById('tablaUsuariosAsignados');
+
+    tbody.innerHTML = `
+        <tr>
+            <td class="px-4 py-6 text-center text-gray-400 text-xs">
+                <i class="fa fa-spinner fa-spin mr-2"></i> Cargando...
+            </td>
+        </tr>
+    `;
+
+    fetch(`/admin/Caja/${id}/usuarios`)
+        .then(res => res.json())
+        .then(data => {
+
+            window.usuariosAsignados = (data.asignados || []).map(Number);
+
+            const select = document.getElementById('selectUsuarioAñadir');
+            select.innerHTML = '<option value="">Buscar usuario...</option>';
+
+            (data.usuarios || []).forEach(u => {
+                const idNum = Number(u.id);
+
+                if (!window.usuariosAsignados.includes(idNum)) {
+                    select.innerHTML += `
+                        <option value="${idNum}">
+                            ${u.nombre_completo}
+                        </option>
+                    `;
+                }
+            });
+
+            renderTablaAsignados(data.usuarios || []);
+        })
+        .catch(() => {
+            tbody.innerHTML = `
+                <tr>
+                    <td class="px-4 py-6 text-center text-red-400 text-xs">
+                        Error al cargar usuarios
+                    </td>
+                </tr>
+            `;
+        });
+}
+
+function renderTablaAsignados(todos) {
+    const tbody = document.getElementById('tablaUsuariosAsignados');
+
+    const asignados = todos.filter(u =>
+        window.usuariosAsignados.includes(Number(u.id))
+    );
+
+    if (asignados.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td class="px-4 py-6 text-center text-gray-400 text-xs">
+                    Sin usuarios asignados.
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    tbody.innerHTML = asignados.map(u => `
+        <tr class="hover:bg-gray-50 transition-colors">
+            <td class="px-4 py-3 text-sm font-medium text-gray-700">
+                ${u.nombre_completo}
+            </td>
+            <td class="px-4 py-3 text-right">
+                <button type="button"
+                    onclick="quitarUsuario(${u.id})"
+                    class="text-red-400 hover:text-red-600 p-1.5 rounded-lg transition-colors">
+                    <i class="fa fa-trash"></i>
+                </button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+window.añadirUsuario = function () {
+    const select = document.getElementById('selectUsuarioAñadir');
+    const uid = Number(select.value);
+
+    if (!uid) return;
+
+    if (!window.usuariosAsignados.includes(uid)) {
+        window.usuariosAsignados.push(uid);
+    }
+
+    select.value = "";
+    sincronizarYEnviar();
+    
+};
+
+window.quitarUsuario = function (uid) {
+    window.usuariosAsignados = window.usuariosAsignados.filter(id =>
+        Number(id) !== Number(uid)
+    );
+
+    sincronizarYEnviar();
+};
+
+function sincronizarYEnviar() {
+    const hiddenDiv = document.getElementById('inputsUsuariosHidden');
+
+    hiddenDiv.innerHTML = window.usuariosAsignados.map(id =>
+        `<input type="hidden" name="usuarios[]" value="${id}">`
+    ).join('');
+
+    document.getElementById('formUsuarios').submit();
+}
+
+window.onclick = function (e) {
+    Object.values(window.UI.modals).forEach(m => {
+        if (e.target === m) {
+            window.UI.toggle(m, false);
+        }
+    });
+};
+
+document.addEventListener('DOMContentLoaded', function () {
+    const buscador = document.getElementById('buscador');
+    if (!buscador) return;
+    buscador.addEventListener('keyup', function () {
+        const filtro = this.value.toLowerCase();
+        const filas = document.querySelectorAll('#tablaCaja tr');
+        filas.forEach(fila => {
+            const texto = fila.textContent.toLowerCase();
+            if (texto.includes(filtro)) {
+                fila.style.display = '';
+            } else {
+                fila.style.display = 'none';
+            }
+
+        });
+
+    });
+
+});

@@ -103,14 +103,15 @@ Route::middleware('auth')->group(function () {
     Route::delete('/{id}', [UsuarioController::class, 'destroy'])->name('destroy');
     });
     // Rutas para gestión de cajas
-   Route::middleware(['auth'])->group(function () {
-    Route::resource('cajas', CajaController::class)->except(['create', 'show']);
-    Route::get('cajas/{id}/usuarios', [CajaController::class, 'usuarios'])->name('cajas.usuarios');
-    Route::post('cajas/{id}/asignar-usuarios', [CajaController::class, 'asignarUsuarios'])->name('cajas.asignar-usuarios');
-    });
+    Route::get('/admin/Caja', [CajaController::class, 'index'])->name('admin.Caja.index');
+    Route::post('/admin/Caja', [CajaController::class, 'store'])->name('admin.Caja.store');
+    Route::put('/admin/Caja/{id}', [CajaController::class, 'update'])->name('admin.Caja.update');
+    Route::delete('/admin/Caja/{id}', [CajaController::class, 'destroy'])->name('admin.Caja.destroy');
+    // Rutas Usuarios - Cajas 
+    Route::get('/admin/Caja/{id}/usuarios', [CajaController::class, 'usuarios'])->name('admin.Caja.usuarios');
+    Route::post('/admin/Caja/{id}/asignar-usuarios', [CajaController::class, 'asignarUsuarios'])->name('admin.Caja.asignar-usuarios');
 
-   
 
-    
+        
 });
 
