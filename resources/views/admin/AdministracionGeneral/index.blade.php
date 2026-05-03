@@ -152,16 +152,34 @@
                         </div>
                     </a>
 
-                    <a href="{{ url('admin/Producto') }}" class="group flex items-center gap-4 p-4 rounded-2xl border border-gray-100 shadow-sm transition-all duration-300 hover:bg-emerald-50 hover:shadow-md hover:-translate-y-1 hover:border-emerald-200">
-                        <div class="w-11 h-11 bg-emerald-600 rounded-xl flex items-center justify-center text-white shadow-inner group-hover:rotate-12 transition-transform">
-                            <i class="fa fa-box"></i>
+                   <div class="group relative flex items-center gap-4 p-4 rounded-2xl border border-gray-100 shadow-sm transition-all duration-300 hover:shadow-md hover:-translate-y-1 hover:border-emerald-200 bg-white">
+                        <div class="w-12 h-12 bg-emerald-600 rounded-xl flex items-center justify-center text-white shadow-inner group-hover:rotate-6 transition-transform">
+                            <i class="fa fa-boxes text-xl"></i>
                         </div>
-                        <div>
-                            <h4 class="font-bold text-gray-800 text-sm leading-tight group-hover:text-emerald-600 transition-colors">Productos</h4>
-                            <p class="text-[11px] text-gray-500">Catálogo de venta.</p>
+                        
+                        <div class="flex-1">
+                            <h4 class="font-bold text-gray-800 text-sm leading-tight mb-1">Productos y Categorías</h4>
+                            
+                            <div class="flex gap-3">
+                                <a href="{{ url('admin/Categoria') }}" 
+                                class="text-[11px] font-black uppercase tracking-wider text-emerald-600 hover:text-emerald-700 transition-colors">
+                                    <i class="fa fa-tags mr-1"></i> Categorías
+                                </a>
+                                <span class="text-gray-300 text-xs">|</span>
+                                
+                                <a href="{{ url('admin/Producto') }}" 
+                                class="text-[11px] font-black uppercase tracking-wider text-emerald-600 hover:text-emerald-700 transition-colors">
+                                    <i class="fa fa-hamburger mr-1"></i> Productos
+                                </a>
+                            </div>
+                            
+                            <p class="text-[10px] text-gray-400 mt-1 italic">Administra el catálogo completo aquí.</p>
                         </div>
-                    </a>
-
+                        
+                        <div class="text-gray-200 group-hover:text-emerald-300 transition-colors">
+                            <i class="fa fa-chevron-right text-xs"></i>
+                        </div>
+                    </div>
                     <a href="{{ url('/carta-digital') }}" class="group flex items-center gap-4 p-4 rounded-2xl border border-gray-100 shadow-sm transition-all duration-300 hover:bg-emerald-50 hover:shadow-md hover:-translate-y-1 hover:border-emerald-200">
                         <div class="w-11 h-11 bg-emerald-500 rounded-xl flex items-center justify-center text-white shadow-inner group-hover:rotate-12 transition-transform">
                             <i class="fa fa-book"></i>

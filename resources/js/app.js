@@ -1106,3 +1106,132 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 });
+
+//Categorias productos
+document.addEventListener("DOMContentLoaded", function () {
+
+    let categoriaIdEliminar = null;
+
+    window.abrirEliminar = function (id, nombre) {
+        const form = document.getElementById("formEliminarCategoria");
+        const modal = document.getElementById("modalEliminar");
+        const nombreSpan = document.getElementById("delete_nombre");
+
+        if (!form || !modal || !nombreSpan) {
+            console.error("Elementos del modal no encontrados");
+            return;
+        }
+
+        categoriaIdEliminar = id;
+
+        nombreSpan.innerText = nombre;
+        form.action = `/admin/Categoria/delete/${id}`;
+
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+    };
+
+    window.cerrarModal = function (id) {
+        const modal = document.getElementById(id);
+        if (!modal) return;
+
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+    };
+
+    document.addEventListener("click", function (e) {
+        const modal = document.getElementById("modalEliminar");
+        if (modal && e.target === modal) {
+            cerrarModal("modalEliminar");
+        }
+    });
+
+    // 🔎 FILTROS
+    let filtroActual = "todos";
+
+    const btnTodos = document.getElementById("btnTodos");
+    const btnActivos = document.getElementById("btnActivos");
+    const btnInactivos = document.getElementById("btnInactivos");
+    const buscador = document.getElementById("buscador");
+    const categorias = document.querySelectorAll(".categoria");
+
+    function filtrarCategorias() {
+        const texto = (buscador?.value || "").toLowerCase();
+
+        categorias.forEach(cat => {
+            const estado = cat.dataset.estado || "";
+            const nombre = cat.dataset.nombre || "";
+
+            const coincideBusqueda = nombre.includes(texto);
+
+            let coincideFiltro = false;
+
+            if (filtroActual === "todos") {
+                coincideFiltro = true;
+            } else if (filtroActual === "activos") {
+                coincideFiltro = (estado === "a");
+            } else if (filtroActual === "inactivos") {
+                coincideFiltro = (estado !== "a");
+            }
+
+            cat.style.display = (coincideBusqueda && coincideFiltro) ? "block" : "none";
+        });
+    }
+
+    function activarBoton(botonActivo) {
+        [btnTodos, btnActivos, btnInactivos].forEach(btn => {
+            if (!btn) return;
+
+            btn.classList.remove("text-white");
+            btn.classList.add("text-slate-400");
+            btn.style.background = "transparent";
+        });
+
+        if (botonActivo) {
+            botonActivo.classList.remove("text-slate-400");
+            botonActivo.classList.add("text-white");
+            botonActivo.style.background = "linear-gradient(135deg, var(--primary) 0%, #0096D9 100%)";
+        }
+    }
+
+    btnTodos?.addEventListener("click", () => {
+        filtroActual = "todos";
+        activarBoton(btnTodos);
+        filtrarCategorias();
+    });
+
+    btnActivos?.addEventListener("click", () => {
+        filtroActual = "activos";
+        activarBoton(btnActivos);
+        filtrarCategorias();
+    });
+
+    btnInactivos?.addEventListener("click", () => {
+        filtroActual = "inactivos";
+        activarBoton(btnInactivos);
+        filtrarCategorias();
+    });
+
+    buscador?.addEventListener("input", filtrarCategorias);
+
+});
+document.addEventListener("DOMContentLoaded", function () {
+    window.previewImage = function (event) {
+        const file = event.target.files[0];
+        const previewContainer = document.getElementById('previewContainer');
+        const imagePreview = document.getElementById('imagePreview');
+        if (!file || !previewContainer || !imagePreview) {
+            console.error("Error en preview: elementos o archivo no encontrados");
+            return;
+        }
+        const reader = new FileReader();
+
+        reader.onload = function () {
+            imagePreview.src = reader.result;
+            previewContainer.classList.remove('hidden');
+            previewContainer.classList.add('flex');
+        };
+        reader.readAsDataURL(file);
+    };
+
+});

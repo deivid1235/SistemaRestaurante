@@ -16,8 +16,7 @@ use App\Http\Controllers\SalonController;
 use App\Http\Controllers\TipoDocumentoController;
 use App\Http\Controllers\CajaController;
 use App\Http\Controllers\MesaController;
-
-
+use App\Http\Controllers\ProductoCategoriaController;
 
 
 Route::get('/', function () {
@@ -91,8 +90,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/admin/mesa/{id}', [MesaController::class, 'destroy'])->name('admin.mesa.destroy');
     Route::put('/admin/mesa/{id}', [MesaController::class, 'update'])->name('admin.mesa.update'); 
 
-
-
     //Rutas para usuarios y roles
     Route::prefix('usuarios-roles')->name('usuarios.')->group(function () {
     Route::get('/',        [UsuarioController::class, 'index'])->name('index');
@@ -110,7 +107,14 @@ Route::middleware('auth')->group(function () {
     // Rutas Usuarios - Cajas 
     Route::get('/admin/Caja/{id}/usuarios', [CajaController::class, 'usuarios'])->name('admin.Caja.usuarios');
     Route::post('/admin/Caja/{id}/asignar-usuarios', [CajaController::class, 'asignarUsuarios'])->name('admin.Caja.asignar-usuarios');
-
+    //Categorias
+    Route::get('/admin/Categoria', [ProductoCategoriaController::class, 'index'])->name('admin.Categoria.index');
+    Route::get('/admin/Categoria/create', [ProductoCategoriaController::class, 'create'])->name('admin.Categoria.create');
+    Route::post('/admin/Categoria', [ProductoCategoriaController::class, 'store'])->name('admin.Categoria.store');
+    Route::put('/admin/Categoria/update/{id}', [ProductoCategoriaController::class, 'update'])->name('admin.Categoria.update');
+    Route::delete('/admin/Categoria/delete/{id}', [ProductoCategoriaController::class, 'destroy'])->name('admin.Categoria.destroy');
+    Route::get('/admin/Categoria/{id}/edit', [ProductoCategoriaController::class, 'edit'])
+    ->name('admin.Categoria.edit');
 
         
 });

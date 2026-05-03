@@ -1,17 +1,29 @@
-Table cajas {
-  id int [pk, increment]
-  nombre varchar
-  estado varchar
-  created_at datetime
-  updated_at datetime
+Table producto_categorias {
+    id_catg int [pk, increment]
+    descripcion varchar(100)
+    delivery boolean
+    orden int
+    imagen varchar(255)
+    estado char(1) // a = activo, i = inactivo
+    created_at datetime
+    updated_at datetime
 }
 
+
+Table cajas {
+    id int [pk, increment]
+    nombre varchar
+    estado varchar
+    created_at datetime
+    updated_at datetime
+    }
+
 Table caja_usuario {
-  id int [pk, increment]
-  caja_id int [ref: > cajas.id]
-  usuario_id int
-  created_at datetime
-  updated_at datetime
+    id int [pk, increment]
+    caja_id int [ref: > cajas.id]
+    usuario_id int
+    created_at datetime
+    updated_at datetime
 } 
 
 Table salons {
