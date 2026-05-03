@@ -3,8 +3,8 @@
 @section('content')
 
 <div class="w-full md:p-8 bg-gray-100 min-h-full transition-all duration-500">
-    
-    <div class="rounded-t-3xl p-6 text-white shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4 relative overflow-hidden" 
+
+    <div class="rounded-t-3xl p-6 text-white shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4 relative overflow-hidden"
         style="background: linear-gradient(135deg, var(--primary) 0%, #4fc3f7 100%);">
         <div class="flex items-center gap-4 z-10">
             <div class="w-12 h-12 md:w-16 md:h-16 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/30 transition-transform hover:rotate-6">
@@ -19,14 +19,14 @@
 
     <div class="bg-white p-6 rounded-b-3xl shadow-lg border-t border-gray-100">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-            
+
             <div class="space-y-4">
                 <div class="flex items-center gap-2 mb-4 text-gray-700 font-black border-b border-gray-100 pb-2 uppercase text-xs tracking-widest">
                     <i class="fa fa-cogs text-orange-500"></i> Sistema
                 </div>
-                
+
                 <div class="flex flex-col gap-3">
-                    <a href="{{ url('/configuracion-inicial') }}" class="group flex items-center gap-4 p-4 rounded-2xl border border-gray-100 shadow-sm transition-all duration-300 hover:bg-orange-50 hover:shadow-md hover:-translate-y-1 hover:border-orange-200">
+                    <a href="{{ url('/admin/ConfiguracionInicial') }}" class="group flex items-center gap-4 p-4 rounded-2xl border border-gray-100 shadow-sm transition-all duration-300 hover:bg-orange-50 hover:shadow-md hover:-translate-y-1 hover:border-orange-200">
                         <div class="w-11 h-11 bg-orange-400 rounded-xl flex items-center justify-center text-white shadow-inner group-hover:rotate-12 transition-transform">
                             <i class="fa fa-sliders-h"></i>
                         </div>
@@ -36,7 +36,7 @@
                         </div>
                     </a>
 
-                    <a href="{{ url('/optimizacion') }}" class="group flex items-center gap-4 p-4 rounded-2xl border border-gray-100 shadow-sm transition-all duration-300 hover:bg-orange-50 hover:shadow-md hover:-translate-y-1 hover:border-orange-200">
+                    <a href="{{ url('/admin/Optimizacion') }}" class="group flex items-center gap-4 p-4 rounded-2xl border border-gray-100 shadow-sm transition-all duration-300 hover:bg-orange-50 hover:shadow-md hover:-translate-y-1 hover:border-orange-200">
                         <div class="w-11 h-11 bg-orange-500 rounded-xl flex items-center justify-center text-white shadow-inner group-hover:rotate-12 transition-transform">
                             <i class="fa fa-rocket"></i>
                         </div>
@@ -132,7 +132,7 @@
                         </div>
                     </a>
 
-                    <a href="{{ url('/areas-produccion') }}" class="group flex items-center gap-4 p-4 rounded-2xl border border-gray-100 shadow-sm transition-all duration-300 hover:bg-emerald-50 hover:shadow-md hover:-translate-y-1 hover:border-emerald-200">
+                    <a href="{{ url('/admin/AreaProduccion') }}" class="group flex items-center gap-4 p-4 rounded-2xl border border-gray-100 shadow-sm transition-all duration-300 hover:bg-emerald-50 hover:shadow-md hover:-translate-y-1 hover:border-emerald-200">
                         <div class="w-11 h-11 bg-emerald-600 rounded-xl flex items-center justify-center text-white shadow-inner group-hover:rotate-12 transition-transform">
                             <i class="fa fa-utensils"></i>
                         </div>
@@ -181,6 +181,10 @@
                         </div>
                     </div>
                     <a href="{{ url('/carta-digital') }}" class="group flex items-center gap-4 p-4 rounded-2xl border border-gray-100 shadow-sm transition-all duration-300 hover:bg-emerald-50 hover:shadow-md hover:-translate-y-1 hover:border-emerald-200">
+
+                    </a>
+
+                    <a href="{{ url('/admin/CartaDigital') }}" class="group flex items-center gap-4 p-4 rounded-2xl border border-gray-100 shadow-sm transition-all duration-300 hover:bg-emerald-50 hover:shadow-md hover:-translate-y-1 hover:border-emerald-200">
                         <div class="w-11 h-11 bg-emerald-500 rounded-xl flex items-center justify-center text-white shadow-inner group-hover:rotate-12 transition-transform">
                             <i class="fa fa-book"></i>
                         </div>
@@ -200,8 +204,8 @@
     <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity"></div>
 
     <div class="relative bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden transform transition-all">
-        
-        <div class="p-6 text-white flex justify-between items-center" 
+
+        <div class="p-6 text-white flex justify-between items-center"
              style="background: linear-gradient(135deg, var(--primary) 0%, #4fc3f7 100%);">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center border border-white/30">
@@ -218,7 +222,7 @@
             <form id="formTipoPago" action="{{ route('admin.TipoPago.store') }}" method="POST" class="mb-6 group">
                 @csrf
                 <input type="hidden" name="id" id="tipoPagoId">
-                
+
                 <label class="block text-[10px] font-black uppercase text-gray-400 tracking-widest mb-1 ml-1">Nuevo Método</label>
                 <div class="flex gap-2">
                     <div class="relative flex-1">
@@ -254,7 +258,7 @@
                                 <td class="px-4 py-3 text-sm font-bold text-gray-700 uppercase">{{ $tipoPago->descripcion }}</td>
                                 <td class="px-4 py-3">
                                     <div class="flex justify-end gap-2">
-                                        <button 
+                                        <button
                                             class="btnEditar w-8 h-8 flex items-center justify-center rounded-lg bg-amber-100 text-amber-600 hover:bg-amber-500 hover:text-white transition-all shadow-sm"
                                             data-id="{{ $tipoPago->id }}"
                                             data-descripcion="{{ $tipoPago->descripcion }}">

@@ -17,7 +17,10 @@ use App\Http\Controllers\TipoDocumentoController;
 use App\Http\Controllers\CajaController;
 use App\Http\Controllers\MesaController;
 use App\Http\Controllers\ProductoCategoriaController;
-
+use App\Http\Controllers\AreaProduccionController;
+use App\Http\Controllers\CartaDigitalController;
+use App\Http\Controllers\ConfiguracionInicialController;
+use App\Http\Controllers\OptimizacionController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -88,8 +91,33 @@ Route::middleware('auth')->group(function () {
     //Rutas de Mesas
     Route::post('/admin/mesa', [MesaController::class, 'store'])->name('admin.mesa.store');
     Route::delete('/admin/mesa/{id}', [MesaController::class, 'destroy'])->name('admin.mesa.destroy');
-    Route::put('/admin/mesa/{id}', [MesaController::class, 'update'])->name('admin.mesa.update'); 
+    Route::put('/admin/mesa/{id}', [MesaController::class, 'update'])->name('admin.mesa.update');
+    // Rutas para áreas de producción
+    Route::get('/admin/AreaProduccion',       [AreaProduccionController::class, 'index'])->name('admin.AreaProduccion.index');
+    Route::post('/admin/AreaProduccion',      [AreaProduccionController::class, 'store'])->name('admin.AreaProduccion.store');
+    Route::put('/admin/AreaProduccion/{id}',  [AreaProduccionController::class, 'update'])->name('admin.AreaProduccion.update');
+    Route::delete('/admin/AreaProduccion/{id}', [AreaProduccionController::class, 'destroy'])->name('admin.AreaProduccion.destroy');
 
+    // Rutas para Carta Digital
+    Route::get('/admin/CartaDigital',              [CartaDigitalController::class, 'index'])->name('admin.CartaDigital.index');
+    Route::post('/admin/CartaDigital/guardar-url', [CartaDigitalController::class, 'guardarUrl'])->name('admin.CartaDigital.guardarUrl');
+    Route::post('/admin/CartaDigital/generar-qr',  [CartaDigitalController::class, 'generarQr'])->name('admin.CartaDigital.generarQr');
+    Route::get('/admin/CartaDigital/descargar-qr', [CartaDigitalController::class, 'descargarQr'])->name('admin.CartaDigital.descargarQr');
+
+    // Rutas para Configuración Inicial
+    Route::get('/admin/ConfiguracionInicial',  [ConfiguracionInicialController::class, 'index'])->name('admin.ConfiguracionInicial.index');
+    Route::put('/admin/ConfiguracionInicial',  [ConfiguracionInicialController::class, 'update'])->name('admin.ConfiguracionInicial.update');
+
+    // Rutas para Optimización de Procesos
+    Route::get('/admin/Optimizacion', [OptimizacionController::class, 'index'])->name('admin.Optimizacion.index');
+    Route::post('/admin/Optimizacion/pedidos',[OptimizacionController::class, 'optimizarPedidos'])->name('admin.Optimizacion.pedidos');
+    Route::post('/admin/Optimizacion/ventas', [OptimizacionController::class, 'restaurarVentas'])->name('admin.Optimizacion.ventas');
+    Route::post('/admin/Optimizacion/productos',[OptimizacionController::class, 'restaurarProductos'])->name('admin.Optimizacion.productos');
+    Route::post('/admin/Optimizacion/insumos', [OptimizacionController::class, 'restaurarInsumos'])->name('admin.Optimizacion.insumos');
+    Route::post('/admin/Optimizacion/clientes',[OptimizacionController::class, 'restaurarClientes'])->name('admin.Optimizacion.clientes');
+    Route::post('/admin/Optimizacion/proveedores',[OptimizacionController::class, 'restaurarProveedores'])->name('admin.Optimizacion.proveedores');
+    Route::post('/admin/Optimizacion/salones',[OptimizacionController::class, 'restaurarSalones'])->name('admin.Optimizacion.salones');
+    Route::post('/admin/Optimizacion/notas-ventas',[OptimizacionController::class, 'restaurarNotasVentas'])->name('admin.Optimizacion.notasVentas');
     //Rutas para usuarios y roles
     Route::prefix('usuarios-roles')->name('usuarios.')->group(function () {
     Route::get('/',        [UsuarioController::class, 'index'])->name('index');
@@ -99,12 +127,13 @@ Route::middleware('auth')->group(function () {
     Route::put('/{id}',    [UsuarioController::class, 'update'])->name('update');
     Route::delete('/{id}', [UsuarioController::class, 'destroy'])->name('destroy');
     });
+
     // Rutas para gestión de cajas
     Route::get('/admin/Caja', [CajaController::class, 'index'])->name('admin.Caja.index');
     Route::post('/admin/Caja', [CajaController::class, 'store'])->name('admin.Caja.store');
     Route::put('/admin/Caja/{id}', [CajaController::class, 'update'])->name('admin.Caja.update');
     Route::delete('/admin/Caja/{id}', [CajaController::class, 'destroy'])->name('admin.Caja.destroy');
-    // Rutas Usuarios - Cajas 
+    // Rutas Usuarios - Cajas
     Route::get('/admin/Caja/{id}/usuarios', [CajaController::class, 'usuarios'])->name('admin.Caja.usuarios');
     Route::post('/admin/Caja/{id}/asignar-usuarios', [CajaController::class, 'asignarUsuarios'])->name('admin.Caja.asignar-usuarios');
     //Categorias
@@ -116,6 +145,5 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/Categoria/{id}/edit', [ProductoCategoriaController::class, 'edit'])
     ->name('admin.Categoria.edit');
 
-        
 });
 
