@@ -1,22 +1,55 @@
+Table productos {
+    id int [pk, increment]
+    id_catg int [ref: > producto_categorias.id_catg]
+    id_areap int [ref: > areas_produccion.id]
+    nombre varchar(255)
+    notas text
+    descripcion text
+    imagen varchar(255) //  ruta de la imagen
+    codigo_qr varchar(255) //  QR del producto (opcional)
+    codigo_barra varchar(100) //  para escáner
+    precio decimal(10,2) //  PRECIO (CLAVE)
+    costo decimal(10,2) //  opcional para ganancias
+    stock int //  control de inventario
+    stock_minimo int //  alerta de stock bajo
+    preparacion enum('cocina', 'bodega')
+    tiempo_preparacion int //  minutos
+    delivery boolean
+    destacado boolean //  producto destacado
+    estado char(1) // a = activo, i = inactivo
+    orden int
+
+    created_at datetime
+    updated_at datetime
+}
+
+Table areas_produccion {
+    id int [pk, increment]
+    nombre varchar(255)
+    impresora_id int [ref: > impresoras.id] // CORREGIDO
+    estado char(1)
+    created_at datetime
+    updated_at datetime
+}
+
 Table producto_categorias {
     id_catg int [pk, increment]
     descripcion varchar(100)
     delivery boolean
     orden int
     imagen varchar(255)
-    estado char(1) // a = activo, i = inactivo
+    estado char(1)
     created_at datetime
     updated_at datetime
 }
 
-
 Table cajas {
     id int [pk, increment]
-    nombre varchar
-    estado varchar
+    nombre varchar(100)
+    estado char(1)
     created_at datetime
     updated_at datetime
-    }
+}
 
 Table caja_usuario {
     id int [pk, increment]
@@ -24,7 +57,7 @@ Table caja_usuario {
     usuario_id int
     created_at datetime
     updated_at datetime
-} 
+}
 
 Table salons {
     id_salon int [pk, increment]
@@ -37,43 +70,42 @@ Table salons {
 Table mesas {
     id_mesa int [pk, increment]
     id_salon int [ref: > salons.id_salon]
-    nombre varchar(10) // M01, M02...
+    nombre varchar(10)
     estado enum('activo', 'ocupado', 'inactivo')
     created_at timestamp
     updated_at timestamp
 }
 
-Table inpresoras {
-    id bigint [pk, increment, note: 'ID único autoincrementable']
-    nombre varchar(100) [not null, note: 'Ej: EPSON TM-T20II']
+Table impresoras { // CORREGIDO nombre
+    id bigint [pk, increment]
+    nombre varchar(100) [not null]
     estado enum('activo','inactivo') [default: 'activo']
     created_at timestamp
     updated_at timestamp
 }
 
 Table tipo_documentos {
-    id bigint [pk, increment, note: 'ID único autoincrementable']
-    descripcion varchar [note: 'Ej: BOLETA, FACTURA, NOTA DE CREDITO']
-    serie varchar [note: 'Ej: B001, F001']
-    numero varchar [note: 'Correlativo del documento']
+    id bigint [pk, increment]
+    descripcion varchar(100)
+    serie varchar(10)
+    numero varchar(20)
     estado enum('activo','inactivo') [default: 'activo']
     created_at timestamp
     updated_at timestamp
 }
 
-Table tipo_pagos{
-    id bigint [pk, increment, note: 'ID único autoincrementable']
-    descripcion varchar 
-
+Table tipo_pagos {
+    id bigint [pk, increment]
+    descripcion varchar(100)
     created_at timestamp
     updated_at timestamp
 }
-Table metodopagos{
-    id bigint [pk, increment, note: 'ID único autoincrementable']
-    tipo_pago_id bigint [not null, ref: > tipo_pagos.id]
-    estado enum('activo','inactivo') [default: 'activo']
-    descripcion varchar 
 
+Table metodo_pagos {
+    id bigint [pk, increment]
+    tipo_pago_id bigint [ref: > tipo_pagos.id]
+    estado enum('activo','inactivo') [default: 'activo']
+    descripcion varchar(100)
     created_at timestamp
     updated_at timestamp
 }
@@ -107,26 +139,25 @@ Table empresas {
     updated_at timestamp
 }
 
-
 Table reclamos {
-    id bigint [pk, increment, note: 'ID único autoincrementable']
-    tipo_documento varchar [note: 'DNI, CE, RUC, Pasaporte']
-    numero_documento varchar
-    primer_nombre varchar
-    segundo_nombre varchar [null, note: 'Opcional']
-    primer_apellido varchar
-    segundo_apellido varchar
-    correo varchar
-    telefono varchar
-    direccion varchar
-    departamento varchar
-    provincia varchar
-    distrito varchar
-    servicio_contratado varchar
-    numero_orden varchar [null, note: 'Opcional']
-    identificacion_servicio varchar [null, note: 'Opcional']
-    monto_reclamado decimal(10,2) [null, note: 'Monto en Soles (S/.)']
-    tipo_reclamo varchar [note: 'Reclamo o Queja']
+    id bigint [pk, increment]
+    tipo_documento varchar(20)
+    numero_documento varchar(20)
+    primer_nombre varchar(100)
+    segundo_nombre varchar(100)
+    primer_apellido varchar(100)
+    segundo_apellido varchar(100)
+    correo varchar(150)
+    telefono varchar(20)
+    direccion varchar(255)
+    departamento varchar(100)
+    provincia varchar(100)
+    distrito varchar(100)
+    servicio_contratado varchar(255)
+    numero_orden varchar(50)
+    identificacion_servicio varchar(100)
+    monto_reclamado decimal(10,2)
+    tipo_reclamo varchar(20)
     motivo text
     detalle_solicitud text
     pedido_concreto text
@@ -143,4 +174,3 @@ Table settings {
     created_at timestamp
     updated_at timestamp
 }
-

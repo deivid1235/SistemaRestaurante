@@ -5,10 +5,6 @@
 @section('content')
 
 <div class="relative space-y-6">
-
-    {{-- ══════════════════════════════════════════
-         HEADER BANNER
-    ══════════════════════════════════════════ --}}
     <div class="group relative overflow-hidden rounded-2xl p-7 text-white shadow-md transition-all duration-500 hover:shadow-lg"
         style="background: linear-gradient(135deg, var(--primary) 0%, #0096D9 100%);">
 
@@ -35,9 +31,7 @@
         <div class="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-3xl transition-transform duration-700 group-hover:scale-150"></div>
     </div>
 
-    {{-- ══════════════════════════════════════════
-         ALERTAS
-    ══════════════════════════════════════════ --}}
+   
     @if(session('success'))
         <div class="flex items-center gap-3 bg-emerald-50 border border-emerald-200 text-emerald-700 px-5 py-3.5 rounded-xl text-sm font-bold shadow-sm">
             <i class="fa fa-check-circle text-emerald-500"></i>
@@ -57,151 +51,229 @@
         </div>
     @endif
 
-    {{-- ══════════════════════════════════════════
-         GRID DE TARJETAS
-    ══════════════════════════════════════════ --}}
+   
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
 
         {{-- PEDIDOS --}}
-        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 flex flex-col items-center text-center gap-4 hover:shadow-md transition-all">
-            <div class="w-14 h-14 flex items-center justify-center">
-                <i class="fa fa-receipt text-4xl text-blue-500"></i>
+        <div class="group bg-white rounded-[2rem] border border-slate-100 shadow-sm p-6 flex flex-col items-center text-center gap-5 hover:shadow-xl hover:shadow-blue-500/5 hover:-translate-y-1 transition-all duration-300">
+            <div class="relative">
+                <div class="absolute inset-0 bg-blue-100/50 blur-2xl rounded-full group-hover:bg-blue-200/50 transition-colors"></div>
+                <div class="relative w-16 h-16 flex items-center justify-center rounded-2xl bg-white border border-slate-50 shadow-sm">
+                    <i class="fa fa-receipt text-3xl transition-transform duration-500 group-hover:scale-110"
+                    style="background: linear-gradient(135deg, var(--primary) 0%, #4fc3f7 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    </i>
+                </div>
             </div>
-            <div>
-                <h3 class="font-bold text-slate-800 text-base">Pedidos</h3>
-                <p class="text-[11px] text-slate-400 mt-1">Eliminar recursos temporales</p>
+
+            <div class="space-y-1">
+                <h3 class="font-black text-slate-800 text-lg tracking-tight">Pedidos</h3>
+                <p class="text-[11px] leading-relaxed text-slate-400 font-medium px-2">
+                    Elimina recursos temporales y libera espacio del sistema
+                </p>
             </div>
+
             <button onclick="abrirModalOptimizacion(
                         'optimizar-pedidos',
                         'Para poder eliminar los datos, no deben existir pedidos aperturados en el sistema'
                     )"
-                    class="w-full py-2.5 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-sm transition-all active:scale-95 shadow-sm shadow-indigo-100 mt-auto">
+                    style="background: linear-gradient(135deg, var(--primary) 0%, #4fc3f7 100%);"
+                    class="w-full py-3 rounded-xl text-white font-bold text-xs uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-blue-200 hover:brightness-110 mt-auto">
                 Optimizar
             </button>
         </div>
-
         {{-- VENTAS --}}
-        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 flex flex-col items-center text-center gap-4 hover:shadow-md transition-all">
-            <div class="w-14 h-14 flex items-center justify-center">
-                <i class="fa fa-tag text-4xl text-emerald-500"></i>
+        <div class="group bg-white rounded-[2rem] border border-slate-100 shadow-sm p-6 flex flex-col items-center text-center gap-5 hover:shadow-xl hover:shadow-blue-500/5 hover:-translate-y-1 transition-all duration-300">
+            <div class="relative">
+                <div class="absolute inset-0 bg-blue-100/60 blur-2xl rounded-full group-hover:bg-blue-200/60 transition-colors"></div>
+                
+                <div class="relative w-16 h-16 flex items-center justify-center rounded-2xl bg-white border border-slate-50 shadow-sm">
+                    <i class="fa fa-tag text-3xl transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6"
+                    style="background: linear-gradient(135deg, var(--primary) 0%, #4fc3f7 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    </i>
+                </div>
             </div>
-            <div>
-                <h3 class="font-bold text-slate-800 text-base">Ventas</h3>
-                <p class="text-[11px] text-slate-400 mt-1">Restaurar datos de ventas</p>
+
+            <div class="space-y-1">
+                <h3 class="font-black text-slate-800 text-lg tracking-tight">Ventas</h3>
+                <p class="text-[11px] leading-relaxed text-slate-400 font-medium px-2">
+                    Restaura datos de ventas eliminando registros de prueba
+                </p>
             </div>
+
             <button onclick="abrirModalOptimizacion(
                         'restaurar-ventas',
                         'La eliminación de estos registros es útil cuando sólo han sido de prueba y se desea comenzar a operar con datos reales.'
                     )"
-                    class="w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm transition-all active:scale-95 shadow-sm shadow-emerald-100 mt-auto">
+                    style="background: linear-gradient(135deg, var(--primary) 0%, #4fc3f7 100%);"
+                    class="w-full py-3 rounded-xl text-white font-bold text-xs uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-blue-200 hover:brightness-110 mt-auto">
                 Restaurar
             </button>
         </div>
 
         {{-- PRODUCTOS --}}
-        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 flex flex-col items-center text-center gap-4 hover:shadow-md transition-all">
-            <div class="w-14 h-14 flex items-center justify-center">
-                <i class="fa fa-utensils text-4xl text-emerald-500"></i>
+        <div class="group bg-white rounded-[2rem] border border-slate-100 shadow-sm p-6 flex flex-col items-center text-center gap-5 hover:shadow-xl hover:shadow-blue-500/5 hover:-translate-y-1 transition-all duration-300">
+            <div class="relative">
+                <div class="absolute inset-0 bg-blue-100/60 blur-2xl rounded-full group-hover:bg-blue-200/60 transition-colors"></div>
+                <div class="relative w-16 h-16 flex items-center justify-center rounded-2xl bg-white border border-slate-50 shadow-sm">
+                    <i class="fa fa-utensils text-3xl transition-transform duration-500 group-hover:scale-110"
+                    style="background: linear-gradient(135deg, var(--primary) 0%, #4fc3f7 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    </i>
+                </div>
             </div>
-            <div>
-                <h3 class="font-bold text-slate-800 text-base">Productos</h3>
-                <p class="text-[11px] text-slate-400 mt-1">Restaurar catálogo de productos</p>
+
+            <div class="space-y-1">
+                <h3 class="font-black text-slate-800 text-lg tracking-tight">Productos</h3>
+                <p class="text-[11px] leading-relaxed text-slate-400 font-medium px-2">
+                    Restaurar catálogo de productos eliminando registros de prueba
+                </p>
             </div>
+
             <button onclick="abrirModalOptimizacion(
                         'restaurar-productos',
                         'La eliminación de estos registros es útil cuando sólo han sido de prueba y se desea comenzar a operar con datos reales.'
                     )"
-                    class="w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm transition-all active:scale-95 shadow-sm shadow-emerald-100 mt-auto">
+                    style="background: linear-gradient(135deg, var(--primary) 0%, #4fc3f7 100%);"
+                    class="w-full py-3 rounded-xl text-white font-bold text-xs uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-blue-200 hover:brightness-110 mt-auto">
                 Restaurar
             </button>
         </div>
 
         {{-- INSUMOS --}}
-        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 flex flex-col items-center text-center gap-4 hover:shadow-md transition-all">
-            <div class="w-14 h-14 flex items-center justify-center">
-                <i class="fa fa-wine-bottle text-4xl text-emerald-500"></i>
+        <div class="group bg-white rounded-[2rem] border border-slate-100 shadow-sm p-6 flex flex-col items-center text-center gap-5 hover:shadow-xl hover:shadow-blue-500/5 hover:-translate-y-1 transition-all duration-300">
+            <div class="relative">
+                <div class="absolute inset-0 bg-blue-100/60 blur-2xl rounded-full group-hover:bg-blue-200/60 transition-colors"></div>
+                <div class="relative w-16 h-16 flex items-center justify-center rounded-2xl bg-white border border-slate-50 shadow-sm">
+                    <i class="fa fa-wine-bottle text-3xl transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-6"
+                    style="background: linear-gradient(135deg, var(--primary) 0%, #4fc3f7 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    </i>
+                </div>
             </div>
-            <div>
-                <h3 class="font-bold text-slate-800 text-base">Insumos</h3>
-                <p class="text-[11px] text-slate-400 mt-1">Restaurar inventario de insumos</p>
+
+            <div class="space-y-1">
+                <h3 class="font-black text-slate-800 text-lg tracking-tight">Insumos</h3>
+                <p class="text-[11px] leading-relaxed text-slate-400 font-medium px-2">
+                    Restaurar inventario de insumos y materia prima
+                </p>
             </div>
+
             <button onclick="abrirModalOptimizacion(
                         'restaurar-insumos',
                         'La eliminación de estos registros es útil cuando sólo han sido de prueba y se desea comenzar a operar con datos reales.'
                     )"
-                    class="w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm transition-all active:scale-95 shadow-sm shadow-emerald-100 mt-auto">
+                    style="background: linear-gradient(135deg, var(--primary) 0%, #4fc3f7 100%);"
+                    class="w-full py-3 rounded-xl text-white font-bold text-xs uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-blue-200 hover:brightness-110 mt-auto">
                 Restaurar
             </button>
         </div>
 
         {{-- CLIENTES --}}
-        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 flex flex-col items-center text-center gap-4 hover:shadow-md transition-all">
-            <div class="w-14 h-14 flex items-center justify-center">
-                <i class="fa fa-users text-4xl text-emerald-500"></i>
+        <div class="group bg-white rounded-[2rem] border border-slate-100 shadow-sm p-6 flex flex-col items-center text-center gap-5 hover:shadow-xl hover:shadow-blue-500/5 hover:-translate-y-1 transition-all duration-300">
+            <div class="relative">
+                <div class="absolute inset-0 bg-blue-100/60 blur-2xl rounded-full group-hover:bg-blue-200/60 transition-colors"></div>
+                <div class="relative w-16 h-16 flex items-center justify-center rounded-2xl bg-white border border-slate-50 shadow-sm">
+                    <i class="fa fa-users text-3xl transition-transform duration-500 group-hover:scale-110"
+                    style="background: linear-gradient(135deg, var(--primary) 0%, #4fc3f7 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    </i>
+                </div>
             </div>
-            <div>
-                <h3 class="font-bold text-slate-800 text-base">Clientes</h3>
-                <p class="text-[11px] text-slate-400 mt-1">Restaurar base de datos de clientes</p>
+
+            <div class="space-y-1">
+                <h3 class="font-black text-slate-800 text-lg tracking-tight">Clientes</h3>
+                <p class="text-[11px] leading-relaxed text-slate-400 font-medium px-2">
+                    Restaurar base de datos de clientes eliminando registros de prueba
+                </p>
             </div>
+
             <button onclick="abrirModalOptimizacion(
                         'restaurar-clientes',
                         'La eliminación de estos registros es útil cuando sólo han sido de prueba y se desea comenzar a operar con datos reales.'
                     )"
-                    class="w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm transition-all active:scale-95 shadow-sm shadow-emerald-100 mt-auto">
+                    style="background: linear-gradient(135deg, var(--primary) 0%, #4fc3f7 100%);"
+                    class="w-full py-3 rounded-xl text-white font-bold text-xs uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-blue-200 hover:brightness-110 mt-auto">
                 Restaurar
             </button>
         </div>
 
         {{-- PROVEEDORES --}}
-        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 flex flex-col items-center text-center gap-4 hover:shadow-md transition-all">
-            <div class="w-14 h-14 flex items-center justify-center">
-                <i class="fa fa-truck text-4xl text-emerald-500"></i>
+        <div class="group bg-white rounded-[2rem] border border-slate-100 shadow-sm p-6 flex flex-col items-center text-center gap-5 hover:shadow-xl hover:shadow-blue-500/5 hover:-translate-y-1 transition-all duration-300">
+            <div class="relative">
+                <div class="absolute inset-0 bg-blue-100/60 blur-2xl rounded-full group-hover:bg-blue-200/60 transition-colors"></div>
+                <div class="relative w-16 h-16 flex items-center justify-center rounded-2xl bg-white border border-slate-50 shadow-sm">
+                    <i class="fa fa-truck text-3xl transition-transform duration-500 group-hover:scale-110 group-hover:translate-x-1"
+                    style="background: linear-gradient(135deg, var(--primary) 0%, #4fc3f7 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    </i>
+                </div>
             </div>
-            <div>
-                <h3 class="font-bold text-slate-800 text-base">Proveedores</h3>
-                <p class="text-[11px] text-slate-400 mt-1">Restaurar lista de proveedores</p>
+
+            <div class="space-y-1">
+                <h3 class="font-black text-slate-800 text-lg tracking-tight">Proveedores</h3>
+                <p class="text-[11px] leading-relaxed text-slate-400 font-medium px-2">
+                    Restaurar lista de proveedores y contactos comerciales
+                </p>
             </div>
+
             <button onclick="abrirModalOptimizacion(
                         'restaurar-proveedores',
                         'La eliminación de estos registros es útil cuando sólo han sido de prueba y se desea comenzar a operar con datos reales.'
                     )"
-                    class="w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm transition-all active:scale-95 shadow-sm shadow-emerald-100 mt-auto">
+                    style="background: linear-gradient(135deg, var(--primary) 0%, #4fc3f7 100%);"
+                    class="w-full py-3 rounded-xl text-white font-bold text-xs uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-blue-200 hover:brightness-110 mt-auto">
                 Restaurar
             </button>
         </div>
 
         {{-- SALONES Y MESAS --}}
-        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 flex flex-col items-center text-center gap-4 hover:shadow-md transition-all">
-            <div class="w-14 h-14 flex items-center justify-center">
-                <i class="fa fa-folder-open text-4xl text-emerald-500"></i>
+        <div class="group bg-white rounded-[2rem] border border-slate-100 shadow-sm p-6 flex flex-col items-center text-center gap-5 hover:shadow-xl hover:shadow-blue-500/5 hover:-translate-y-1 transition-all duration-300">
+            <div class="relative">
+                <div class="absolute inset-0 bg-blue-100/60 blur-2xl rounded-full group-hover:bg-blue-200/60 transition-colors"></div>
+                <div class="relative w-16 h-16 flex items-center justify-center rounded-2xl bg-white border border-slate-50 shadow-sm">
+                    <i class="fa fa-folder-open text-3xl transition-transform duration-500 group-hover:scale-110"
+                    style="background: linear-gradient(135deg, var(--primary) 0%, #4fc3f7 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    </i>
+                </div>
             </div>
-            <div>
-                <h3 class="font-bold text-slate-800 text-base">Salones y mesas</h3>
-                <p class="text-[11px] text-slate-400 mt-1">Restaurar configuración de áreas</p>
+
+            <div class="space-y-1">
+                <h3 class="font-black text-slate-800 text-lg tracking-tight">Salones y Mesas</h3>
+                <p class="text-[11px] leading-relaxed text-slate-400 font-medium px-2">
+                    Restaurar configuración de áreas, sectores y distribución de mesas
+                </p>
             </div>
+
             <button onclick="abrirModalOptimizacion(
                         'restaurar-salones',
                         'La eliminación de estos registros es útil cuando sólo han sido de prueba y se desea comenzar a operar con datos reales.'
                     )"
-                    class="w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm transition-all active:scale-95 shadow-sm shadow-emerald-100 mt-auto">
+                    style="background: linear-gradient(135deg, var(--primary) 0%, #4fc3f7 100%);"
+                    class="w-full py-3 rounded-xl text-white font-bold text-xs uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-blue-200 hover:brightness-110 mt-auto">
                 Restaurar
             </button>
         </div>
 
         {{-- NOTAS DE VENTAS --}}
-        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 flex flex-col items-center text-center gap-4 hover:shadow-md transition-all">
-            <div class="w-14 h-14 flex items-center justify-center">
-                <i class="fa fa-bookmark text-4xl text-emerald-500"></i>
+        <div class="group bg-white rounded-[2rem] border border-slate-100 shadow-sm p-6 flex flex-col items-center text-center gap-5 hover:shadow-xl hover:shadow-blue-500/5 hover:-translate-y-1 transition-all duration-300">
+            <div class="relative">
+                <div class="absolute inset-0 bg-blue-100/60 blur-2xl rounded-full group-hover:bg-blue-200/60 transition-colors"></div>
+                <div class="relative w-16 h-16 flex items-center justify-center rounded-2xl bg-white border border-slate-50 shadow-sm">
+                    <i class="fa fa-bookmark text-3xl transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-12"
+                    style="background: linear-gradient(135deg, var(--primary) 0%, #4fc3f7 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    </i>
+                </div>
             </div>
-            <div>
-                <h3 class="font-bold text-slate-800 text-base">Notas de Ventas</h3>
-                <p class="text-[11px] text-slate-400 mt-1">Restaurar notas de ventas</p>
+
+            <div class="space-y-1">
+                <h3 class="font-black text-slate-800 text-lg tracking-tight">Notas de Ventas</h3>
+                <p class="text-[11px] leading-relaxed text-slate-400 font-medium px-2">
+                    Restaurar histórico de notas y apuntes de ventas realizadas
+                </p>
             </div>
+
             <button onclick="abrirModalOptimizacion(
                         'restaurar-notas-ventas',
                         'La eliminación de estos registros es útil cuando sólo han sido de prueba y se desea comenzar a operar con datos reales.'
                     )"
-                    class="w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm transition-all active:scale-95 shadow-sm shadow-emerald-100 mt-auto">
+                    style="background: linear-gradient(135deg, var(--primary) 0%, #4fc3f7 100%);"
+                    class="w-full py-3 rounded-xl text-white font-bold text-xs uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-blue-200 hover:brightness-110 mt-auto">
                 Restaurar
             </button>
         </div>
@@ -209,19 +281,13 @@
     </div>
 </div>
 
-{{-- ══════════════════════════════════════════════════════════════
-     MODAL DE CONFIRMACIÓN
-══════════════════════════════════════════════════════════════ --}}
+
 <div id="modalOptimizacion" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/40 backdrop-blur-sm p-4">
     <div class="bg-white w-full max-w-[420px] rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in duration-200">
-
         <div class="p-8 flex flex-col items-center text-center gap-4">
-
-            {{-- Ícono de advertencia --}}
             <div class="w-16 h-16 rounded-full border-2 border-orange-300 flex items-center justify-center">
                 <span class="text-orange-400 text-3xl font-black">!</span>
             </div>
-
             <div>
                 <h3 class="font-bold text-slate-800 text-lg leading-tight">
                     Necesitamos de tu<br>Confirmación
@@ -233,7 +299,6 @@
         </div>
 
         <div class="px-8 pb-7 flex gap-3">
-            {{-- Formulario oculto que se actualiza dinámicamente --}}
             <form id="formOptimizacion" action="" method="POST" class="flex-1">
                 @csrf
                 <button type="submit"

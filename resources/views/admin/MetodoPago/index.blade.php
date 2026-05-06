@@ -22,16 +22,27 @@
                 </div>
             </div>
 
-            <a href="{{ route('admin.AdministracionGeneral.index') }}" 
-                class="flex items-center justify-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/40 rounded-xl font-semibold text-xs transition-all hover:bg-white hover:text-[#0096D9] active:scale-95 w-fit">
-                <i class="fa fa-arrow-left"></i>
-                Volver al Menú
-            </a>
+            <!-- Contenedor de botones ajustado para centrar el botón principal -->
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <button onclick="openModal('create')" 
+                    class="group px-8 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-bold text-sm transition-all shadow-sm flex items-center gap-2 active:scale-95"
+                    style="background: linear-gradient(135deg, var(--primary) 0%, #0096D9 100%);">
+                    <i class="fa fa-plus-circle group-hover:rotate-90 transition-transform"></i>
+                    Nuevo Método
+                </button>
+                
+                <a href="{{ route('admin.AdministracionGeneral.index') }}" 
+                    class="flex items-center justify-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/40 rounded-xl font-semibold text-xs transition-all hover:bg-white hover:text-[#0096D9] active:scale-95 w-fit">
+                    <i class="fa fa-arrow-left"></i>
+                    Volver al Menú
+                </a>
+            </div>
         </div>
+        
         <div class="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-3xl group-hover:bg-white/20 transition-colors"></div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         @php
             $totalMetodoPago = $metodos->count();
             $activos = $metodos->where('estado', 1)->count();
@@ -42,150 +53,153 @@
             $porcInactivo = round(($inactivos / $divisor) * 100);
         @endphp
 
-        <div class="group relative bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex items-center justify-center gap-4 transition-all duration-300 hover:shadow-md hover:-translate-y-1 overflow-hidden">
-            <div class="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center transition-colors duration-300 group-hover:bg-[#00B5E2]">
-                <i class="fa fa-boxes text-[#00B5E2] text-xl transition-colors duration-300 group-hover:text-white"></i>
+        <!-- Total Métodos de Pago -->
+        <div class="group relative bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4 transition-all duration-300 hover:shadow-md hover:-translate-y-1 overflow-hidden">
+            <div class="w-12 h-12 rounded-xl flex items-center justify-center text-xl shadow-sm transition-all duration-500 group-hover:scale-110 group-hover:rotate-3"
+                style="background: linear-gradient(135deg, var(--primary, #00B5E2) 0%, #0096D9 100%); color: white;">
+                <i class="fa fa-wallet"></i>
             </div>
-            <div class="text-center">
-                <p class="text-2xl font-black text-gray-800 leading-none">{{ $totalMetodoPago }}</p>
-                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-tight mt-1">Total Métodos de Pago</p>
+            <div>
+                <p class="text-2xl font-black text-slate-800 leading-none group-hover:text-[#00B5E2] transition-colors">{{ $totalMetodoPago }}</p>
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tight mt-1">Total Métodos de Pago</p>
             </div>
             <div class="absolute bottom-0 left-0 w-full h-1 bg-[#00B5E2] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
         </div>
 
-        <div class="group relative bg-white p-4 rounded-xl shadow-sm border border-gray-100 transition-all duration-300 hover:shadow-md hover:-translate-y-1 overflow-hidden">
-            <div class="flex items-center gap-3 mb-2">
-                <div class="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center text-green-500 transition-colors duration-300 group-hover:bg-green-500 group-hover:text-white">
-                    <i class="fa fa-check-circle text-lg"></i>
+        <!-- Habilitados -->
+        <div class="group relative bg-white p-4 rounded-2xl shadow-sm border border-slate-100 transition-all duration-300 hover:shadow-md hover:-translate-y-1 overflow-hidden">
+            <div class="flex items-center gap-4 mb-3">
+                <div class="w-11 h-11 rounded-xl flex items-center justify-center text-lg shadow-sm transition-all duration-500 group-hover:rotate-12 group-hover:scale-110"
+                    style="background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: white;">
+                    <i class="fa fa-check-circle"></i>
                 </div>
-                <div class="flex flex-col">
-                    <p class="text-2xl font-black text-gray-800 leading-none">{{ $activos }}</p>
-                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-tight mt-1">Habilitado</p>
+                <div>
+                    <p class="text-2xl font-black text-slate-800 leading-none group-hover:text-emerald-600 transition-colors">{{ $activos }}</p>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tight mt-1">Habilitado</p>
                 </div>
-                <span class="ml-auto text-[10px] font-bold bg-green-50 text-green-600 px-2 py-0.5 rounded border border-green-100">{{ $porcActivo }}%</span>
+                <span class="ml-auto text-[9px] font-black bg-emerald-50 text-emerald-600 px-2 py-1 rounded-md border border-emerald-100 transition-all duration-300 group-hover:bg-emerald-500 group-hover:text-white group-hover:border-emerald-500">
+                    {{ $porcActivo }}%
+                </span>
             </div>
-            <div class="w-full bg-gray-100 h-1 rounded-full overflow-hidden">
-                <div class="bg-green-500 h-full transition-all duration-1000" style="width: {{ $porcActivo }}%"></div>
+            <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                <div class="h-full rounded-full transition-all duration-1000 group-hover:animate-pulse" 
+                    style="width: {{ $porcActivo }}%; background: linear-gradient(90deg, #10B981, #059669);"></div>
             </div>
-            <div class="absolute top-0 left-0 w-full h-1 bg-green-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-center"></div>
+            <div class="absolute top-0 left-0 w-full h-1 bg-emerald-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-center"></div>
         </div>
 
-        <div class="group relative bg-white p-4 rounded-xl shadow-sm border border-gray-100 transition-all duration-300 hover:shadow-md hover:-translate-y-1 overflow-hidden">
-            <div class="flex items-center gap-3 mb-2">
-                <div class="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center text-red-500 transition-colors duration-300 group-hover:bg-red-500 group-hover:text-white">
-                    <i class="fa fa-times-circle text-lg"></i>
+        <!-- Inhabilitados -->
+        <div class="group relative bg-white p-4 rounded-2xl shadow-sm border border-slate-100 transition-all duration-300 hover:shadow-md hover:-translate-y-1 overflow-hidden">
+            <div class="flex items-center gap-4 mb-3">
+                <div class="w-11 h-11 rounded-xl flex items-center justify-center text-lg shadow-sm transition-all duration-500 group-hover:scale-110 group-hover:-rotate-6"
+                    style="background: linear-gradient(135deg, #EF4444 0%, #B91C1C 100%); color: white;">
+                    <i class="fa fa-times-circle"></i>
                 </div>
-                <div class="flex flex-col">
-                    <p class="text-2xl font-black text-gray-800 leading-none">{{ $inactivos }}</p>
-                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-tight mt-1">Inhabilitado</p>
+                <div>
+                    <p class="text-2xl font-black text-slate-800 leading-none group-hover:text-red-600 transition-colors">{{ $inactivos }}</p>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tight mt-1">Inhabilitado</p>
                 </div>
-                <span class="ml-auto text-[10px] font-bold bg-red-50 text-red-600 px-2 py-0.5 rounded border border-red-100">{{ $porcInactivo }}%</span>
+                <span class="ml-auto text-[9px] font-black bg-red-50 text-red-600 px-2 py-1 rounded-md border border-red-100 transition-all duration-300 group-hover:bg-red-500 group-hover:text-white group-hover:border-red-500">
+                    {{ $porcInactivo }}%
+                </span>
             </div>
-            <div class="w-full bg-gray-100 h-1 rounded-full overflow-hidden">
-                <div class="bg-red-500 h-full transition-all duration-1000" style="width: {{ $porcInactivo }}%"></div>
+            <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                <div class="h-full rounded-full transition-all duration-1000 group-hover:animate-pulse" 
+                    style="width: {{ $porcInactivo }}%; background: linear-gradient(90deg, #EF4444, #B91C1C);"></div>
             </div>
             <div class="absolute top-0 left-0 w-full h-1 bg-red-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-center"></div>
         </div>
     </div>
-
-    <div class="flex flex-col lg:flex-row gap-6">
-        
-
-        <div class="flex-1 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden animate-in fade-in slide-in-from-left duration-700">
-            <div class="p-5 border-b flex items-center justify-between bg-white">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
-                        <i class="fa fa-list text-[#0096D9]"></i>
-                    </div>
-                    <h2 class="font-bold text-slate-800 text-lg">Lista de Métodos</h2>
-                </div>
-                <button onclick="openModal('create')" class="group px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-bold text-sm transition-all shadow-sm flex items-center gap-2 active:scale-95"
-                    style="background: linear-gradient(135deg, var(--primary) 0%, #0096D9 100%);">
-                    <i class="fa fa-plus-circle group-hover:rotate-90 transition-transform"></i>
-                    Nuevo Método
-                </button>
-            </div>
-            <div class="px-5 py-4 bg-gray-50/30">
-                <div class="relative flex max-w-sm ml-auto">
-                   <input type="text" id="buscador" placeholder="Buscar Metodo de Pago..." class="w-full border border-gray-200 rounded-l-md px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-400">
-                    <button class="bg-white border border-l-0 border-gray-200 rounded-r-md px-3 text-gray-400">
-                        <i class="fa fa-search"></i>
-                    </button>
-                </div>
-            </div>
-
-            <div class="overflow-x-auto overflow-y-auto max-h-[300px]">
-                <table class="w-full text-sm text-left">
-                    <thead class="bg-slate-50 text-slate-400 uppercase text-[11px] font-black tracking-widest border-b">
-                        <tr>
-                            <th class="px-6 py-4">Descripción</th>
-                            <th class="px-6 py-4">Categoría</th>
-                            <th class="px-6 py-4">Estado</th>
-                            <th class="px-6 py-4 text-center">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tablaMetodos" class="divide-y divide-slate-100">
-                        @forelse($metodos as $metodo)
-                        <tr class="hover:bg-blue-50/30 transition-colors group">
-                            <td class="px-6 py-4 font-bold text-slate-700 uppercase tracking-tight">{{ $metodo->descripcion }}</td>
-                            <td class="px-6 py-4">
-                                <span class="inline-flex items-center gap-1.5 text-slate-500 font-medium uppercase text-xs">
-                                    <i class="fa fa-tag text-[10px] opacity-40"></i>
-                                    {{ $metodo->tipoPago->descripcion ?? 'GENERAL' }}
-                                </span>
-                            </td>
-                            <td class="px-6 py-4">
-                                <span class="px-3 py-1 text-[10px] font-black rounded-lg uppercase {{ $metodo->estado == 1 ? 'bg-emerald-100 text-emerald-600' : 'bg-rose-100 text-rose-600' }}">
-                                    {{ $metodo->estado == 1 ? 'Activo' : 'Inactivo' }}
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 text-center">
-                                <div class="flex justify-center gap-1">
-                                    <button onclick='openModal("edit", @json($metodo))' class="p-2 text-blue-400 hover:bg-blue-50 rounded-lg transition-all hover:scale-110">
-                                        <i class="fa fa-edit text-lg"></i>
-                                    </button>
-                                    <button class="btnEliminarMetodoPago"
-                                        data-id="{{ $metodo->id }}"
-                                        data-nombre="{{ $metodo->descripcion }}">
-                                        <i class="fa fa-trash text-red-500"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        @empty
-                        <tr><td colspan="4" class="py-12 text-center text-slate-400 italic">No hay registros disponibles.</td></tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+    {{-- Buscador  --}}
+    <div class="flex flex-col md:flex-row md:items-center gap-4 mb-6">
+        <div class="flex-1 relative group">
+            <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors"></i>
+            <input id="buscador" type="text" placeholder="Buscar impresora por nombre..." 
+                class="w-full pl-12 pr-4 py-3 bg-white border border-slate-200 rounded-2xl text-sm focus:ring-4 focus:ring-blue-50 outline-none transition-all shadow-sm">
         </div>
 
-        
-        <div class="lg:w-80 animate-in fade-in slide-in-from-right duration-700">
-            <div class="bg-[#0096D9] rounded-2xl p-6 text-white shadow-lg sticky top-6 overflow-hidden" style="background: linear-gradient(135deg, var(--primary) 0%, #0096D9 100%);">
-                <div class="absolute -right-4 -bottom-4 text-white/10 text-8xl -rotate-12">
-                    <i class="fa fa-info-circle"></i>
-                </div>
-                <div class="flex items-center gap-3 mb-4 font-bold text-lg relative z-10">
-                    <i class="fa fa-lightbulb"></i> 
-                    <span>Información</span>
-                </div>
-                <p class="text-sm opacity-95 leading-relaxed mb-6 relative z-10">
-                    Permite crear tipos de pago que a su vez se le debe asignar una categoría sobre la cual debería reflejarse en los reportes y arqueos de caja.
-                </p>
-                <div class="border-t border-white/20 pt-4 relative z-10">
-                    <h4 class="font-black text-[11px] uppercase tracking-widest mb-3 text-blue-100">Consejos:</h4>
-                    <div class="flex gap-2 group">
-                        <i class="fa fa-chevron-right text-[10px] mt-1 text-blue-200 group-hover:translate-x-1 transition-transform"></i>
-                        <p class="text-xs leading-relaxed">
-                            <span class="font-bold text-white">Categorización:</span> Es importante asignar correctamente si es "Efectivo" o "Tarjeta" para que el cierre de caja cuadre.
-                        </p>
-                    </div>
-                </div>
+        <div class="w-full md:w-auto md:min-w-[350px]">
+            <div class="flex bg-white p-1 rounded-2xl border border-slate-100 shadow-sm">
+                <button id="btnTodos" class="flex-1 py-2.5 text-white rounded-xl text-[11px] font-black uppercase tracking-wider transition-all shadow-md shadow-blue-200"
+                        style="background: linear-gradient(135deg, var(--primary, #0ea5e9) 0%, #0096D9 100%);">
+                    Todos
+                </button>
+                <button id="btnActivos" class="flex-1 py-2.5 text-slate-400 hover:text-slate-600 rounded-xl text-[11px] font-bold uppercase tracking-wider transition-all">
+                    Activos
+                </button>
+                <button id="btnInactivos" class="flex-1 py-2.5 text-slate-400 hover:text-slate-600 rounded-xl text-[11px] font-bold uppercase tracking-wider transition-all">
+                    Inactivos
+                </button>
             </div>
         </div>
     </div>
-</div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+        @foreach($metodos as $metodo)
+        <div class="metodo-card group bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col uppercase"
+            data-estado="{{ $metodo->estado }}"
+            data-nombre="{{ strtolower($metodo->descripcion ?? '') }}">
+            
+            <!-- Contenedor de Imagen más grande -->
+            <div class="relative h-48 overflow-hidden bg-slate-100">
+                <div class="absolute top-3 right-3 z-10">
+                    <span class="px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider text-white shadow-md"
+                        style="background: linear-gradient(135deg, {{ $metodo->estado == 1 ? '#10b981' : '#ef4444' }} 0%, {{ $metodo->estado == 1 ? '#059669' : '#b91c1c' }} 100%);">
+                        {{ $metodo->estado == 1 ? 'ACTIVO' : 'INACTIVO' }}
+                    </span>
+                </div>
+
+                <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
+                    <div class="relative w-full h-full">
+                        <!-- Imagen expandida para ocupar todo el banner -->
+                        <img src="{{ asset('imagen/MetodoPago.png') }}" 
+                            alt="Metodo"
+                            class="w-full h-full object-cover transition-all duration-500 group-hover:scale-110">
+                        
+                        <div class="absolute -bottom-1 -right-1 bg-white rounded-full p-1 shadow-sm border border-slate-100 z-10">
+                            <i class="fas fa-check-circle text-[10px] text-emerald-500"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="absolute bottom-3 left-3 z-10">
+                    <span class="bg-black/60 backdrop-blur-md text-white text-[9px] font-black px-2 py-1 rounded-lg border border-white/20 uppercase">
+                        <i class="fa fa-tag mr-1 text-blue-300"></i> {{ $metodo->tipoPago->descripcion ?? 'GENERAL' }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="p-4 flex-1 flex flex-col">
+                <div class="mb-3">
+                    <h3 class="text-sm font-black text-slate-800 truncate tracking-tight">
+                        {{ $metodo->descripcion }}
+                    </h3>
+                    <p class="text-[9px] text-slate-400 font-bold mt-1">
+                        ID SISTEMA: #{{ str_pad($metodo->id, 3, '0', STR_PAD_LEFT) }}
+                    </p>
+                </div>
+                
+                <div class="bg-slate-50 p-2 rounded-xl border border-slate-100 mb-4 text-center">
+                    <span class="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Procedimiento Estándar</span>
+                </div>
+
+                <div class="flex gap-2 mt-auto">
+                    <button onclick='openModal("edit", @json($metodo))'
+                        class="flex-1 h-10 flex items-center justify-center gap-2 text-white rounded-xl transition-all active:scale-95 shadow-md hover:opacity-90"
+                        style="background: linear-gradient(135deg, var(--primary, #00B5E2) 0%, #0096D9 100%);">
+                        <i class="fas fa-edit text-xs"></i>
+                        <span class="text-[10px] font-bold">EDITAR</span>
+                    </button>
+
+                    <button class="btnEliminarMetodoPago w-10 h-10 flex items-center justify-center rounded-xl bg-slate-50 text-red-400 hover:bg-red-600 hover:text-white transition-all shadow-sm border border-red-50"
+                        data-id="{{ $metodo->id }}" 
+                        data-nombre="{{ $metodo->descripcion }}">
+                        <i class="fa fa-trash text-sm"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        @endforeach
+    </div>
 
 <div id="paymentModal" class="fixed inset-0 z-50 hidden transition-all duration-300">
     <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-[2px]" onclick="closeModal()"></div>
@@ -195,7 +209,8 @@
             
             <div class="px-8 pt-8 pb-6 border-b border-slate-50 flex items-center justify-between">
                 <div class="flex items-center gap-4">
-                    <div id="modalIconContainer" class="flex-shrink-0 w-12 h-12 rounded-2xl bg-[#0096D9] flex items-center justify-center text-white shadow-lg shadow-blue-100">
+                    <div id="modalIconContainer" class="flex-shrink-0 w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-blue-100"
+                       style="background: linear-gradient(135deg, var(--primary) 0%, #0096D9 100%);">
                         <i id="modalIcon" class="fa fa-credit-card text-xl"></i>
                     </div>
                     <div>
@@ -263,7 +278,8 @@
                     </button>
 
                     <button type="submit" 
-                        class="flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-bold text-sm text-white shadow-lg shadow-blue-200 transition-all active:scale-95 bg-[#0096D9] hover:bg-[#0085C2]">
+                        class="flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-bold text-sm text-white shadow-lg shadow-blue-200 transition-all active:scale-95 bg-[#0096D9] hover:bg-[#0085C2]"
+                        style="background: linear-gradient(135deg, var(--primary) 0%, #0096D9 100%);">
                         <i class="fa fa-save"></i> 
                         GUARDAR CAMBIOS
                     </button>
@@ -272,9 +288,6 @@
         </div>
     </div>
 </div>
-<button id="btnBackToTop" onclick="scrollToTop()" class="fixed bottom-6 right-6 w-12 h-12 bg-[#0096D9] text-white rounded-full shadow-2xl flex items-center justify-center opacity-0 invisible transition-all duration-300 hover:scale-110 active:scale-90 z-">
-    <i class="fa fa-chevron-up"></i>
-</button>
 
 <div id="modalEliminar"  class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-black/50 backdrop-blur-sm transition-all">
     <div class="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl p-8 text-center">

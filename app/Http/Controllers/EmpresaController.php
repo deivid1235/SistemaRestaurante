@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Empresa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class EmpresaController extends Controller
@@ -14,8 +15,8 @@ class EmpresaController extends Controller
     public function index()
     {
         //
-        $empresa = Empresa::first();
-        return(view('admin.Empresa.index', compact('empresa')));
+        $empresa = Empresa::find(1);
+        return view('admin.Empresa.index', compact('empresa'));
     }
 
     /**
@@ -24,6 +25,8 @@ class EmpresaController extends Controller
     public function create()
     {
         //
+        $empresa = DB::table('empresas')->where('id', 1)->first();
+        return view('admin.Empresa.create', compact('empresa'));
     }
 
     /**
@@ -31,39 +34,35 @@ class EmpresaController extends Controller
      */
     public function store(Request $request)
     {
-        //
         $request->validate([
-        'ruc' => 'required|size:11|unique:empresas,ruc',
-        'razon_social' => 'required|max:255',
-        'nombre_comercial' => 'nullable|max:255',
+            'ruc' => 'required|size:11|unique:empresas,ruc',
+            'razon_social' => 'required|max:255',
+            'nombre_comercial' => 'nullable|max:255',
+            'logo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         $empresa = new Empresa();
 
-        // LOGO
         if ($request->hasFile('logo')) {
-            $path = $request->file('logo')->store('empresas', 'public');
-            $empresa->logo = $path;
+            $empresa->logo = $request->file('logo')
+                ->store('empresas', 'public'); 
         }
 
-        $empresa->modo = $request->has('modo') ? 'produccion' : 'beta';
-
+       
+        $empresa->modo = $request->modo ?? 'beta';
         $empresa->ruc = $request->ruc;
         $empresa->razon_social = $request->razon_social;
         $empresa->nombre_comercial = $request->nombre_comercial;
 
-        $empresa->direccion_comercial = $request->direccion_comercial;
         $empresa->direccion_fiscal = $request->direccion_fiscal;
-
+        $empresa->direccion_comercial = $request->direccion_comercial;
         $empresa->ubigeo = $request->ubigeo;
         $empresa->departamento = $request->departamento;
         $empresa->provincia = $request->provincia;
         $empresa->distrito = $request->distrito;
-
         $empresa->usuariosol = $request->usuariosol;
         $empresa->clave_sol = $request->clave_sol;
         $empresa->clavecertificado = $request->clavecertificado;
-
         $empresa->celular = $request->celular;
         $empresa->email = $request->email;
 
@@ -71,6 +70,7 @@ class EmpresaController extends Controller
 
         return redirect()->back()->with('success', 'Empresa creada correctamente');
     }
+
 
     /**
      * Display the specified resource.

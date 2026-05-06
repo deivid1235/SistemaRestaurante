@@ -21,6 +21,8 @@ use App\Http\Controllers\AreaProduccionController;
 use App\Http\Controllers\CartaDigitalController;
 use App\Http\Controllers\ConfiguracionInicialController;
 use App\Http\Controllers\OptimizacionController;
+use App\Http\Controllers\ProductoController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -56,10 +58,12 @@ Route::middleware('auth')->group(function () {
 
     // Rutas para Administración General
     Route::get('/admin/AdministracionGeneral', [AdministracionGeneralController::class, 'index'])->name('admin.AdministracionGeneral.index');
-   // Empresa
+    // Empresa
     Route::get('/admin/Empresa', [EmpresaController::class, 'index'])->name('admin.Empresa.index');
     Route::get('/admin/Empresa/{id}/edit', [EmpresaController::class, 'edit'])->name('admin.Empresa.edit');
     Route::put('/admin/Empresa/{id}', [EmpresaController::class, 'update'])->name('admin.Empresa.update');
+    Route::get('/admin/Empresa/create', [EmpresaController::class, 'create'])->name('admin.Empresa.create');
+    Route::post('/admin/Empresa', [EmpresaController::class, 'store'])->name('admin.Empresa.store');
 
     // Rutas del tipo de pago
     Route::post('/admin/TipoPago', [TipoPagoController::class, 'store'])->name('admin.TipoPago.store');
@@ -142,8 +146,16 @@ Route::middleware('auth')->group(function () {
     Route::post('/admin/Categoria', [ProductoCategoriaController::class, 'store'])->name('admin.Categoria.store');
     Route::put('/admin/Categoria/update/{id}', [ProductoCategoriaController::class, 'update'])->name('admin.Categoria.update');
     Route::delete('/admin/Categoria/delete/{id}', [ProductoCategoriaController::class, 'destroy'])->name('admin.Categoria.destroy');
-    Route::get('/admin/Categoria/{id}/edit', [ProductoCategoriaController::class, 'edit'])
-    ->name('admin.Categoria.edit');
+    Route::get('/admin/Categoria/{id}/edit', [ProductoCategoriaController::class, 'edit'])->name('admin.Categoria.edit');
+    //Producto
+    Route::get('admin/Producto', [ProductoController::class, 'index'])->name('admin.Producto.index');
+    Route::get('admin/Producto/create', [ProductoController::class, 'create'])->name('admin.Producto.create');
+    Route::post('admin/Producto', [ProductoController::class, 'store'])->name('admin.Producto.store');
+    Route::get('admin/Producto/{producto}/edit', [ProductoController::class, 'edit'])->name('admin.Producto.edit');
+    Route::put('admin/Producto/{id}', [ProductoController::class, 'update'])->name('admin.Producto.update');
+    Route::delete('admin/Producto/{producto}', [ProductoController::class, 'destroy'])->name('admin.Producto.destroy');
+    Route::get('admin/Producto/ticket/{id}', [ProductoController::class, 'ticket'])
+    ->name('admin.Producto.ticket');
 
 });
 

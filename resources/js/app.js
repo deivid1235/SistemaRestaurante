@@ -490,8 +490,7 @@ window.toggleModo = function(checkbox) {
 //Modal de metodo de pago
 document.addEventListener('DOMContentLoaded', function () {
 
-    const modal = document.getElementById('paymentModal');
-    const modalIcon = document.getElementById('modalIcon');
+    const modal = document.getElementById('paymentModal'); 
     const btnUp = document.getElementById('btnBackToTop');
 
     window.openModal = function (mode, data = null) {
@@ -509,31 +508,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
             title.innerText = 'Nuevo Método';
 
-            modalIcon.innerHTML = '<i class="fa fa-plus"></i>';
-            modalIcon.className = "w-12 h-12 bg-emerald-50 text-emerald-500 rounded-2xl flex items-center justify-center text-xl";
-
             form.action = "/admin/MetodoPago";
-
             methodField.innerHTML = '';
-            form.reset();
 
-            document.getElementById('inputTipo').value = "";
-            document.getElementById('inputEstado').value = "";
+            form.reset();
 
         } else {
 
             title.innerText = 'Editar Método';
 
-            modalIcon.innerHTML = '<i class="fa fa-edit"></i>';
-            modalIcon.className = "w-12 h-12 bg-blue-50 text-[#0096D9] rounded-2xl flex items-center justify-center text-xl";
-
             form.action = `/admin/MetodoPago/${data.id}`;
-
             methodField.innerHTML = '<input type="hidden" name="_method" value="PUT">';
 
-            document.getElementById('inputDescripcion').value = data.descripcion;
-            document.getElementById('inputTipo').value = data.tipo_pago_id;
-            document.getElementById('inputEstado').value = data.estado;
+            document.getElementById('inputDescripcion').value = data.descripcion ?? '';
+            document.getElementById('inputTipo').value = data.tipo_pago_id ?? '';
+            document.getElementById('inputEstado').value = data.estado ?? '';
         }
     };
 
@@ -544,88 +533,100 @@ document.addEventListener('DOMContentLoaded', function () {
         document.body.style.overflow = 'auto';
     };
 
-
     if (btnUp) {
         window.addEventListener('scroll', function () {
-
-            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+            if (window.scrollY > 300) {
                 btnUp.classList.remove('opacity-0', 'invisible');
                 btnUp.classList.add('opacity-100', 'visible');
             } else {
                 btnUp.classList.add('opacity-0', 'invisible');
                 btnUp.classList.remove('opacity-100', 'visible');
             }
-
         });
     }
+
     window.scrollToTop = function () {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     const buscador = document.getElementById('buscador');
 
-    buscador.addEventListener('keyup', function () {
-        const filtro = this.value.toLowerCase();
-        const filas = document.querySelectorAll('#tablaMetodos tr');
+    if (buscador) {
+        buscador.addEventListener('keyup', function () {
+            const filtro = this.value.toLowerCase();
+            const tarjetas = document.querySelectorAll('.metodo-card');
 
-        filas.forEach(fila => {
-            const texto = fila.innerText.toLowerCase();
+            tarjetas.forEach(card => {
+                const nombre = card.dataset.nombre;
+                card.style.display = nombre.includes(filtro) ? '' : 'none';
+            });
+        });
+    }
 
-            if (texto.includes(filtro)) {
-                fila.style.display = '';
+    const btnTodos = document.getElementById('btnTodos');
+    const btnActivos = document.getElementById('btnActivos');
+    const btnInactivos = document.getElementById('btnInactivos');
+
+    const tarjetas = document.querySelectorAll('.metodo-card');
+
+    function filtrar(estado) {
+        tarjetas.forEach(card => {
+            if (estado === 'todos') {
+                card.style.display = '';
             } else {
-                fila.style.display = 'none';
+                card.style.display = card.dataset.estado == estado ? '' : 'none';
             }
         });
-    });
+    }
+
+    btnTodos?.addEventListener('click', () => filtrar('todos'));
+    btnActivos?.addEventListener('click', () => filtrar('1'));
+    btnInactivos?.addEventListener('click', () => filtrar('0'));
+
     document.querySelectorAll('.btnEliminarMetodoPago').forEach(btn => {
         btn.addEventListener('click', function () {
             const id = this.dataset.id;
             const nombre = this.dataset.nombre;
 
-            const m = document.getElementById('modalEliminar');
-            const f = document.getElementById('formEliminar');
+            const modalEliminar = document.getElementById('modalEliminar');
+            const formEliminar = document.getElementById('formEliminar');
 
-            f.action = `/admin/MetodoPago/${id}`;
+            formEliminar.action = `/admin/MetodoPago/${id}`;
             document.getElementById('delete_nombre').innerText = nombre;
 
-            m.classList.remove('hidden');
-            m.classList.add('flex');
+            modalEliminar.classList.remove('hidden');
+            modalEliminar.classList.add('flex');
         });
     });
-
-
 
 });
 
 // Modal de tipo de documento
 document.addEventListener('DOMContentLoaded', () => {
-
     const modal = document.getElementById('modalDocumento');
-    const overlay = document.getElementById('modalOverlay');
-    const content = document.getElementById('modalContent');
     const form = document.getElementById('formDocumento');
     const modalTitle = document.getElementById('modalTitle');
+
     const buscador = document.getElementById('buscador');
+    const btnTodos = document.getElementById('btnTodos');
+    const btnActivos = document.getElementById('btnActivos');
+    const btnInactivos = document.getElementById('btnInactivos');
+
+    const cards = document.querySelectorAll('.documento-card');
 
     const storeUrl = "/admin/TipoDocumento";
 
-    if (!modal || !overlay || !content || !form) {
-        console.error(" ERROR: No se encontraron elementos del modal");
+    let filtroEstado = "todos";
+
+    if (!modal || !form) {
+        console.error("ERROR: Modal no encontrado");
         return;
     }
 
     const openModal = (edit = false, data = null) => {
 
         modal.classList.remove('hidden');
-
-        setTimeout(() => {
-            overlay.classList.remove('opacity-0');
-            overlay.classList.add('opacity-100');
-
-            content.classList.remove('opacity-0', 'scale-90');
-            content.classList.add('opacity-100', 'scale-100');
-        }, 10);
+        modal.classList.add('flex');
 
         if (edit && data) {
             modalTitle.innerText = 'Editar Documento';
@@ -647,15 +648,21 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const closeModal = () => {
-        overlay.classList.remove('opacity-100');
-        overlay.classList.add('opacity-0');
+        modal.classList.add('hidden');
+    };
 
-        content.classList.remove('opacity-100', 'scale-100');
-        content.classList.add('opacity-0', 'scale-90');
+    document.getElementById('btnNuevo')?.addEventListener('click', () => openModal(false));
 
-        setTimeout(() => {
-            modal.classList.add('hidden');
-        }, 300);
+    document.querySelectorAll('[onclick="closeModal()"]').forEach(btn => {
+        btn.addEventListener('click', closeModal);
+    });
+
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+
+    window.editarDocumento = (data) => {
+        openModal(true, data);
     };
 
     document.querySelectorAll('.btnEliminarDocumento').forEach(btn => {
@@ -674,59 +681,54 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    const btnNuevo = document.getElementById('btnNuevo');
-    const btnCerrar = document.getElementById('btnCerrar');
-    const btnCancelar = document.getElementById('btnCancelar');
+    const filtrar = () => {
+        const texto = buscador?.value.toLowerCase() || "";
 
-    if (btnNuevo) {
-        btnNuevo.addEventListener('click', () => openModal(false));
-    } else {
-        console.error(" No existe #btnNuevo");
-    }
+        cards.forEach(card => {
+            const nombre = card.dataset.nombre;
+            const estado = card.dataset.estado;
 
-    btnCerrar?.addEventListener('click', closeModal);
-    btnCancelar?.addEventListener('click', closeModal);
-    overlay?.addEventListener('click', closeModal);
+            const coincideTexto = nombre.includes(texto);
+            const coincideEstado =
+                filtroEstado === "todos" ||
+                estado === filtroEstado;
 
-    window.editarDocumento = (data) => {
-        openModal(true, data);
-    };
-
-    window.eliminarDocumento = function(id) {
-        if (!confirm('¿Seguro que deseas eliminar este documento?')) return;
-
-        const formDelete = document.createElement('form');
-        formDelete.method = 'POST';
-        formDelete.action = `/admin/TipoDocumento/${id}`;
-
-        const csrf = document.createElement('input');
-        csrf.type = 'hidden';
-        csrf.name = '_token';
-        csrf.value = document.querySelector('meta[name="csrf-token"]').content;
-
-        const method = document.createElement('input');
-        method.type = 'hidden';
-        method.name = '_method';
-        method.value = 'DELETE';
-
-        formDelete.appendChild(csrf);
-        formDelete.appendChild(method);
-
-        document.body.appendChild(formDelete);
-        formDelete.submit();
-    };
-
-    if (buscador) {
-        buscador.addEventListener('keyup', function () {
-            const filtro = this.value.toLowerCase();
-            const filas = document.querySelectorAll('#tablaTipos tr');
-
-            filas.forEach(fila => {
-                const texto = fila.innerText.toLowerCase();
-                fila.style.display = texto.includes(filtro) ? '' : 'none';
-            });
+            card.style.display = (coincideTexto && coincideEstado) ? '' : 'none';
         });
-    }
+    };
+
+    buscador?.addEventListener('keyup', filtrar);
+
+    btnTodos?.addEventListener('click', () => {
+        filtroEstado = "todos";
+        activarBoton(btnTodos);
+        filtrar();
+    });
+
+    btnActivos?.addEventListener('click', () => {
+        filtroEstado = "activo";
+        activarBoton(btnActivos);
+        filtrar();
+    });
+
+    btnInactivos?.addEventListener('click', () => {
+        filtroEstado = "inactivo";
+        activarBoton(btnInactivos);
+        filtrar();
+    });
+
+    const activarBoton = (btnActivo) => {
+        [btnTodos, btnActivos, btnInactivos].forEach(btn => {
+            btn.classList.remove('text-white', 'shadow-md');
+            btn.classList.add('text-slate-400');
+            btn.style.background = '';
+        });
+
+        btnActivo.classList.add('text-white', 'shadow-md');
+        btnActivo.classList.remove('text-slate-400');
+
+        btnActivo.style.background = "linear-gradient(135deg, var(--primary) 0%, #0096D9 100%)";
+    };
 
 });
 
@@ -736,7 +738,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const modal = document.getElementById('modal');
     const form = document.getElementById('form');
     const method = document.getElementById('method');
-
     const storeUrl = document.getElementById('btnNueva')?.dataset.url;
 
     document.getElementById('btnNueva')?.addEventListener('click', () => {
@@ -758,8 +759,10 @@ document.addEventListener('DOMContentLoaded', function () {
         btn.addEventListener('click', function () {
             modal.classList.remove('hidden');
             modal.classList.add('flex');
+
             form.action = "/admin/Inpresora/" + this.dataset.id;
             method.innerHTML = '<input type="hidden" name="_method" value="PUT">';
+
             document.getElementById('nombre').value = this.dataset.nombre;
             document.getElementById('estado').value = this.dataset.estado;
 
@@ -784,21 +787,63 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     const buscador = document.getElementById('buscador');
+    const btnTodos = document.getElementById('btnTodos');
+    const btnActivos = document.getElementById('btnActivos');
+    const btnInactivos = document.getElementById('btnInactivos');
 
-    if (buscador) {
-        buscador.addEventListener('keyup', function () {
-            const filtro = this.value.toLowerCase();
-            const filas = document.querySelectorAll('#tablaImpresoras tr');
+    let filtroEstado = 'todos';
 
-            filas.forEach(fila => {
-                const texto = fila.innerText.toLowerCase();
-                fila.style.display = texto.includes(filtro) ? '' : 'none';
-            });
+    function filtrar() {
+        const texto = buscador.value.toLowerCase();
+
+        document.querySelectorAll('.impresora').forEach(card => {
+            const nombre = card.dataset.nombre;
+            const estado = card.dataset.estado;
+
+            const coincideTexto = nombre.includes(texto);
+            const coincideEstado = (filtroEstado === 'todos') || (estado === filtroEstado);
+
+            if (coincideTexto && coincideEstado) {
+                card.style.display = 'flex';
+            } else {
+                card.style.display = 'none';
+            }
         });
     }
 
-});
+    function activarBoton(activo) {
+        [btnTodos, btnActivos, btnInactivos].forEach(btn => {
+            btn.classList.remove('text-white', 'shadow-md');
+            btn.classList.add('text-slate-400');
+            btn.style.background = 'transparent';
+        });
 
+        activo.classList.add('text-white', 'shadow-md');
+        activo.classList.remove('text-slate-400');
+        activo.style.background = 'linear-gradient(135deg, var(--primary, #0ea5e9) 0%, #0096D9 100%)';
+    }
+
+    btnTodos?.addEventListener('click', () => {
+        filtroEstado = 'todos';
+        activarBoton(btnTodos);
+        filtrar();
+    });
+
+    btnActivos?.addEventListener('click', () => {
+        filtroEstado = 'activo';
+        activarBoton(btnActivos);
+        filtrar();
+    });
+
+    btnInactivos?.addEventListener('click', () => {
+        filtroEstado = 'inactivo';
+        activarBoton(btnInactivos);
+        filtrar();
+    });
+
+    buscador?.addEventListener('input', filtrar);
+
+});
 window.cerrarModal = function(id) {
     const modal = document.getElementById(id);
     modal.classList.add('hidden');
@@ -1147,7 +1192,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // 🔎 FILTROS
+   
     let filtroActual = "todos";
 
     const btnTodos = document.getElementById("btnTodos");
@@ -1237,9 +1282,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
-// ══════════════════════════════════════════════════════════════
 // ÁREAS DE PRODUCCIÓN
-// ══════════════════════════════════════════════════════════════
 
 window.UI_Area = {
     modals: {
@@ -1255,7 +1298,6 @@ window.UI_Area = {
     }
 };
 
-// ── Crear ──────────────────────────────────────────────────────
 window.abrirModalCrearArea = function () {
     window.UI_Area.toggle(window.UI_Area.modals.crear, true);
 };
@@ -1264,7 +1306,6 @@ window.cerrarModalCrearArea = function () {
     window.UI_Area.toggle(window.UI_Area.modals.crear, false);
 };
 
-// ── Editar ─────────────────────────────────────────────────────
 window.abrirModalEditarArea = function (id, nombre, inpresoraId, estado) {
     const form = document.getElementById('formEditarArea');
 
@@ -1283,7 +1324,6 @@ window.cerrarModalEditarArea = function () {
     window.UI_Area.toggle(window.UI_Area.modals.editar, false);
 };
 
-// ── Eliminar ───────────────────────────────────────────────────
 window.abrirModalEliminarArea = function (id, nombre) {
     const form = document.getElementById('formEliminarArea');
 
@@ -1297,7 +1337,7 @@ window.cerrarModalEliminarArea = function () {
     window.UI_Area.toggle(window.UI_Area.modals.eliminar, false);
 };
 
-// ── Cerrar al click en backdrop ────────────────────────────────
+
 document.addEventListener('click', function (e) {
     Object.values(window.UI_Area.modals).forEach(m => {
         if (m && e.target === m) {
@@ -1306,7 +1346,6 @@ document.addEventListener('click', function (e) {
     });
 });
 
-// ── Buscador ───────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', function () {
     const buscador = document.getElementById('buscadorArea');
     if (!buscador) return;
@@ -1321,16 +1360,13 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
-// ══════════════════════════════════════════════════════════════
 // CARTA DIGITAL
-// ══════════════════════════════════════════════════════════════
 
 window.copiarUrl = function () {
     const input = document.getElementById('inputUrl');
     if (!input || !input.value) return;
 
     navigator.clipboard.writeText(input.value).then(() => {
-        // Feedback visual temporal
         const btn = document.querySelector('[onclick="copiarUrl()"]');
         if (!btn) return;
 
@@ -1341,13 +1377,13 @@ window.copiarUrl = function () {
             btn.innerHTML = original;
         }, 2000);
     }).catch(() => {
-        // Fallback para navegadores sin clipboard API
+       
         input.select();
         document.execCommand('copy');
     });
 };
 
-// Actualizar botón Abrir cuando cambia la URL
+
 document.addEventListener('DOMContentLoaded', function () {
     const inputUrl  = document.getElementById('inputUrl');
     const btnAbrir  = document.getElementById('btnAbrir');
@@ -1366,46 +1402,52 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
-// ══════════════════════════════════════════════════════════════
-// CONFIGURACIÓN INICIAL — TABS
-// ══════════════════════════════════════════════════════════════
+// CONFIGURACIÓN INICIAL
 
 window.cambiarTab = function (tabId) {
-    // Ocultar todos los contenidos
+
+
     document.querySelectorAll('.config-tab-content').forEach(el => {
         el.classList.add('hidden');
     });
 
-    // Desactivar todos los botones
+   
     document.querySelectorAll('.config-tab-btn').forEach(btn => {
-        btn.classList.remove('active-tab');
-        btn.classList.add('inactive-tab');
+        btn.classList.remove(
+            'bg-white',
+            'shadow-md',
+            'shadow-slate-200/50',
+            'text-sky-600',
+            'border',
+            'border-slate-50'
+        );
+
+        btn.classList.add('text-slate-500');
     });
 
-    // Mostrar el tab seleccionado
     const content = document.getElementById('tab-' + tabId);
     if (content) content.classList.remove('hidden');
 
-    // Activar el botón seleccionado
+    
     const btn = document.getElementById('tab-btn-' + tabId);
     if (btn) {
-        btn.classList.remove('inactive-tab');
-        btn.classList.add('active-tab');
+        btn.classList.add(
+            'bg-white',
+            'shadow-md',
+            'shadow-slate-200/50',
+            'text-sky-600',
+            'border',
+            'border-slate-50'
+        );
+
+        btn.classList.remove('text-slate-500');
     }
 };
 
-// Activar primer tab al cargar
 document.addEventListener('DOMContentLoaded', function () {
-    // Solo inicializar si estamos en la página de configuración
-    if (document.getElementById('tab-zona-horaria')) {
-        cambiarTab('zona-horaria');
-    }
+    cambiarTab('zona-horaria');
 });
-// ══════════════════════════════════════════════════════════════
-// OPTIMIZACIÓN DE PROCESOS
-// ══════════════════════════════════════════════════════════════
 
-// Mapa de acción → ruta POST
 const _optimizacionRoutes = {
     'optimizar-pedidos':      '/admin/Optimizacion/pedidos',
     'restaurar-ventas':       '/admin/Optimizacion/ventas',
@@ -1424,7 +1466,7 @@ window.abrirModalOptimizacion = function (accion, mensaje) {
 
     if (!modal || !form || !msgEl) return;
 
-    form.action   = _optimizacionRoutes[accion] ?? '#';
+    form.action = _optimizacionRoutes[accion] ?? '#';
     msgEl.innerText = mensaje;
 
     modal.classList.remove('hidden');
@@ -1439,10 +1481,43 @@ window.cerrarModalOptimizacion = function () {
     modal.classList.remove('flex');
 };
 
-// Cerrar al click en el backdrop
 document.addEventListener('click', function (e) {
     const modal = document.getElementById('modalOptimizacion');
     if (modal && e.target === modal) {
         cerrarModalOptimizacion();
+    }
+});
+
+//Empresa
+document.addEventListener("DOMContentLoaded", function () {
+
+    const input = document.getElementById("logo-input");
+    const preview = document.getElementById("logo-preview");
+    const placeholder = document.getElementById("logo-placeholder");
+
+    if (input) {
+        input.addEventListener("change", function () {
+
+            const file = this.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+                preview.classList.remove("hidden");
+                if (placeholder) {
+                    placeholder.style.display = "none";
+                }
+            };
+
+            reader.readAsDataURL(file);
+        });
+    }
+
+    // activar tab inicial
+    const tabLegal = document.getElementById("tab-btn-legal");
+    if (tabLegal) {
+        tabLegal.click();
     }
 });
