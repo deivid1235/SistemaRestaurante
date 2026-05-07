@@ -391,13 +391,18 @@
                 </button>
 
                 {{-- Botón Descargar PDF --}}
-                <a id="btnDownloadPDF"
-                href="{{ route('admin.Producto.ticket', $prod->id) }}"
-                target="_blank"
-                class="w-full py-3 bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200 rounded-xl text-[9px] font-black uppercase tracking-[2px] transition-all flex items-center justify-center gap-2">
-                    <i class="fas fa-file-pdf text-red-500"></i>
-                    Descargar en PDF
-                </a>
+                @foreach($productos as $prod)
+                <div class="producto">
+                    <a id="btnDownloadPDF"
+                    href="{{ route('admin.Producto.ticket', $prod->id) }}"
+                    target="_blank"
+                    class="w-full py-3 bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200 rounded-xl text-[9px] font-black uppercase tracking-[2px] transition-all flex items-center justify-center gap-2">
+                        <i class="fas fa-file-pdf text-red-500"></i>
+                        Descargar en PDF
+                    </a>
+                </div>
+
+                @endforeach
             </div>
         </div>
 
