@@ -1521,3 +1521,189 @@ document.addEventListener("DOMContentLoaded", function () {
         tabLegal.click();
     }
 });
+
+//Producto
+function previewImage(event) {
+    const reader = new FileReader();
+
+    reader.onload = function () {
+        const output = document.getElementById("imagePreview");
+        const container = document.getElementById("previewContainer");
+
+        if (output && container) {
+            output.src = reader.result;
+            container.classList.remove("hidden");
+        }
+    };
+
+    if (event.target.files && event.target.files[0]) {
+        reader.readAsDataURL(event.target.files[0]);
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const btn = document.getElementById("btnGenerarCodigo");
+    const input = document.getElementById("codigo_barra");
+
+    if (btn && input) {
+
+        btn.addEventListener("click", function () {
+            let codigo = "";
+
+            for (let i = 0; i < 13; i++) {
+                codigo += Math.floor(Math.random() * 10);
+            }
+
+            input.value = codigo;
+        });
+
+    }
+
+});
+
+function abrirModalQR(qr, barra, nombre, pdfUrl) {
+    document.getElementById('qrImg').src = qr;
+    document.getElementById('barraImg').src = barra;
+    document.getElementById('modalNombreProducto').innerText = nombre;
+
+    document.getElementById('btnDownloadPDF').href = pdfUrl;
+
+    const modal = document.getElementById('modalQR');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
+function cerrarModalQR() {
+    const modal = document.getElementById('modalQR');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    const btnTodos = document.getElementById('btnTodos');
+    const btnActivos = document.getElementById('btnActivos');
+    const btnInactivos = document.getElementById('btnInactivos');
+    const btnDelivery = document.getElementById('btnDelivery');
+    const buscador = document.getElementById('buscador');
+
+    const productos = document.querySelectorAll('.producto');
+
+    let filtroActual = 'todos';
+
+    function resetBotones() {
+        [btnTodos, btnActivos, btnInactivos, btnDelivery].forEach(btn => {
+            if (!btn) return;
+            btn.classList.remove('text-white', 'shadow-md');
+            btn.classList.add('text-slate-400');
+            btn.style.background = 'transparent';
+        });
+    }
+
+    function activarBoton(btn) {
+        resetBotones();
+        if (!btn) return;
+
+        btn.classList.remove('text-slate-400');
+        btn.classList.add('text-white', 'shadow-md');
+        btn.style.background = 'linear-gradient(135deg, #0ea5e9 0%, #0096D9 100%)';
+    }
+
+    function filtrar() {
+        const texto = buscador.value.toLowerCase();
+
+        productos.forEach(p => {
+            const nombre = p.dataset.nombre || '';
+            const estado = p.dataset.estado;
+            const delivery = p.dataset.delivery;
+
+            let mostrar = true;
+
+            if (texto && !nombre.includes(texto)) {
+                mostrar = false;
+            }
+
+            if (filtroActual === 'activos' && estado !== 'a') {
+                mostrar = false;
+            }
+
+            if (filtroActual === 'inactivos' && estado !== 'i') {
+                mostrar = false;
+            }
+
+            if (filtroActual === 'delivery' && delivery !== '1') {
+                mostrar = false;
+            }
+
+            p.style.display = mostrar ? '' : 'none';
+        });
+    }
+
+    if (btnTodos) {
+        btnTodos.addEventListener('click', () => {
+            activarBoton(btnTodos);
+            filtroActual = 'todos';
+            filtrar();
+        });
+    }
+
+    if (btnActivos) {
+        btnActivos.addEventListener('click', () => {
+            activarBoton(btnActivos);
+            filtroActual = 'activos';
+            filtrar();
+        });
+    }
+
+    if (btnInactivos) {
+        btnInactivos.addEventListener('click', () => {
+            activarBoton(btnInactivos);
+            filtroActual = 'inactivos';
+            filtrar();
+        });
+    }
+
+    if (btnDelivery) {
+        btnDelivery.addEventListener('click', () => {
+            activarBoton(btnDelivery);
+            filtroActual = 'delivery';
+            filtrar();
+        });
+    }
+
+    if (buscador) {
+        buscador.addEventListener('input', filtrar);
+    }
+});
+
+
+window.abrirEliminarProducto = function (id, nombre) {
+
+    const modal = document.getElementById("modalEliminar");
+    const form = document.getElementById("formEliminarProducto");
+    const nombreSpan = document.getElementById("delete_nombre");
+
+    if (!modal || !form || !nombreSpan) {
+        console.error(" Modal de eliminar producto no encontrado");
+        return;
+    }
+
+    nombreSpan.textContent = nombre;
+    form.action = `/admin/Producto/${id}`;
+
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
+};
+
+window.cerrarEliminarProducto = function () {
+    const modal = document.getElementById("modalEliminar");
+
+    if (!modal) return;
+
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+};
+
+window.abrirModalQR = abrirModalQR;
+window.cerrarModalQR = cerrarModalQR;

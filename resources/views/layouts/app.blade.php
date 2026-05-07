@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700;900&family=Barlow+Condensed:wght@700;900&display=swap" rel="stylesheet">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -53,24 +54,24 @@
 
         <div class="hidden md:flex items-center space-x-1">
             @php 
-                $menuItems = [
-                    'INICIO' => [
-                        'url' => url('/inicio'),
-                        'icon' => 'fa-solid fa-house'
-                    ],
-                    'NOSOTROS' => [
-                        'url' => route('inicio').'#filosofia',
-                        'icon' => 'fa-solid fa-users'
-                    ],
-                    'CARTA' => [
-                        'url' => route('inicio').'#productos',
-                        'icon' => 'fa-solid fa-utensils'
-                    ],
-                    'PROMOCIONES' => [
-                        'url' => route('inicio').'#comboss',
-                        'icon' => 'fa-solid fa-fire'
-                    ]
-                ]; 
+            $menuItems = [
+                'INICIO' => [
+                    'url' => url('/'),
+                    'icon' => 'fa-solid fa-house'
+                ],
+                'NOSOTROS' => [
+                    'url' => url('/#filosofia'),
+                    'icon' => 'fa-solid fa-users'
+                ],
+                'CARTA' => [
+                    'url' => url('/#productos'),
+                    'icon' => 'fa-solid fa-utensils'
+                ],
+                'PROMOCIONES' => [
+                    'url' => url('/#comboss'),
+                    'icon' => 'fa-solid fa-fire'
+                ]
+            ]; 
             @endphp
 
             @foreach($menuItems as $nombre => $data)
@@ -83,11 +84,10 @@
         </div>
 
         <div class="flex items-center space-x-4">
-            <a href="#" id="open-login-modal"
+            <a href="{{ route('inicio') }}"
             class="hidden md:inline-flex px-6 py-2.5 bg-sky-600 text-white text-xs font-black rounded-full shadow-lg shadow-sky-200 hover:bg-sky-700 hover:-translate-y-0.5 transition-all uppercase tracking-widest">
                 Iniciar Sesión
             </a>
-
             <button id="mobile-menu-button" class="md:hidden p-2 text-sky-600 hover:bg-sky-50 rounded-xl transition-colors">
                 <i class="bi bi-grid-3x3-gap-fill text-2xl"></i>
             </button>
@@ -113,61 +113,75 @@
     @yield('content')
 </main>
 
-<footer id="contacto" class="bg-slate-900 pt-16 pb-8 text-slate-400">
+<footer id="contacto" class="bg-[#01579B] pt-16 pb-8 text-white/80" style="font-family: 'Montserrat', sans-serif;">
     <div class="container mx-auto px-6 max-w-6xl">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
             
             <div class="space-y-6">
                 <h4 class="text-2xl font-black text-white font-brand">
-                    <span class="text-sky-500">Corporation</span>AOSC
+                    <span class="text-sky-300">Corporation</span>AOSC
                 </h4>
-                <div class="space-y-3 text-sm font-medium">
-                    <p class="flex items-center gap-3"><i class="fas fa-map-marker-alt text-sky-500"></i> Perú - Piura - Talara</p>
-                    <p class="flex items-center gap-3"><i class="fas fa-phone-alt text-sky-500"></i> +51 952 167 090</p>
-                    <p class="flex items-center gap-3"><i class="fas fa-envelope text-sky-500"></i> grupoaosc@gmail.com</p>
+                <div class="space-y-3 text-lg font-medium">
+                    <p class="flex items-center gap-3"><i class="fas fa-map-marker-alt text-sky-300"></i> Perú - Piura - Talara</p>
+                    <p class="flex items-center gap-3"><i class="fas fa-phone-alt text-sky-300"></i> +51 952 167 090</p>
+                    <p class="flex items-center gap-3"><i class="fas fa-envelope text-sky-300"></i> grupoaosc@gmail.com</p>
                 </div>
             </div>
 
             <div>
-                <h4 class="text-white font-bold mb-6 uppercase text-xs tracking-widest">Descubrir</h4>
-                <ul class="space-y-4 text-sm">
-                    <li><a href="#inicio" class="hover:text-sky-400 transition-colors">Inicio</a></li>
-                    <li><a href="#productos" class="hover:text-sky-400 transition-colors">Nuestra Carta</a></li>
-                    <li><a href="#filosofia" class="hover:text-sky-400 transition-colors">Nuestra Historia</a></li>
+                <h4 class="text-white font-bold mb-6 uppercase text-xs tracking-widest" style="font-family: 'Montserrat', sans-serif;">Descubrir</h4>
+                <ul class="space-y-4 text-lg">
+                    <li><a href="#inicio" class="hover:text-sky-200 transition-colors">Inicio</a></li>
+                    <li><a href="#productos" class="hover:text-sky-200 transition-colors">Nuestra Carta</a></li>
+                    <li><a href="#filosofia" class="hover:text-sky-200 transition-colors">Nuestra Historia</a></li>
                 </ul>
             </div>
 
             <div>
-                <h4 class="text-white font-bold mb-6 uppercase text-xs tracking-widest">Ayuda</h4>
-                <ul class="space-y-4 text-sm">
-                    <li><a href="#" class="hover:text-sky-400 transition-colors">Términos y Condiciones</a></li>
+                <h4 class="text-white font-bold mb-6 uppercase text-xs tracking-widest" style="font-family: 'Montserrat', sans-serif;">Ayuda</h4>
+                <ul class="space-y-4 text-lg">
+                    <li><a href="#" class="hover:text-sky-200 transition-colors">Términos y Condiciones</a></li>
                     <li>
-                        <a href="{{ route('libro.reclamacion') }}" class="inline-flex items-center gap-3 p-3 bg-white/5 rounded-2xl hover:bg-white/10 transition-all border border-white/5 group">
-                            <img src="{{ asset('imagen/libroReclamaciones.png') }}" alt="Libro" class="w-8 h-8 object-contain">
-                            <span class="text-[10px] font-black text-white group-hover:text-sky-400 uppercase tracking-tighter">Libro de Reclamaciones</span>
+                        <a href="{{ route('libro.reclamacion') }}" 
+                        class="inline-flex items-center gap-4 p-3 rounded-2xl transition-all hover:bg-white/10 group">
+                            
+                            <div class="w-16 h-12 flex items-center justify-center">
+                                <img src="{{ asset('imagen/libroReclamaciones.png') }}" 
+                                    alt="Libro de Reclamaciones" 
+                                    class="w-full h-full object-contain transition-transform group-hover:scale-110">
+                            </div>
+
+                            <div class="flex flex-col leading-[0.3]">
+                                <span class="text-lg font-black text-white uppercase tracking-tighter">
+                                    Libro de
+                                </span>
+                                <span class="text-sm font-black text-white uppercase tracking-tighter group-hover:text-slate-300 transition-colors">
+                                    Reclamaciones
+                                </span>
+                            </div>
                         </a>
                     </li>
                 </ul>
             </div>
 
             <div>
-                <h4 class="text-white font-bold mb-6 uppercase text-xs tracking-widest">Síguenos</h4>
+                <h4 class="text-white font-bold mb-6 uppercase text-xs tracking-widest" style="font-family: 'Montserrat', sans-serif;">Síguenos</h4>
                 <div class="flex gap-3">
-                    <a href="#" class="w-11 h-11 flex items-center justify-center rounded-xl bg-white/5 hover:bg-sky-600 hover:-translate-y-1 transition-all duration-300">
+                    <a href="#" class="w-11 h-11 flex items-center justify-center rounded-xl bg-white/10 hover:bg-blue-600 hover:-translate-y-1 transition-all duration-300 border border-white/5">
                         <i class="fab fa-facebook-f text-white"></i>
                     </a>
-                    <a href="#" class="w-11 h-11 flex items-center justify-center rounded-xl bg-white/5 hover:bg-gradient-to-tr hover:from-pink-500 hover:to-yellow-500 hover:-translate-y-1 transition-all duration-300">
+                    <a href="#" class="w-11 h-11 flex items-center justify-center rounded-xl bg-white/10 hover:bg-gradient-to-tr hover:from-pink-500 hover:to-yellow-500 hover:-translate-y-1 transition-all duration-300 border border-white/5">
                         <i class="fab fa-instagram text-white"></i>
                     </a>
-                    <a href="#" class="w-11 h-11 flex items-center justify-center rounded-xl bg-white/5 hover:bg-black hover:-translate-y-1 transition-all duration-300 border border-white/10">
+                    <a href="#" class="w-11 h-11 flex items-center justify-center rounded-xl bg-white/10 hover:bg-black hover:-translate-y-1 transition-all duration-300 border border-white/5">
                         <i class="fab fa-tiktok text-white"></i>
                     </a>
                 </div>
             </div>
         </div>
 
-        <div class="pt-8 border-t border-white/5 text-center">
-            <p class="text-[10px] font-bold tracking-[0.4em] uppercase text-slate-500">© 2026 CorporationAOSC. Excellence in fine dining.</p>
+        <div class="pt-8 border-t border-white/10 text-center">
+            <p class="text-[10px] font-bold tracking-[0.4em] uppercase text-white/50">© 2026 CorporationAOSC. Excellence in fine dining.</p>
         </div>
     </div>
 </footer>

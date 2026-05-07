@@ -31,9 +31,11 @@ Route::get('/', function () {
 Route::get('/', [HomeController::class, 'index']);
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
-Route::get('/inicio', [HomeController::class, 'index'])->name('inicio');
+Route::get('/inicio', [HomeController::class, 'inicioSECCION'])->name('inicio');
+Route::post('/register', [LoginController::class, 'register'])->name('register');
 Route::get('/LibroReclamacion', function () { return view('home.LibroReclamacion');})->name('libro.reclamacion');
 Route::post('/LibroReclamacion', [LibroReclamacionController::class, 'store'])->name('libro.reclamacion.store');
+Route::get('/producto/{id}', [HomeController::class, 'productoDetalle'])->name('home.producto.show');
 
 Route::middleware('auth')->group(function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
@@ -154,8 +156,9 @@ Route::middleware('auth')->group(function () {
     Route::get('admin/Producto/{producto}/edit', [ProductoController::class, 'edit'])->name('admin.Producto.edit');
     Route::put('admin/Producto/{id}', [ProductoController::class, 'update'])->name('admin.Producto.update');
     Route::delete('admin/Producto/{producto}', [ProductoController::class, 'destroy'])->name('admin.Producto.destroy');
-    Route::get('admin/Producto/ticket/{id}', [ProductoController::class, 'ticket'])
-    ->name('admin.Producto.ticket');
+    Route::get('admin/Producto/ticket/{id}', [ProductoController::class, 'ticket']) ->name('admin.Producto.ticket');
+    Route::get('admin/Producto/{producto}', [ProductoController::class, 'show'])->name('admin.Producto.show');
+    Route::get('admin/Producto/{id}/print', [ProductoController::class, 'print'])->name('admin.Producto.print');
 
 });
 

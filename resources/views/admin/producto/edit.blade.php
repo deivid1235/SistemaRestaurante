@@ -394,31 +394,5 @@
     </div>
 </div>
 
-<script>
-    function previewImage(event) {
-        const reader = new FileReader();
-        reader.onload = function(){
-            const output = document.getElementById('imagePreview');
-            const container = document.getElementById('previewContainer');
-            output.src = reader.result;
-            container.classList.remove('hidden');
-        };
-        reader.readAsDataURL(event.target.files[0]);
-    }
-    
-    document.addEventListener("DOMContentLoaded", function () {
-        const btn = document.getElementById("btnGenerarCodigo");
-        const input = document.getElementById("codigo_barra");
 
-        if (btn && input) {
-            btn.addEventListener("click", function () {
-                let codigo = "";
-                for (let i = 0; i < 13; i++) {
-                    codigo += Math.floor(Math.random() * 10);
-                }
-                input.value = codigo;
-            });
-        }
-    });
-</script>
 @endsection

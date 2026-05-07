@@ -115,7 +115,11 @@ class ProductoController extends Controller
      */
     public function show(Producto $producto)
     {
-        //
+        $categorias = ProductoCategoria::all();
+        $areas = AreaProduccion::all();
+
+        // Retornar vista con datos
+        return view('admin.Producto.show', compact('producto', 'categorias', 'areas'));
     }
 
     /**
@@ -227,10 +231,16 @@ class ProductoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Producto $producto)
+    public function destroy(int $id)
     {
         //
+        $producto = Producto::findOrFail($id);
+        $producto->delete();
+
+        return redirect()->back()->with('success', 'Producto eliminado');
     }
+
+    
     public function ticket( int $id)
     {
         $producto = Producto::findOrFail($id);
@@ -239,4 +249,14 @@ class ProductoController extends Controller
 
         return $pdf->download('ticket.pdf');
     }
+    
+    public function print( int $id)
+    {
+        $producto = Producto::with(['categoria', 'areaProduccion'])->findOrFail($id);
+
+        $pdf = Pdf::loadView('admin.producto.print', compact('producto'));
+
+        return $pdf->download('producto_'.$producto->id.'.pdf'); 
+    }
+
 }

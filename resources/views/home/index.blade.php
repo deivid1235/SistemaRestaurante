@@ -3,21 +3,11 @@
 @section('title', 'CorporationAOSC - Experiencia Gourmet Minimalista')
 
 @section('content')
-
-    {{-- HERO --}}
     <main id="inicio" class="relative w-full h-screen overflow-hidden">
-        <div class="absolute inset-0 hero-slider z-0">
-            @foreach($images as $index => $img)
-                <div class="slide absolute inset-0 bg-cover bg-center transition-opacity duration-1000 {{ $index == 0 ? 'opacity-100' : 'opacity-0' }}" 
-                    style="background-image: url('{{ $img }}')">
-                </div>
-            @endforeach
-        </div>
-
-        <div class="absolute inset-0 bg-black/40 z-10"></div> {{-- Un poco más oscuro para resaltar el blanco --}}
+        <div class="absolute inset-0 bg-black/40 z-10"></div> 
 
         <div class="relative z-20 text-center flex flex-col items-center justify-center h-full px-6 max-w-5xl mx-auto">
-            {{-- Movimiento de entrada suave: animate-fade-down --}}
+           
             <p class="text-xl tracking-widest text-sky-400 mb-3 uppercase font-light animate-bounce">
                 Corporación de Alta Gastronomía
             </p>
@@ -28,7 +18,7 @@
             <p class="text-2xl text-gray-100 mb-10 font-extralight max-w-3xl mx-auto">
                 Llevamos la excelencia culinaria al siguiente nivel. Claridad en el diseño, pureza en el sabor.
             </p>
-            {{-- Botón Celeste con efecto de escala --}}
+           
             <a href="#productos"
             class="inline-block px-10 py-4 bg-sky-500 text-white text-xl font-semibold rounded-xl shadow-lg
                     hover:bg-sky-600 transition duration-300 transform hover:scale-110 uppercase tracking-wider">
@@ -37,39 +27,42 @@
         </div>
     </main>
 
-    {{-- SECCIÓN: CATEGORÍAS Y PRODUCTOS--}}
-    <section id="productos" class="py-24 bg-slate-50"> {{-- Fondo blanco humo --}}
+    
+    <section id="productos" class="py-24 bg-slate-50"> 
         <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
 
             <h2 class="text-5xl font-extrabold text-center mb-16 text-gray-900 transition-all hover:tracking-wide duration-500">
                 Categorías <span class="text-sky-600">Disponibles</span>
             </h2>
+            <div id="categories-carousel" class="product-carousel flex space-x-4 pb-4 overflow-x-auto scrollbar-hide">
+                @forelse($categorias as $cat)
+                    <div class="min-w-[150px] bg-white rounded-2xl shadow-md hover:shadow-xl transition-all p-4 flex flex-col items-center text-center cursor-pointer group">
+                        <div class="w-20 h-20 rounded-full overflow-hidden border-2 border-sky-200 group-hover:scale-105 transition">
 
-            {{-- Carrusel de categorías --}}
-            <div class="mb-16 relative">
-                <h3 class="text-3xl font-bold mb-6 text-gray-800 border-l-4 border-sky-500 pl-4">Explora por Categoría</h3>
+                            @if($cat->imagen)
+                                <img src="{{ asset('storage/' . $cat->imagen) }}"
+                                    class="w-full h-full object-cover">
+                            @else
+                                <div class="w-full h-full flex items-center justify-center bg-slate-100 text-slate-400">
+                                    <i class="fa fa-utensils"></i>
+                                </div>
+                            @endif
 
-                <div class="relative">
-                    <button id="categories-prev" aria-label="Anterior"
-                            class="absolute left-0 top-1/2 -translate-y-1/2 z-30 p-2 rounded-full bg-white shadow-lg hover:bg-sky-500 hover:text-white transition-all duration-300">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-                        </svg>
-                    </button>
+                        </div>
+                        <h4 class="mt-3 text-sm font-bold text-gray-800 uppercase">
+                            {{ $cat->descripcion }}
+                        </h4>
 
-                    <div id="categories-carousel" class="product-carousel flex space-x-4 pb-4 overflow-x-auto scrollbar-hide"></div>
+                    </div>
+                @empty
+                    <p class="text-gray-400 text-sm">No hay categorías disponibles</p>
+                @endforelse
 
-                    <button id="categories-next" aria-label="Siguiente"
-                            class="absolute right-0 top-1/2 -translate-y-1/2 z-30 p-2 rounded-full bg-white shadow-lg hover:bg-sky-500 hover:text-white transition-all duration-300">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                        </svg>
-                    </button>
-                </div>
             </div>
-
-            {{-- Listado de productos --}}
-            <h3 id="product-listing-title" class="text-3xl font-bold mb-8 text-gray-900">Menú General</h3>
+           
+    
+            
+           
 
             <div id="product-loading-indicator" class="hidden flex justify-center items-center py-16">
                 <div class="spinner border-sky-500"></div>
@@ -82,8 +75,137 @@
 
         </div>
     </section>
+    <div class="max-w-[1400px] mx-auto px-6 py-8">
+    
+    <div class="mb-10 text-center lg:text-left lg:px-3">
+        
+        <div class="relative mb-10 overflow-hidden">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                
+                <div class="relative z-10 flex items-start gap-5">
+                    <div class="relative">
+                        <div class="w-2 h-14 bg-[#00629b] rounded-full shadow-[0_0_15px_rgba(0,98,155,0.3)]"></div>
+                        <div class="absolute top-0 w-2 h-6 bg-sky-400 rounded-full animate-pulse"></div>
+                    </div>
 
-    {{-- SECCIÓN: COMBOS ESPECIALES --}}
+                    <div class="space-y-1">
+                        <h2 class="text-4xl font-black text-[#00629b] tracking-tight uppercase leading-none italic">
+                            Menú <span class="text-slate-800 not-italic">General</span>
+                        </h2>
+                        
+                        <div class="flex items-center gap-3">
+                            <span class="h-[1px] w-8 bg-[#00629b]/30"></span>
+                            <p class="text-slate-500 text-[11px] font-bold uppercase tracking-[0.5em]">
+                                Gestión de Inventario <span class="text-[#00629b]">AOSC</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hidden md:flex flex-col items-end border-r-4 border-slate-100 pr-4">
+                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Sistema Operativo</span>
+                    <span class="text-sm font-bold text-[#00629b] font-mono">v2.0.2026</span>
+                </div>
+            </div>
+
+            <div class="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-[#00629b] via-slate-200 to-transparent mt-4"></div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+            
+            @foreach($productos as $prod)
+            <div class="producto group bg-white rounded-[1.5rem] border border-slate-100 shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden flex flex-col h-full"
+                data-estado="{{ $prod->estado }}"
+                data-nombre="{{ strtolower($prod->nombre ?? '') }}">
+                
+                <div class="relative h-44 m-2 overflow-hidden rounded-[1.2rem]">
+                    <div class="absolute top-2 right-2 z-10">
+                        <span class="px-2 py-0.5 rounded-md text-[9px] font-black uppercase tracking-wider text-white shadow-lg {{ $prod->estado == 'a' ? 'bg-emerald-500' : 'bg-red-500' }}">
+                            {{ $prod->estado == 'a' ? 'Activo' : 'Inactivo' }}
+                        </span>
+                    </div>
+
+                    @if($prod->destacado)
+                    <div class="absolute top-2 left-2 z-10">
+                        <span class="bg-amber-400 text-white p-1.5 rounded-lg shadow-lg flex items-center justify-center">
+                            <i class="fas fa-star text-[8px]"></i>
+                        </span>
+                    </div>
+                    @endif
+
+                    @if($prod->imagen && $prod->imagen != 'NULL')
+                        <img src="{{ asset('storage/'.$prod->imagen) }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    @else
+                        <div class="w-full h-full flex items-center justify-center bg-slate-100">
+                            <i class="fas fa-utensils text-slate-300 text-3xl"></i>
+                        </div>
+                    @endif
+
+                    <div class="absolute bottom-2 left-2 right-2 flex justify-between items-center">
+                        <span class="bg-black/70 backdrop-blur-md text-white text-xs font-black px-3 py-1 rounded-xl border border-white/10">
+                            S/ {{ number_format($prod->precio, 2) }}
+                        </span>
+                        <span class="bg-sky-500/90 backdrop-blur-md text-white text-[9px] font-black px-2 py-1 rounded-lg">
+                            Stock: {{ $prod->stock }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="px-4 pb-4 pt-1 flex-1 flex flex-col">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-base font-black text-slate-800 uppercase leading-tight truncate mr-2">
+                            {{ $prod->nombre }}
+                        </h3>
+                        <span class="text-[9px] font-bold text-slate-300 bg-slate-50 px-1.5 py-0.5 rounded-md">#{{ $prod->id }}</span>
+                    </div>
+                    
+                    <div class="space-y-0.5 mb-3">
+                        <p class="text-[10px] text-slate-400 font-bold uppercase flex items-center gap-1.5">
+                            <i class="fas fa-tag text-sky-400/50"></i> {{ $prod->categoria->descripcion ?? 'General' }}
+                        </p>
+                        <p class="text-[10px] text-emerald-500 font-extrabold uppercase flex items-center gap-1.5">
+                            <i class="fas fa-wallet opacity-50"></i> COSTO: S/{{ number_format($prod->costo, 2) }}
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2 mb-4 bg-slate-50 p-2.5 rounded-[1rem] border border-slate-100">
+                        <div class="flex items-center gap-1.5">
+                            <i class="fas fa-clock text-[10px] text-slate-400"></i>
+                            <span class="text-[9px] font-bold text-slate-600">{{ $prod->tiempo_preparacion }} min</span>
+                        </div>
+                        <div class="flex items-center gap-1.5 {{ $prod->delivery ? 'text-orange-500' : 'text-slate-400' }}">
+                            <i class="fas fa-motorcycle text-[10px]"></i>
+                            <span class="text-[9px] font-black uppercase">{{ $prod->delivery ? 'Si' : 'No' }}</span>
+                        </div>
+                        <div class="flex items-center gap-1.5 text-slate-500">
+                            <i class="fas fa-sort-numeric-down text-[10px]"></i>
+                            <span class="text-[9px] font-bold uppercase">ORD: {{ $prod->orden }}</span>
+                        </div>
+                        <div class="flex items-center gap-1.5 text-sky-500">
+                            <i class="fas fa-utensils text-[10px]"></i>
+                            <span class="text-[9px] font-black uppercase truncate">{{ $prod->preparacion }}</span>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-2 mt-auto">
+                        <a href="" 
+                        class="flex-1 h-10 flex items-center justify-center gap-2 bg-[#0081C9] text-white rounded-xl shadow-md hover:bg-[#0071b3] transition-all active:scale-95">
+                            <i class="fas fa-shopping-cart text-xs"></i>
+                            <span class="text-[10px] font-black uppercase tracking-wider">Agregar al carrito</span>
+                        </a>
+                        <a href="{{ route('home.producto.show', $prod->id) }}"
+                        class="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-50 text-blue-400 hover:bg-blue-600 hover:text-white transition-all shadow-sm border border-blue-50">
+                            <i class="fa fa-eye text-sm"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+
+        </div>
+    </div>
+
+   
     <section id="comboss" class="py-24 bg-white">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
             <h2 class="text-5xl font-extrabold text-center mb-4 text-gray-900">
@@ -96,10 +218,9 @@
         </div>
     </section>
 
-    {{-- SECCIÓN: MISIÓN / FILOSOFÍA --}}
+    
     <section id="filosofia" class="py-24 position-relative overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #e0f2fe 100%);">
     
-        {{-- Decoración de fondo Celeste --}}
         <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="pointer-events: none;">
             <div class="position-absolute" style="top: -20%; right: -10%; width: 60%; height: 80%; background: radial-gradient(circle, rgba(14,165,233,0.1) 0%, transparent 70%);"></div>
         </div>
@@ -111,7 +232,7 @@
             </h2>
 
             <div class="row g-4 mt-5">
-                {{-- Card 1 - Materia Prima --}}
+              
                 <div class="col-md-6 col-lg-4">
                     <div class="card h-100 border-0 rounded-4 shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-2 overflow-hidden bg-white">
                         <div class="card-body p-4 p-xl-5 text-center">
@@ -125,7 +246,7 @@
                     </div>
                 </div>
 
-                {{-- Card 2 - Innovación --}}
+              
                 <div class="col-md-6 col-lg-4">
                     <div class="card h-100 border-0 rounded-4 shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-2 overflow-hidden bg-white">
                         <div class="card-body p-4 p-xl-5 text-center">
@@ -250,39 +371,6 @@
             </div>
         </div>
     </section>
-
-    {{-- Login Modal --}}
-    <div id="login-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/20">
-        <div class="w-full max-w-sm rounded-2xl shadow-2xl p-8 relative border bg-white transform transition-all duration-300 scale-100">
-            <button id="close-login-modal" class="absolute top-4 right-4 text-gray-400 hover:text-sky-500 transition">
-                <i class="bi bi-x-lg"></i>
-            </button>
-            <div class="flex justify-center mb-4">
-                <img src="{{ asset('perfil/logoprint.jpg') }}" alt="Logo" class="w-16 h-16">
-            </div>
-
-            <h2 class="text-2xl font-bold text-center text-gray-800 mb-2">¡BIENVENIDO!</h2>
-            <p class="text-center text-sm text-gray-500 mb-8">Ingresa tus credenciales</p>
-
-            <form method="POST" action="{{ route('login') }}">
-                @csrf
-
-                <div class="mb-4">
-                    <label class="block text-xs font-bold text-sky-600 mb-1 uppercase tracking-wider">Email</label>
-                    <input type="email" name="email" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-sky-500 outline-none transition">
-                </div>
-
-                <div class="mb-6">
-                    <label class="block text-xs font-bold text-sky-600 mb-1 uppercase tracking-wider">Contraseña</label>
-                    <input type="password" name="password" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-sky-500 outline-none transition">
-                </div>
-
-                <button type="submit" class="w-full py-3 bg-sky-500 text-white font-bold rounded-lg hover:bg-sky-600 shadow-md transition-all transform hover:scale-105">
-                    Iniciar Sesión
-                </button>
-            </form>
-        </div>
-    </div>
 
     <script>
     document.addEventListener("DOMContentLoaded", function () {

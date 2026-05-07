@@ -20,7 +20,7 @@
 
 <style>
     :root {
-        --primary: {{ DB::table('settings')->where('key','accent_color')->value('value') ?? '#30b1e4' }};
+        --primary: {{ DB::table('settings')->where('key','accent_color')->value('value') ?? '#00629b' }};
         --bg:        #f0f4f8;
         --text:      #1a2332;
         --sidebar-w: 248px;

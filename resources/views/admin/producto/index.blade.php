@@ -157,6 +157,10 @@
                 <button id="btnInactivos" class="flex-1 py-2.5 text-slate-400 hover:text-slate-600 rounded-xl text-[11px] font-bold uppercase tracking-wider transition-all">
                     Inactivos
                 </button>
+                <button id="btnDelivery" 
+                    class="flex-1 py-2.5 text-slate-400 hover:text-slate-600 rounded-xl text-[11px] font-bold uppercase tracking-wider transition-all">
+                    Delivery
+                </button>
             </div>
         </div>
     </div>
@@ -165,7 +169,7 @@
         @foreach($productos as $prod)
         <div class="producto group bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col"
             data-estado="{{ $prod->estado }}"
-            data-nombre="{{ strtolower($prod->nombre ?? '') }}">
+            data-nombre="{{ strtolower($prod->nombre ?? '') }}"   data-delivery="{{ $prod->delivery ? '1' : '0' }}">
             
             <div class="relative h-44 overflow-hidden bg-slate-100">
                 <div class="absolute top-3 left-3 right-3 z-10 flex justify-between items-center">
@@ -271,8 +275,12 @@
 
                         <i class="fas fa-qrcode text-sm"></i>
                     </button>
-
-                    <button onclick="abrirEliminar({{ $prod->id }}, '{{ $prod->nombre }}')"
+                    <a href="{{ route('admin.Producto.show', $prod->id) }}"
+                    class="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-50 text-blue-400 hover:bg-blue-600 hover:text-white transition-all shadow-sm border border-blue-50">
+                        <i class="fa fa-eye text-sm"></i>
+                    </a>
+                    <button type="button"
+                        onclick="abrirEliminarProducto('{{ $prod->id }}', '{{ addslashes($prod->nombre) }}')"
                         class="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-50 text-red-400 hover:bg-red-600 hover:text-white transition-all shadow-sm border border-red-50">
                         <i class="fa fa-trash text-sm"></i>
                     </button>
@@ -283,35 +291,49 @@
     </div>
 </div>
 
-{{-- Modal Eliminar (Reutilizando el mismo estilo) --}}
-<div id="modalEliminar" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-black/50 backdrop-blur-sm transition-all">
-    <div class="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl p-8 text-center">
+{{-- Modal Eliminar --}}
+<div id="modalEliminar"
+    class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+
+    <div class="bg-white rounded-2xl w-full max-w-sm shadow-2xl p-8 text-center">
+
         <div class="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
             <i class="fa fa-trash"></i>
         </div>
-        <h3 class="text-lg font-bold text-gray-800">¿Eliminar Producto?</h3>
 
-        <p class="text-gray-500 mt-2 mb-6 text-xs leading-relaxed">
-            Esta acción eliminará el producto <span id="delete_nombre" class="font-bold text-red-600"></span> permanentemente.
+        <h3 class="text-lg font-bold text-gray-800">
+            ¿Eliminar Producto?
+        </h3>
+
+        <p class="text-gray-500 mt-2 mb-6 text-xs">
+            Estás a punto de eliminar:
+            <span id="delete_nombre" class="font-bold text-red-600"></span>
         </p>
 
         <form id="formEliminarProducto" method="POST">
             @csrf
             @method('DELETE')
+
             <div class="flex gap-3">
-                <button type="button" onclick="cerrarModal('modalEliminar')"
-                        class="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-xl font-bold hover:bg-gray-200 text-xs transition-all">
-                    No, volver
+
+                <!-- CANCELAR -->
+                <button type="button"
+                    onclick="cerrarEliminarProducto()"
+                    class="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-xl font-bold hover:bg-gray-200 text-xs">
+                    Cancelar
                 </button>
+
+                <!-- ELIMINAR -->
                 <button type="submit"
-                        class="flex-1 px-4 py-2 bg-[#e74c3c] text-white rounded-xl font-bold hover:bg-red-700 shadow-lg shadow-red-100 text-xs transition-all">
+                    class="flex-1 px-4 py-2 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 text-xs">
                     Sí, eliminar
                 </button>
+
             </div>
         </form>
+
     </div>
 </div>
-
 <!-- Modal QR & Barcode -->
 
 <div id="modalQR" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center z-[100] transition-all duration-300">
@@ -396,25 +418,5 @@
 </div>
 
 
-<script>
-  function abrirModalQR(qr, barra, nombre, pdfUrl) {
 
-    document.getElementById('qrImg').src = qr;
-    document.getElementById('barraImg').src = barra;
-    document.getElementById('modalNombreProducto').innerText = nombre;
-
-    // 🔥 PDF dinámico
-    document.getElementById('btnDownloadPDF').href = pdfUrl;
-
-    const modal = document.getElementById('modalQR');
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
-}
-
-function cerrarModalQR() {
-    const modal = document.getElementById('modalQR');
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
-}
-</script>
 @endsection
