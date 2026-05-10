@@ -5,10 +5,6 @@
 @section('content')
 
 <div class="relative space-y-6">
-
-    {{-- ══════════════════════════════════════════
-         HEADER BANNER
-    ══════════════════════════════════════════ --}}
     <div class="group relative overflow-hidden rounded-2xl p-7 text-white shadow-md transition-all duration-500 hover:shadow-lg"
         style="background: linear-gradient(135deg, var(--primary) 0%, #0096D9 100%);">
 
@@ -37,9 +33,7 @@
         <div class="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-3xl transition-transform duration-700 group-hover:scale-150"></div>
     </div>
 
-    {{-- ══════════════════════════════════════════
-         ALERTAS
-    ══════════════════════════════════════════ --}}
+   
     @if(session('success'))
         <div class="flex items-center gap-3 bg-emerald-50 border border-emerald-200 text-emerald-700 px-5 py-3.5 rounded-xl text-sm font-bold shadow-sm">
             <i class="fa fa-check-circle text-emerald-500"></i>
@@ -54,15 +48,10 @@
         </div>
     @endif
 
-    {{-- ══════════════════════════════════════════
-         CONTENIDO PRINCIPAL
-    ══════════════════════════════════════════ --}}
     <div class="flex flex-col lg:flex-row gap-4">
 
-        {{-- PANEL IZQUIERDO --}}
+       
         <div class="flex-1 space-y-4">
-
-            {{-- ── CARD: URL ─────────────────────────────── --}}
             <div class="bg-white rounded-[1.5rem] shadow-sm border border-slate-100 overflow-hidden">
 
                 <div class="px-6 py-4 border-b border-slate-50 flex items-center gap-3">

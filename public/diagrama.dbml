@@ -32,6 +32,23 @@ Table areas_produccion {
     updated_at datetime
 }
 
+Table usuarios {
+    id int [pk, increment]
+    dni varchar
+    nombres varchar
+    apellido_paterno varchar
+    apellido_materno varchar
+    email varchar
+    cargo_rrhh varchar
+    foto varchar
+    username varchar
+    password varchar
+    rol varchar
+    estado int
+    created_at datetime
+    updated_at datetime
+}
+
 Table producto_categorias {
     id_catg int [pk, increment]
     descripcion varchar(100)
@@ -47,6 +64,8 @@ Table cajas {
     id int [pk, increment]
     nombre varchar(100)
     estado char(1)
+    fecha_apertura datetime
+    fecha_cierre datetime
     created_at datetime
     updated_at datetime
 }
@@ -54,7 +73,7 @@ Table cajas {
 Table caja_usuario {
     id int [pk, increment]
     caja_id int [ref: > cajas.id]
-    usuario_id int
+    usuario_id int [ref: > usuarios.id]
     created_at datetime
     updated_at datetime
 }
@@ -76,7 +95,7 @@ Table mesas {
     updated_at timestamp
 }
 
-Table impresoras { // CORREGIDO nombre
+Table impresoras { 
     id bigint [pk, increment]
     nombre varchar(100) [not null]
     estado enum('activo','inactivo') [default: 'activo']

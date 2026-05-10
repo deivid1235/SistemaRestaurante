@@ -12,6 +12,9 @@ return new class extends Migration
             $table->id();
             $table->string('nombre', 100);
             $table->enum('estado', ['activo', 'inactivo'])->default('activo');
+             
+            $table->dateTime('fecha_apertura')->nullable();
+            $table->dateTime('fecha_cierre')->nullable();
             $table->timestamps();
         });
     }

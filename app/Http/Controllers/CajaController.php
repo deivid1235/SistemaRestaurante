@@ -11,6 +11,7 @@ class CajaController extends Controller
     public function index(Request $request)
     {
         $query = Caja::with('usuarios'); 
+
         if ($request->filled('buscar')) {
             $query->where('nombre', 'like', '%' . $request->buscar . '%');
         }
@@ -31,12 +32,13 @@ class CajaController extends Controller
         Caja::create([
             'nombre' => strtoupper($request->nombre),
             'estado' => $request->estado,
+            'fecha_apertura' => $request->fecha_apertura ?: null,
+            'fecha_cierre' => $request->fecha_cierre ?: null,
         ]);
 
         return redirect()->route('admin.Caja.index')
-                         ->with('success', 'Caja creada correctamente.');
+                        ->with('success', 'Caja creada correctamente.');
     }
-
     public function edit(int $id)
     {
         $caja = Caja::findOrFail($id);
@@ -55,13 +57,18 @@ class CajaController extends Controller
         $caja->update([
             'nombre' => strtoupper($request->nombre),
             'estado' => $request->estado,
+            'fecha_apertura' => $request->fecha_apertura 
+                ? str_replace('T', ' ', $request->fecha_apertura) 
+                : null,
+            'fecha_cierre' => $request->fecha_cierre 
+                ? str_replace('T', ' ', $request->fecha_cierre) 
+                : null,
         ]);
 
         return redirect()->route('admin.Caja.index')
-                         ->with('success', 'Caja actualizada correctamente.');
+                        ->with('success', 'Caja actualizada correctamente.');
     }
-
-    public function destroy( int $id)
+    public function destroy(int $id)
     {
         $caja = Caja::findOrFail($id);
         $caja->delete();
@@ -70,7 +77,46 @@ class CajaController extends Controller
                          ->with('success', 'Caja eliminada correctamente.');
     }
 
-    // Mostrar usuarios disponibles y asignados a la caja
+  
+    public function abrir(int $id)
+    {
+        $caja = Caja::findOrFail($id);
+
+        if ($caja->fecha_apertura && !$caja->fecha_cierre) {
+            return redirect()->back()->with('error', 'La caja ya está abierta.');
+        }
+
+        $caja->update([
+            'fecha_apertura' => now(),
+            'fecha_cierre' => null,
+            'estado' => 'activo'
+        ]);
+
+        return redirect()->back()->with('success', 'Caja abierta correctamente.');
+    }
+
+   
+    public function cerrar( int $id)
+    {
+        $caja = Caja::findOrFail($id);
+
+        if (!$caja->fecha_apertura) {
+            return redirect()->back()->with('error', 'La caja no ha sido abierta.');
+        }
+
+        if ($caja->fecha_cierre) {
+            return redirect()->back()->with('error', 'La caja ya está cerrada.');
+        }
+
+        $caja->update([
+            'fecha_cierre' => now(),
+            'estado' => 'inactivo'
+        ]);
+
+        return redirect()->back()->with('success', 'Caja cerrada correctamente.');
+    }
+
+   
     public function usuarios(int $id)
     {
         $caja = Caja::with('usuarios')->findOrFail($id);
@@ -96,7 +142,6 @@ class CajaController extends Controller
         ]);
     }
 
-    // Guardar usuarios asignados a la caja
     public function asignarUsuarios(Request $request, int $id)
     {
         $caja = Caja::findOrFail($id);
@@ -107,9 +152,6 @@ class CajaController extends Controller
         ]);
 
         $usuarios = $request->usuarios ?? [];
-
-        // 🔥 DEBUG OPCIONAL (quitar luego)
-        // dd($usuarios);
 
         $caja->usuarios()->sync($usuarios);
 

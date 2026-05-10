@@ -319,7 +319,7 @@
             @if($producto->imagen)
                 <img src="{{ public_path('storage/' . $producto->imagen) }}" alt="{{ $producto->nombre }}">
             @else
-                <div class="img-empty">📷<br>Sin imagen</div>
+                <div class="img-empty"><br>Sin imagen</div>
             @endif
         </div>
 

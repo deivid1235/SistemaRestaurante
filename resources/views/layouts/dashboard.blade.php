@@ -475,9 +475,15 @@
 
     <!-- MENÚ -->
     <nav class="nav-primary">
+        <a href="{{ route('admin.dashboard') }}" 
+        class="flex items-center {{ request()->routeIs('admin.dashboard') ? 'active-link' : '' }}">
+            <span class="nav-icon">
+                <i class="fa fa-th-large"></i>
+            </span>
+            <span class="nav-text">Dashboard</span>
+        </a>
 
         <p class="sidebar-section">Principal</p>
-
         <a href="#" class="flex items-center {{ request()->routeIs('admin.pos.*') ? 'active-link' : '' }}">
             <span class="nav-icon"><i class="fa fa-store"></i></span>
             <span class="nav-text">Punto de Venta</span>

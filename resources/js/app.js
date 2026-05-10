@@ -956,43 +956,65 @@ window.onload = function () {
     if (primeraFila) primeraFila.click();
 };
 
-// Caja Y usuarios
-
 window.UI = {
     modals: {
-        crear: document.getElementById('modalCrear'),
-        editar: document.getElementById('modalEditar'),
         usuarios: document.getElementById('modalUsuarios')
     },
-
-    toggle(modal, show) {
-        if (!modal) return;
-        modal.classList.toggle('hidden', !show);
-        modal.classList.toggle('flex', show);
+    toggle: function (el, show) {
+        if (!el) return;
+        el.classList.toggle('hidden', !show);
+        el.classList.toggle('flex', show); 
     }
 };
 
-window.abrirModalCrear = function () {
-    window.UI.toggle(window.UI.modals.crear, true);
+//Caja
+window.abrirCrear = function () {
+    const modal = document.getElementById('modalCaja');
+
+    modal.classList.remove('hidden');
+    modal.classList.add('flex'); 
+
+    document.getElementById('formCaja').action = "/admin/Caja";
+    document.getElementById('methodCaja').value = "POST";
+
+    document.getElementById('tituloModal').innerText = "Nueva Caja";
+    document.getElementById('btnGuardar').innerText = "Guardar";
+    document.getElementById('iconModal').className = "fa fa-plus text-white";
+
+    document.getElementById('formCaja').reset();
 };
 
-window.cerrarModalCrear = function () {
-    window.UI.toggle(window.UI.modals.crear, false);
+window.abrirEditar = function (id, nombre, estado, apertura, cierre) {
+    const modal = document.getElementById('modalCaja');
+
+    modal.classList.remove('hidden');
+    modal.classList.add('flex'); 
+
+    document.getElementById('formCaja').action = `/admin/Caja/${id}`;
+    document.getElementById('methodCaja').value = "PUT";
+
+    document.getElementById('tituloModal').innerText = "Editar Caja";
+    document.getElementById('btnGuardar').innerText = "Actualizar";
+    document.getElementById('iconModal').className = "fa fa-edit text-white";
+
+    document.getElementById('nombre').value = nombre;
+    document.getElementById('estado').value = estado;
+
+   
+    document.getElementById('fecha_apertura').value = apertura 
+        ? apertura.replace(' ', 'T') 
+        : '';
+
+    document.getElementById('fecha_cierre').value = cierre 
+        ? cierre.replace(' ', 'T') 
+        : '';
 };
 
-window.abrirModalEditar = function (id, nombre, estado) {
-    const form = document.getElementById('formEditar');
+window.cerrarModalCaja = function () {
+    const modal = document.getElementById('modalCaja');
 
-    form.action = `/admin/Caja/${id}`;
-
-    document.getElementById('edit_nombre').value = nombre;
-    document.getElementById('edit_estado').value = estado;
-
-    window.UI.toggle(window.UI.modals.editar, true);
-};
-
-window.cerrarModalEditar = function () {
-    window.UI.toggle(window.UI.modals.editar, false);
+    modal.classList.add('hidden');
+    modal.classList.remove('flex'); 
 };
 
 window.cajaIdActual = null;
@@ -1103,7 +1125,6 @@ window.añadirUsuario = function () {
 
     select.value = "";
     sincronizarYEnviar();
-
 };
 
 window.quitarUsuario = function (uid) {
@@ -1125,6 +1146,8 @@ function sincronizarYEnviar() {
 }
 
 window.onclick = function (e) {
+    if (!window.UI || !window.UI.modals) return;
+
     Object.values(window.UI.modals).forEach(m => {
         if (e.target === m) {
             window.UI.toggle(m, false);
@@ -1135,23 +1158,17 @@ window.onclick = function (e) {
 document.addEventListener('DOMContentLoaded', function () {
     const buscador = document.getElementById('buscador');
     if (!buscador) return;
+
     buscador.addEventListener('keyup', function () {
         const filtro = this.value.toLowerCase();
         const filas = document.querySelectorAll('#tablaCaja tr');
+
         filas.forEach(fila => {
             const texto = fila.textContent.toLowerCase();
-            if (texto.includes(filtro)) {
-                fila.style.display = '';
-            } else {
-                fila.style.display = 'none';
-            }
-
+            fila.style.display = texto.includes(filtro) ? '' : 'none';
         });
-
     });
-
 });
-
 
 //Categorias productos
 document.addEventListener("DOMContentLoaded", function () {
@@ -1345,23 +1362,72 @@ document.addEventListener('click', function (e) {
         }
     });
 });
+document.addEventListener("DOMContentLoaded", () => {
 
-document.addEventListener('DOMContentLoaded', function () {
-    const buscador = document.getElementById('buscadorArea');
-    if (!buscador) return;
+    const buscador = document.getElementById("buscador");
+    const btnTodos = document.getElementById("btnTodos");
+    const btnActivos = document.getElementById("btnActivos");
+    const btnInactivos = document.getElementById("btnInactivos");
+    const cards = document.querySelectorAll(".area-card");
 
-    buscador.addEventListener('keyup', function () {
-        const filtro = this.value.toLowerCase();
-        const filas  = document.querySelectorAll('#tablaAreas tr');
+    let filtroEstado = "todos";
 
-        filas.forEach(fila => {
-            const texto = fila.textContent.toLowerCase();
-            fila.style.display = texto.includes(filtro) ? '' : 'none';
+    function filtrar() {
+        const texto = buscador.value.toLowerCase();
+
+        cards.forEach(card => {
+            const nombre = card.dataset.nombre;
+            const estado = card.dataset.estado;
+
+            let coincideBusqueda = nombre.includes(texto);
+            let coincideEstado =
+                filtroEstado === "todos" ||
+                estado === filtroEstado;
+
+            if (coincideBusqueda && coincideEstado) {
+                card.style.display = "flex";
+            } else {
+                card.style.display = "none";
+            }
         });
-    });
-});
-// CARTA DIGITAL
+    }
 
+    buscador.addEventListener("input", filtrar);
+
+    btnTodos.addEventListener("click", () => {
+        filtroEstado = "todos";
+        activarBoton(btnTodos);
+        filtrar();
+    });
+
+    btnActivos.addEventListener("click", () => {
+        filtroEstado = "activo";
+        activarBoton(btnActivos);
+        filtrar();
+    });
+
+    btnInactivos.addEventListener("click", () => {
+        filtroEstado = "inactivo";
+        activarBoton(btnInactivos);
+        filtrar();
+    });
+
+    function activarBoton(botonActivo) {
+        [btnTodos, btnActivos, btnInactivos].forEach(btn => {
+            btn.classList.remove("text-white", "shadow-md");
+            btn.classList.add("text-slate-400");
+            btn.style.background = "transparent";
+        });
+
+        botonActivo.classList.remove("text-slate-400");
+        botonActivo.classList.add("text-white", "shadow-md");
+        botonActivo.style.background =
+            "linear-gradient(135deg, #0ea5e9 0%, #0096D9 100%)";
+    }
+
+});
+
+// CARTA DIGITAL
 window.copiarUrl = function () {
     const input = document.getElementById('inputUrl');
     if (!input || !input.value) return;
@@ -1382,7 +1448,6 @@ window.copiarUrl = function () {
         document.execCommand('copy');
     });
 };
-
 
 document.addEventListener('DOMContentLoaded', function () {
     const inputUrl  = document.getElementById('inputUrl');

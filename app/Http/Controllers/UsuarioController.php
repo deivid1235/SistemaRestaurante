@@ -26,7 +26,7 @@ class UsuarioController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        return view('admin.Empresa.usuarios.index', compact('usuarios', 'search'));
+        return view('admin.Usuarios.index', compact('usuarios', 'search'));
     }
 
     /**
@@ -35,7 +35,7 @@ class UsuarioController extends Controller
     public function create()
     {
         $roles = ['ADMINISTRADOR', 'CAJERO', 'PRODUCCION', 'MOZO', 'REPARTIDOR', 'PERSONALIZADO'];
-        return view('admin.Empresa.usuarios.create', compact('roles'));
+        return view('admin.Usuarios.create', compact('roles'));
     }
 
     /**
@@ -76,7 +76,7 @@ class UsuarioController extends Controller
 
         $usuario->save();
 
-        return redirect()->route('usuarios.index')
+        return redirect()->route('admin.Usuario.index')
             ->with('success', 'Usuario creado correctamente.');
     }
 
@@ -87,7 +87,7 @@ class UsuarioController extends Controller
     {
         $usuario = Usuario::findOrFail($id);
         $roles   = ['ADMINISTRADOR', 'CAJERO', 'PRODUCCION', 'MOZO', 'REPARTIDOR', 'PERSONALIZADO'];
-        return view('admin.Empresa.usuarios.edit', compact('usuario', 'roles'));
+        return view('admin.Usuarios.edit', compact('usuario', 'roles'));
     }
 
     /**
@@ -136,7 +136,7 @@ class UsuarioController extends Controller
 
         $usuario->save();
 
-        return redirect()->route('usuarios.index')
+        return redirect()->route('admin.Usuarios.index')
             ->with('success', 'Usuario actualizado correctamente.');
     }
 
