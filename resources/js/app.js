@@ -1,3 +1,5 @@
+import './clientes';
+
 function setupMobileMenu() {
     const button = document.getElementById('mobile-menu-button');
     const menu   = document.getElementById('mobile-menu');
@@ -94,79 +96,80 @@ document.addEventListener('DOMContentLoaded', function() {
     const provSelect = document.getElementById('provincia');
     const distSelect = document.getElementById('distrito');
 
-    async function cargarUbigeo() {
-        try {
-            const response = await fetch('https://raw.githubusercontent.com/CONCYTEC/ubigeo-peru/master/equivalencia-ubigeos-oti-concytec.json');
-            const dataFlat = await response.json();
+    if (deptSelect && provSelect && distSelect) {
 
-            dataFlat.forEach(item => {
-                let dep = item.desc_dep_inei;
-                let prov = item.desc_prov_inei;
-                let dist = item.desc_ubigeo_inei;
+        async function cargarUbigeo() {
+            try {
+                const response = await fetch('https://raw.githubusercontent.com/CONCYTEC/ubigeo-peru/master/equivalencia-ubigeos-oti-concytec.json');
+                const dataFlat = await response.json();
 
-                if (dep && prov && dist) {
-                    if (!ubigeoData[dep]) ubigeoData[dep] = {};
-                    if (!ubigeoData[dep][prov]) ubigeoData[dep][prov] = [];
+                dataFlat.forEach(item => {
+                    let dep = item.desc_dep_inei;
+                    let prov = item.desc_prov_inei;
+                    let dist = item.desc_ubigeo_inei;
 
-                    if (!ubigeoData[dep][prov].includes(dist)) {
-                        ubigeoData[dep][prov].push(dist);
+                    if (dep && prov && dist) {
+                        if (!ubigeoData[dep]) ubigeoData[dep] = {};
+                        if (!ubigeoData[dep][prov]) ubigeoData[dep][prov] = [];
+
+                        if (!ubigeoData[dep][prov].includes(dist)) {
+                            ubigeoData[dep][prov].push(dist);
+                        }
                     }
-                }
-            });
+                });
 
-            // Cargar departamentos
-            Object.keys(ubigeoData).sort().forEach(departamento => {
-                let option = document.createElement('option');
-                option.value = departamento;
-                option.textContent = departamento;
-                deptSelect.appendChild(option);
-            });
+                Object.keys(ubigeoData).sort().forEach(departamento => {
+                    let option = document.createElement('option');
+                    option.value = departamento;
+                    option.textContent = departamento;
+                    deptSelect.appendChild(option);
+                });
 
-        } catch (error) {
-            console.error("Error al cargar datos:", error);
+            } catch (error) {
+                console.error("Error al cargar ubigeo:", error);
+            }
         }
+
+        deptSelect.addEventListener('change', function() {
+
+            provSelect.innerHTML = '<option disabled selected>Seleccione una provincia...</option>';
+            distSelect.innerHTML = '<option disabled selected>Seleccione un distrito...</option>';
+
+            provSelect.disabled = false;
+            distSelect.disabled = true;
+
+            const depto = this.value;
+
+            if (!ubigeoData[depto]) return;
+
+            Object.keys(ubigeoData[depto]).sort().forEach(provincia => {
+                let option = document.createElement('option');
+                option.value = provincia;
+                option.textContent = provincia;
+                provSelect.appendChild(option);
+            });
+        });
+
+        provSelect.addEventListener('change', function() {
+
+            distSelect.innerHTML = '<option disabled selected>Seleccione un distrito...</option>';
+            distSelect.disabled = false;
+
+            const depto = deptSelect.value;
+            const provincia = this.value;
+
+            if (!ubigeoData[depto] || !ubigeoData[depto][provincia]) return;
+
+            ubigeoData[depto][provincia].forEach(distrito => {
+                let option = document.createElement('option');
+                option.value = distrito;
+                option.textContent = distrito;
+                distSelect.appendChild(option);
+            });
+        });
+
+        cargarUbigeo();
     }
-
-    // CUANDO CAMBIA DEPARTAMENTO
-    deptSelect.addEventListener('change', function() {
-
-        provSelect.innerHTML = '<option disabled selected>Seleccione una provincia...</option>';
-        distSelect.innerHTML = '<option disabled selected>Seleccione un distrito...</option>';
-
-        provSelect.disabled = false;
-        distSelect.disabled = true;
-
-        const depto = this.value;
-
-        Object.keys(ubigeoData[depto]).sort().forEach(provincia => {
-            let option = document.createElement('option');
-            option.value = provincia;
-            option.textContent = provincia;
-            provSelect.appendChild(option);
-        });
-
-    });
-
-    // CUANDO CAMBIA PROVINCIA
-    provSelect.addEventListener('change', function() {
-
-        distSelect.innerHTML = '<option disabled selected>Seleccione un distrito...</option>';
-        distSelect.disabled = false;
-
-        const depto = deptSelect.value;
-        const provincia = this.value;
-
-        ubigeoData[depto][provincia].sort().forEach(distrito => {
-            let option = document.createElement('option');
-            option.value = distrito;
-            option.textContent = distrito;
-            distSelect.appendChild(option);
-        });
-
-    });
-
-    cargarUbigeo();
-
 });
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -174,56 +177,51 @@ document.addEventListener('DOMContentLoaded', function () {
     const tipoDoc = document.getElementById('tipo_documento');
     const numeroDoc = document.getElementById('numero_documento');
 
-    tipoDoc.addEventListener('change', function () {
-        numeroDoc.value = '';
-    });
+    if (tipoDoc && numeroDoc) {
 
-    numeroDoc.addEventListener('input', function () {
-        let valor = numeroDoc.value;
-        const tipo = tipoDoc.value;
+        tipoDoc.addEventListener('change', function () {
+            numeroDoc.value = '';
+        });
 
+        numeroDoc.addEventListener('input', function () {
 
-        if (tipo === 'DNI' || tipo === 'RUC') {
-            valor = valor.replace(/\D/g, '');
+            let valor = numeroDoc.value;
+            const tipo = tipoDoc.value;
+
+            if (tipo === 'DNI' || tipo === 'RUC') {
+                valor = valor.replace(/\D/g, '');
+            }
+
+            if (tipo === 'DNI') numeroDoc.value = valor.slice(0, 8);
+            else if (tipo === 'RUC') numeroDoc.value = valor.slice(0, 11);
+            else numeroDoc.value = valor.slice(0, 12);
+        });
+
+        const form = numeroDoc.closest('form');
+
+        if (form) {
+            form.addEventListener('submit', function (e) {
+
+                const tipo = tipoDoc.value;
+                const valor = numeroDoc.value;
+
+                if (tipo === 'DNI' && valor.length !== 8) {
+                    alert('El DNI debe tener 8 dígitos');
+                    e.preventDefault();
+                }
+
+                if (tipo === 'RUC' && valor.length !== 11) {
+                    alert('El RUC debe tener 11 dígitos');
+                    e.preventDefault();
+                }
+
+                if (!tipo) {
+                    alert('Seleccione un tipo de documento');
+                    e.preventDefault();
+                }
+            });
         }
-
-        if (tipo === 'DNI') {
-            numeroDoc.value = valor.slice(0, 8);
-        }
-        else if (tipo === 'RUC') {
-            numeroDoc.value = valor.slice(0, 11);
-        }
-        else if (tipo === 'CE') {
-            numeroDoc.value = valor.slice(0, 12);
-        }
-        else if (tipo === 'Pasaporte') {
-            numeroDoc.value = valor.slice(0, 12);
-        }
-    });
-
-
-    const form = numeroDoc.closest('form');
-
-    form.addEventListener('submit', function (e) {
-        const tipo = tipoDoc.value;
-        const valor = numeroDoc.value;
-
-        if (tipo === 'DNI' && valor.length !== 8) {
-            alert('El DNI debe tener 8 dígitos');
-            e.preventDefault();
-        }
-
-        if (tipo === 'RUC' && valor.length !== 11) {
-            alert('El RUC debe tener 11 dígitos');
-            e.preventDefault();
-        }
-
-        if (!tipo) {
-            alert('Seleccione un tipo de documento');
-            e.preventDefault();
-        }
-    });
-
+    }
 });
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -232,8 +230,7 @@ document.addEventListener('DOMContentLoaded', function () {
         'primer_nombre',
         'segundo_nombre',
         'primer_apellido',
-        'segundo_apellido',
-
+        'segundo_apellido'
     ];
 
     campos.forEach(id => {
@@ -241,7 +238,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (input) {
             input.addEventListener('input', function () {
-                // Permitir solo letras, espacios y tildes
                 this.value = this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, '');
             });
         }
@@ -250,11 +246,14 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 document.addEventListener('DOMContentLoaded', function () {
+
     const telefono = document.getElementById('telefono');
-    telefono.addEventListener('input', function () {
-        this.value = this.value.replace(/\D/g, '');
-        this.value = this.value.slice(0, 9);
-    });
+
+    if (telefono) {
+        telefono.addEventListener('input', function () {
+            this.value = this.value.replace(/\D/g, '').slice(0, 9);
+        });
+    }
 
 });
 
@@ -388,22 +387,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
 //Modal Tipo pago
 document.addEventListener('DOMContentLoaded', function () {
-
     const modal = document.getElementById('modalPago');
     const btnAbrir = document.getElementById('btnAbrirModal');
     const btnCerrar = document.getElementById('btnCerrarModal');
     const form = document.getElementById('formTipoPago');
 
+    if (!modal || !form) return;
 
-    btnAbrir.addEventListener('click', function () {
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-    });
+    if (btnAbrir) {
+        btnAbrir.addEventListener('click', function () {
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        });
+    }
 
-    btnCerrar.addEventListener('click', function () {
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
-    });
+    if (btnCerrar) {
+        btnCerrar.addEventListener('click', function () {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        });
+    }
 
     window.addEventListener('click', function (e) {
         if (e.target === modal) {
@@ -414,11 +417,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.querySelectorAll('.btnEditar').forEach(btn => {
         btn.addEventListener('click', function () {
+
             const id = this.dataset.id;
             const descripcion = this.dataset.descripcion;
 
-            document.getElementById('tipoPagoId').value = id;
-            document.getElementById('descripcion').value = descripcion;
+            const inputId = document.getElementById('tipoPagoId');
+            const inputDesc = document.getElementById('descripcion');
+
+            if (!inputId || !inputDesc) return;
+
+            inputId.value = id;
+            inputDesc.value = descripcion;
 
             form.action = '/admin/TipoPago/' + id;
 
@@ -435,16 +444,24 @@ document.addEventListener('DOMContentLoaded', function () {
             modal.classList.add('flex');
         });
     });
+
     document.querySelectorAll('.btnEliminarTipoPago').forEach(btn => {
         btn.addEventListener('click', function () {
+
             const id = this.dataset.id;
             const nombre = this.dataset.nombre;
 
             const m = document.getElementById('modalEliminar');
             const f = document.getElementById('formEliminar');
+            const span = document.getElementById('delete_nombre');
+
+            if (!m || !f || !span) {
+                console.error("ERROR: Modal eliminar no encontrado");
+                return;
+            }
 
             f.action = `/admin/TipoPago/${id}`;
-            document.getElementById('delete_nombre').innerText = nombre;
+            span.innerText = nombre;
 
             m.classList.remove('hidden');
             m.classList.add('flex');
@@ -602,46 +619,48 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // Modal de tipo de documento
 document.addEventListener('DOMContentLoaded', () => {
+
     const modal = document.getElementById('modalDocumento');
     const form = document.getElementById('formDocumento');
     const modalTitle = document.getElementById('modalTitle');
-
     const buscador = document.getElementById('buscador');
     const btnTodos = document.getElementById('btnTodos');
     const btnActivos = document.getElementById('btnActivos');
     const btnInactivos = document.getElementById('btnInactivos');
-
     const cards = document.querySelectorAll('.documento-card');
-
     const storeUrl = "/admin/TipoDocumento";
-
     let filtroEstado = "todos";
 
-    if (!modal || !form) {
-        console.error("ERROR: Modal no encontrado");
-        return;
-    }
+    if (!modal || !form) return;
 
     const openModal = (edit = false, data = null) => {
 
         modal.classList.remove('hidden');
         modal.classList.add('flex');
 
+        const methodField = document.getElementById('methodField');
+        const inputDesc = document.getElementById('inputDesc');
+        const inputSerie = document.getElementById('inputSerie');
+        const inputNum = document.getElementById('inputNum');
+        const inputEstado = document.getElementById('inputEstado');
+
         if (edit && data) {
-            modalTitle.innerText = 'Editar Documento';
+
+            if (modalTitle) modalTitle.innerText = 'Editar Documento';
             form.action = `/admin/TipoDocumento/${data.id}`;
 
-            document.getElementById('methodField').value = 'PUT';
-            document.getElementById('inputDesc').value = data.descripcion ?? '';
-            document.getElementById('inputSerie').value = data.serie ?? '';
-            document.getElementById('inputNum').value = data.numero ?? '';
-            document.getElementById('inputEstado').value = data.estado.toUpperCase();
+            if (methodField) methodField.value = 'PUT';
+            if (inputDesc) inputDesc.value = data.descripcion ?? '';
+            if (inputSerie) inputSerie.value = data.serie ?? '';
+            if (inputNum) inputNum.value = data.numero ?? '';
+            if (inputEstado) inputEstado.value = (data.estado || '').toUpperCase();
 
         } else {
-            modalTitle.innerText = 'Nuevo Documento';
+
+            if (modalTitle) modalTitle.innerText = 'Nuevo Documento';
             form.action = storeUrl;
 
-            document.getElementById('methodField').value = 'POST';
+            if (methodField) methodField.value = 'POST';
             form.reset();
         }
     };
@@ -666,14 +685,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelectorAll('.btnEliminarDocumento').forEach(btn => {
         btn.addEventListener('click', function () {
+
             const id = this.dataset.id;
             const nombre = this.dataset.nombre;
 
             const m = document.getElementById('modalEliminar');
             const f = document.getElementById('formEliminar');
+            const span = document.getElementById('delete_nombre');
+
+            if (!m || !f || !span) return;
 
             f.action = `/admin/TipoDocumento/${id}`;
-            document.getElementById('delete_nombre').innerText = nombre;
+            span.innerText = nombre;
 
             m.classList.remove('hidden');
             m.classList.add('flex');
@@ -684,7 +707,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const texto = buscador?.value.toLowerCase() || "";
 
         cards.forEach(card => {
-            const nombre = card.dataset.nombre;
+            const nombre = (card.dataset.nombre || "").toLowerCase();
             const estado = card.dataset.estado;
 
             const coincideTexto = nombre.includes(texto);
@@ -717,16 +740,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const activarBoton = (btnActivo) => {
+
         [btnTodos, btnActivos, btnInactivos].forEach(btn => {
+            if (!btn) return;
+
             btn.classList.remove('text-white', 'shadow-md');
             btn.classList.add('text-slate-400');
             btn.style.background = '';
         });
 
+        if (!btnActivo) return;
+
         btnActivo.classList.add('text-white', 'shadow-md');
         btnActivo.classList.remove('text-slate-400');
 
-        btnActivo.style.background = "linear-gradient(135deg, var(--primary) 0%, #0096D9 100%)";
+        btnActivo.style.background =
+            "linear-gradient(135deg, var(--primary) 0%, #0096D9 100%)";
     };
 
 });
@@ -1361,6 +1390,7 @@ document.addEventListener('click', function (e) {
         }
     });
 });
+
 document.addEventListener("DOMContentLoaded", () => {
 
     const buscador = document.getElementById("buscador");
@@ -1368,6 +1398,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnActivos = document.getElementById("btnActivos");
     const btnInactivos = document.getElementById("btnInactivos");
     const cards = document.querySelectorAll(".area-card");
+    if (!buscador || !btnTodos || !btnActivos || !btnInactivos) return;
 
     let filtroEstado = "todos";
 
@@ -1375,7 +1406,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const texto = buscador.value.toLowerCase();
 
         cards.forEach(card => {
-            const nombre = card.dataset.nombre;
+            const nombre = (card.dataset.nombre || "").toLowerCase();
             const estado = card.dataset.estado;
 
             let coincideBusqueda = nombre.includes(texto);
@@ -1731,12 +1762,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnNuevo = document.getElementById("btnNuevoCombo");
 
     let filtroEstado = "todos";
-
-    // ==========================================
     // 1. MODAL (FIX SEGURO)
-    // ==========================================
     const openModal = () => {
-        if (!modalCombo) return console.error("❌ modalCombo no existe");
+        if (!modalCombo) return console.error(" modalCombo no existe");
 
         modalCombo.classList.remove('hidden');
         modalCombo.classList.add('flex');
@@ -1753,9 +1781,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     window.closeComboModal = closeModal;
 
-    // ==========================================
     // 2. FILTRADO
-    // ==========================================
     function filtrarCombos() {
         const texto = buscador?.value.toLowerCase() || "";
         const cards = document.querySelectorAll(".combo-card");
@@ -1788,21 +1814,18 @@ document.addEventListener("DOMContentLoaded", () => {
         filtrarCombos();
     });
 
-    // ==========================================
     // 3. CREAR (FIX IMPORTANTE)
-    // ==========================================
     btnNuevo?.addEventListener("click", () => {
-        if (!comboForm) return console.error("❌ comboForm no existe");
+        if (!comboForm) return console.error(" comboForm no existe");
 
         comboForm.reset();
         document.getElementById('modalTitle').innerText = "Nuevo Combo";
         document.getElementById('formMethod').value = "POST";
 
-        // 🔥 FIX REAL
         const storeRoute = comboForm.dataset.store;
 
         if (!storeRoute) {
-            console.error("❌ data-store no definido en el form");
+            console.error(" data-store no definido en el form");
             return;
         }
 
@@ -1811,9 +1834,7 @@ document.addEventListener("DOMContentLoaded", () => {
         openModal();
     });
 
-    // ==========================================
     // 4. EDITAR (FIX JSON + EVENTO)
-    // ==========================================
     document.addEventListener("click", (e) => {
         const btn = e.target.closest(".btnEditarCombo");
 
@@ -1837,13 +1858,11 @@ document.addEventListener("DOMContentLoaded", () => {
             openModal();
 
         } catch (error) {
-            console.error("❌ Error parseando combo:", error);
+            console.error(" Error parseando combo:", error);
         }
     });
 
-    // ==========================================
     // 5. ELIMINAR
-    // ==========================================
     document.addEventListener("click", (e) => {
         const btn = e.target.closest(".btnEliminarCombos");
 
@@ -2069,3 +2088,4 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 });
+

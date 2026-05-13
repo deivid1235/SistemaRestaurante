@@ -173,6 +173,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/Clientes/{id}/edit', [ClienteController::class, 'edit'])->name('admin.Clientes.edit');
     Route::put('/admin/Clientes/{id}', [ClienteController::class, 'update'])->name('admin.Clientes.update');
     Route::delete('/admin/Clientes/{id}', [ClienteController::class, 'destroy'])->name('admin.Clientes.destroy');
-
+    Route::get('admin/Clientes/buscar/{tipo}/{numero}', [ClienteController::class, 'buscarDocumento'])->name('admin.Clientes.buscar');
 });
 
