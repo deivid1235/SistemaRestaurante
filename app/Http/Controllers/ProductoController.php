@@ -244,7 +244,6 @@ class ProductoController extends Controller
     public function ticket( int $id)
     {
         $producto = Producto::findOrFail($id);
-
         $pdf = Pdf::loadView('admin.Producto.ticket', compact('producto'));
 
         return $pdf->download('ticket.pdf');

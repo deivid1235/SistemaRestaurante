@@ -1,20 +1,34 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use App\Models\ProductoCategoria;
 use App\Models\Producto;
+use App\Models\Combo;
 
 class HomeController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $categorias = ProductoCategoria::where('estado', 'a')->orderBy('orden')->get();
         $productos = Producto::where('estado', 'a')->get();
-        return view('home.index', compact('categorias', 'productos'));
+        $combos = Combo::where('estado', 'activo')->get();
+
+        $path = public_path('storage/combos');
+
+        $imagenesCombos = [];
+
+        if (File::exists($path)) {
+            foreach (File::files($path) as $file) {
+                $imagenesCombos[] = 'storage/combos/' . $file->getFilename();
+            }
+        }
+
+        return view('home.index', compact('categorias', 'productos', 'combos', 'imagenesCombos'));
     }
-    
+        
        
     public function inicioSECCION()
     {
@@ -41,4 +55,13 @@ class HomeController extends Controller
         $producto = Producto::findOrFail($id);
         return view('home.Producto', compact('producto'));
     }
+
+    public function byCategoria( int $id)
+    {
+        $productos = Producto::where('id_catg', $id)->get();
+
+        return response()->json($productos);
+    }
+
+  
 }

@@ -27,6 +27,69 @@
             </a>
         </div>
     </div>
+    {{-- ── ESTADÍSTICAS RÁPIDAS ── --}}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+        @php
+            $totalSalones = $salones->count();
+            $totalMesas = $mesas->count();
+            $mesasOcupadas = $mesas->where('estado', 'ocupado')->count();
+            
+            $divisorMesas = $totalMesas > 0 ? $totalMesas : 1;
+            $porcOcupacion = round(($mesasOcupadas / $divisorMesas) * 100);
+        @endphp
+
+        <div class="group relative bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4 transition-all duration-300 hover:shadow-md hover:-translate-y-1 overflow-hidden">
+            <div class="w-11 h-11 rounded-xl flex items-center justify-center text-lg shadow-sm transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3"
+                style="background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); color: white;">
+                <i class="fas fa-door-open"></i>
+            </div>
+            <div>
+                <p class="text-2xl font-black text-slate-800 leading-none">{{ $totalSalones }}</p>
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tight mt-1">Salones Creados</p>
+            </div>
+            <div class="absolute bottom-0 left-0 w-full h-1 bg-amber-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
+        </div>
+
+        <div class="group relative bg-white p-4 rounded-2xl shadow-sm border border-slate-100 transition-all duration-300 hover:shadow-md hover:-translate-y-1 overflow-hidden">
+            <div class="flex items-center gap-4 mb-3">
+                <div class="w-11 h-11 rounded-xl flex items-center justify-center text-lg shadow-sm transition-transform duration-500 group-hover:rotate-12"
+                    style="background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: white;">
+                    <i class="fas fa-chair"></i>
+                </div>
+                <div>
+                    <p class="text-2xl font-black text-slate-800 leading-none">{{ $totalMesas }}</p>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tight mt-1">Mesas Totales</p>
+                </div>
+                <span class="ml-auto text-[9px] font-black bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded-md border border-emerald-100">
+                    100%
+                </span>
+            </div>
+            <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                <div class="h-full bg-emerald-500 rounded-full w-full"></div>
+            </div>
+        </div>
+
+        <div class="group relative bg-white p-4 rounded-2xl shadow-sm border border-slate-100 transition-all duration-300 hover:shadow-md hover:-translate-y-1 overflow-hidden">
+            <div class="flex items-center gap-4 mb-3">
+                <div class="w-11 h-11 rounded-xl flex items-center justify-center text-lg shadow-sm transition-transform duration-500 group-hover:scale-110"
+                    style="background: linear-gradient(135deg, #EF4444 0%, #B91C1C 100%); color: white;">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div>
+                    <p class="text-2xl font-black text-slate-800 leading-none">{{ $mesasOcupadas }}</p>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tight mt-1">Mesas Ocupadas</p>
+                </div>
+                <span class="ml-auto text-[9px] font-black bg-red-50 text-red-600 px-2 py-0.5 rounded-md border border-red-100 transition-colors group-hover:bg-red-500 group-hover:text-white">
+                    {{ $porcOcupacion }}%
+                </span>
+            </div>
+            
+            <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                <div class="h-full rounded-full transition-all duration-1000 group-hover:animate-pulse" 
+                    style="width: {{ $porcOcupacion }}%; background: linear-gradient(90deg, #EF4444, #B91C1C);"></div>
+            </div>
+        </div>
+    </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div class="bg-white rounded-[2.5rem] shadow-xl border border-gray-100 overflow-hidden transition-all hover:shadow-2xl">

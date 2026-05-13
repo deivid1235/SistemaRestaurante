@@ -1,3 +1,36 @@
+Table clientes {
+    id int [pk, increment]
+    tipo_cliente int
+    tipo_documento varchar(3)  // DNI o RUC
+    numero_documento varchar(13)
+    nombres varchar(100)
+    razon_social varchar(100)
+    telefono int
+    fecha_nac date
+    correo varchar(100)
+    direccion varchar(100)
+    referencia varchar(100)
+    estado varchar(5) [default: 'a']
+
+    created_at datetime
+    updated_at datetime
+}
+
+Table combos {
+    id int [pk, increment]
+    nombre varchar(255)
+    id_area int [ref: > areas_produccion.id]
+    nota text
+    descripcion text
+    imagen varchar(255)
+    estado enum('activo','inactivo')
+    delivery boolean
+
+    created_at datetime
+    updated_at datetime
+}
+
+
 Table productos {
     id int [pk, increment]
     id_catg int [ref: > producto_categorias.id_catg]
@@ -26,7 +59,7 @@ Table productos {
 Table areas_produccion {
     id int [pk, increment]
     nombre varchar(255)
-    impresora_id int [ref: > impresoras.id] // CORREGIDO
+    impresora_id int [ref: > impresoras.id] 
     estado char(1)
     created_at datetime
     updated_at datetime

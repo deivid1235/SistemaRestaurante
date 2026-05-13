@@ -48,4 +48,5 @@ class Producto extends Model
     {
         return $this->stock <= $this->stock_minimo;
     }
+    
 }

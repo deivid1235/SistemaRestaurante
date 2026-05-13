@@ -169,7 +169,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 });
 
-
 document.addEventListener('DOMContentLoaded', function () {
 
     const tipoDoc = document.getElementById('tipo_documento');
@@ -1587,7 +1586,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-//Producto
+// Productos
 function previewImage(event) {
     const reader = new FileReader();
 
@@ -1606,142 +1605,37 @@ function previewImage(event) {
     }
 }
 
-document.addEventListener("DOMContentLoaded", function () {
+window.abrirModalQR = function (qr, barra, nombre, pdfUrl) {
 
-    const btn = document.getElementById("btnGenerarCodigo");
-    const input = document.getElementById("codigo_barra");
+    const qrImg = document.getElementById('qrImg');
+    const barraImg = document.getElementById('barraImg');
+    const nombreText = document.getElementById('modalNombreProducto');
+    const btnPDF = document.getElementById('btnPdf'); 
+    const modal = document.getElementById('modalQR');
+    
 
-    if (btn && input) {
-
-        btn.addEventListener("click", function () {
-            let codigo = "";
-
-            for (let i = 0; i < 13; i++) {
-                codigo += Math.floor(Math.random() * 10);
-            }
-
-            input.value = codigo;
-        });
-
+    if (!modal) {
+        console.error("Modal QR no encontrado");
+        return;
     }
 
-});
+    if (qrImg) qrImg.src = qr;
+    if (barraImg) barraImg.src = barra;
+    if (nombreText) nombreText.innerText = nombre;
+    if (btnPDF) btnPDF.href = pdfUrl;
 
-function abrirModalQR(qr, barra, nombre, pdfUrl) {
-    document.getElementById('qrImg').src = qr;
-    document.getElementById('barraImg').src = barra;
-    document.getElementById('modalNombreProducto').innerText = nombre;
-
-    document.getElementById('btnDownloadPDF').href = pdfUrl;
-
-    const modal = document.getElementById('modalQR');
     modal.classList.remove('hidden');
     modal.classList.add('flex');
-}
+};
 
-function cerrarModalQR() {
+window.cerrarModalQR = function () {
     const modal = document.getElementById('modalQR');
+
+    if (!modal) return;
+
     modal.classList.add('hidden');
     modal.classList.remove('flex');
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-
-    const btnTodos = document.getElementById('btnTodos');
-    const btnActivos = document.getElementById('btnActivos');
-    const btnInactivos = document.getElementById('btnInactivos');
-    const btnDelivery = document.getElementById('btnDelivery');
-    const buscador = document.getElementById('buscador');
-
-    const productos = document.querySelectorAll('.producto');
-
-    let filtroActual = 'todos';
-
-    function resetBotones() {
-        [btnTodos, btnActivos, btnInactivos, btnDelivery].forEach(btn => {
-            if (!btn) return;
-            btn.classList.remove('text-white', 'shadow-md');
-            btn.classList.add('text-slate-400');
-            btn.style.background = 'transparent';
-        });
-    }
-
-    function activarBoton(btn) {
-        resetBotones();
-        if (!btn) return;
-
-        btn.classList.remove('text-slate-400');
-        btn.classList.add('text-white', 'shadow-md');
-        btn.style.background = 'linear-gradient(135deg, #0ea5e9 0%, #0096D9 100%)';
-    }
-
-    function filtrar() {
-        const texto = buscador.value.toLowerCase();
-
-        productos.forEach(p => {
-            const nombre = p.dataset.nombre || '';
-            const estado = p.dataset.estado;
-            const delivery = p.dataset.delivery;
-
-            let mostrar = true;
-
-            if (texto && !nombre.includes(texto)) {
-                mostrar = false;
-            }
-
-            if (filtroActual === 'activos' && estado !== 'a') {
-                mostrar = false;
-            }
-
-            if (filtroActual === 'inactivos' && estado !== 'i') {
-                mostrar = false;
-            }
-
-            if (filtroActual === 'delivery' && delivery !== '1') {
-                mostrar = false;
-            }
-
-            p.style.display = mostrar ? '' : 'none';
-        });
-    }
-
-    if (btnTodos) {
-        btnTodos.addEventListener('click', () => {
-            activarBoton(btnTodos);
-            filtroActual = 'todos';
-            filtrar();
-        });
-    }
-
-    if (btnActivos) {
-        btnActivos.addEventListener('click', () => {
-            activarBoton(btnActivos);
-            filtroActual = 'activos';
-            filtrar();
-        });
-    }
-
-    if (btnInactivos) {
-        btnInactivos.addEventListener('click', () => {
-            activarBoton(btnInactivos);
-            filtroActual = 'inactivos';
-            filtrar();
-        });
-    }
-
-    if (btnDelivery) {
-        btnDelivery.addEventListener('click', () => {
-            activarBoton(btnDelivery);
-            filtroActual = 'delivery';
-            filtrar();
-        });
-    }
-
-    if (buscador) {
-        buscador.addEventListener('input', filtrar);
-    }
-});
-
+};
 
 window.abrirEliminarProducto = function (id, nombre) {
 
@@ -1750,7 +1644,7 @@ window.abrirEliminarProducto = function (id, nombre) {
     const nombreSpan = document.getElementById("delete_nombre");
 
     if (!modal || !form || !nombreSpan) {
-        console.error(" Modal de eliminar producto no encontrado");
+        console.error("Modal eliminar no encontrado");
         return;
     }
 
@@ -1770,5 +1664,408 @@ window.cerrarEliminarProducto = function () {
     modal.classList.remove("flex");
 };
 
-window.abrirModalQR = abrirModalQR;
-window.cerrarModalQR = cerrarModalQR;
+document.addEventListener('DOMContentLoaded', function () {
+    const btn = document.getElementById("btnGenerarCodigo");
+    const input = document.getElementById("codigo_barra");
+
+    if (btn && input) {
+        btn.addEventListener("click", function () {
+            let codigo = "";
+            for (let i = 0; i < 13; i++) {
+                codigo += Math.floor(Math.random() * 10);
+            }
+            input.value = codigo;
+        });
+    }
+
+    // ======================
+    // FILTROS
+    // ======================
+    const btnTodos = document.getElementById('btnTodos');
+    const btnActivos = document.getElementById('btnActivos');
+    const btnInactivos = document.getElementById('btnInactivos');
+    const btnDelivery = document.getElementById('btnDelivery');
+    const buscador = document.getElementById('buscador');
+    const productos = document.querySelectorAll('.producto');
+
+    let filtroActual = 'todos';
+
+    function filtrar() {
+        const texto = buscador ? buscador.value.toLowerCase() : '';
+
+        productos.forEach(p => {
+            const nombre = (p.dataset.nombre || '').toLowerCase();
+            const estado = p.dataset.estado;
+            const delivery = p.dataset.delivery;
+
+            let mostrar = true;
+
+            if (texto && !nombre.includes(texto)) mostrar = false;
+            if (filtroActual === 'activos' && estado !== 'a') mostrar = false;
+            if (filtroActual === 'inactivos' && estado !== 'i') mostrar = false;
+            if (filtroActual === 'delivery' && delivery !== '1') mostrar = false;
+
+            p.style.display = mostrar ? '' : 'none';
+        });
+    }
+
+    if (btnTodos) btnTodos.onclick = () => { filtroActual = 'todos'; filtrar(); };
+    if (btnActivos) btnActivos.onclick = () => { filtroActual = 'activos'; filtrar(); };
+    if (btnInactivos) btnInactivos.onclick = () => { filtroActual = 'inactivos'; filtrar(); };
+    if (btnDelivery) btnDelivery.onclick = () => { filtroActual = 'delivery'; filtrar(); };
+    if (buscador) buscador.addEventListener('input', filtrar);
+
+});
+
+
+// Combos
+document.addEventListener("DOMContentLoaded", () => {
+
+    const modalCombo = document.getElementById("modalCombo");
+    const comboForm = document.getElementById("comboForm");
+    const buscador = document.getElementById("buscador");
+
+    const btnTodos = document.getElementById("btnTodos");
+    const btnActivos = document.getElementById("btnActivos");
+    const btnInactivos = document.getElementById("btnInactivos");
+    const btnNuevo = document.getElementById("btnNuevoCombo");
+
+    let filtroEstado = "todos";
+
+    // ==========================================
+    // 1. MODAL (FIX SEGURO)
+    // ==========================================
+    const openModal = () => {
+        if (!modalCombo) return console.error("❌ modalCombo no existe");
+
+        modalCombo.classList.remove('hidden');
+        modalCombo.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+    };
+
+    const closeModal = () => {
+        if (!modalCombo) return;
+
+        modalCombo.classList.add('hidden');
+        modalCombo.classList.remove('flex');
+        document.body.style.overflow = 'auto';
+    };
+
+    window.closeComboModal = closeModal;
+
+    // ==========================================
+    // 2. FILTRADO
+    // ==========================================
+    function filtrarCombos() {
+        const texto = buscador?.value.toLowerCase() || "";
+        const cards = document.querySelectorAll(".combo-card");
+
+        cards.forEach(card => {
+            const nombre = (card.dataset.nombre || "").toLowerCase();
+            const estado = card.dataset.estado || "";
+
+            const coincideTexto = nombre.includes(texto);
+            const coincideEstado = filtroEstado === "todos" || estado === filtroEstado;
+
+            card.style.display = (coincideTexto && coincideEstado) ? "flex" : "none";
+        });
+    }
+
+    buscador?.addEventListener("keyup", filtrarCombos);
+
+    btnTodos?.addEventListener("click", () => {
+        filtroEstado = "todos";
+        filtrarCombos();
+    });
+
+    btnActivos?.addEventListener("click", () => {
+        filtroEstado = "activo";
+        filtrarCombos();
+    });
+
+    btnInactivos?.addEventListener("click", () => {
+        filtroEstado = "inactivo";
+        filtrarCombos();
+    });
+
+    // ==========================================
+    // 3. CREAR (FIX IMPORTANTE)
+    // ==========================================
+    btnNuevo?.addEventListener("click", () => {
+        if (!comboForm) return console.error("❌ comboForm no existe");
+
+        comboForm.reset();
+        document.getElementById('modalTitle').innerText = "Nuevo Combo";
+        document.getElementById('formMethod').value = "POST";
+
+        // 🔥 FIX REAL
+        const storeRoute = comboForm.dataset.store;
+
+        if (!storeRoute) {
+            console.error("❌ data-store no definido en el form");
+            return;
+        }
+
+        comboForm.action = storeRoute;
+
+        openModal();
+    });
+
+    // ==========================================
+    // 4. EDITAR (FIX JSON + EVENTO)
+    // ==========================================
+    document.addEventListener("click", (e) => {
+        const btn = e.target.closest(".btnEditarCombo");
+
+        if (!btn) return;
+
+        try {
+            const combo = JSON.parse(btn.dataset.combo);
+
+            document.getElementById('modalTitle').innerText = "Editar Combo";
+            document.getElementById('formMethod').value = "PUT";
+
+            comboForm.action = `/admin/Combos/${combo.id}`;
+
+            document.getElementById('nombre').value = combo.nombre || "";
+            document.getElementById('descripcion').value = combo.descripcion || "";
+            document.getElementById('nota').value = combo.nota || "";
+            document.getElementById('id_area').value = combo.id_area || "";
+            document.getElementById('estado').value = combo.estado || "activo";
+            document.getElementById('delivery').value = combo.delivery ? "1" : "0";
+
+            openModal();
+
+        } catch (error) {
+            console.error("❌ Error parseando combo:", error);
+        }
+    });
+
+    // ==========================================
+    // 5. ELIMINAR
+    // ==========================================
+    document.addEventListener("click", (e) => {
+        const btn = e.target.closest(".btnEliminarCombos");
+
+        if (!btn) return;
+
+        const comboId = btn.dataset.id;
+        const comboNombre = btn.dataset.nombre;
+        const modalEliminar = document.getElementById('modalEliminar');
+
+        document.getElementById('delete_nombre').innerText = comboNombre;
+        document.getElementById('formEliminar').action = `/admin/Combos/${comboId}`;
+
+        modalEliminar.classList.remove('hidden');
+        modalEliminar.classList.add('flex');
+    });
+
+});
+
+
+//  USUARIOS 
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const buscador = document.getElementById("buscador");
+    const btnTodos = document.getElementById("btnTodos");
+    const btnActivos = document.getElementById("btnActivos");
+    const btnInactivos = document.getElementById("btnInactivos");
+
+    const cards = document.querySelectorAll(".area-card");
+    if (buscador) {
+        buscador.addEventListener("input", function () {
+            const texto = this.value.toLowerCase();
+
+            cards.forEach(card => {
+                const contenido = card.innerText.toLowerCase();
+
+                card.style.display = contenido.includes(texto) ? "flex" : "none";
+            });
+        });
+    }
+
+    if (btnTodos) {
+        btnTodos.addEventListener("click", () => {
+            cards.forEach(card => {
+                card.style.display = "flex";
+            });
+        });
+    }
+
+    if (btnActivos) {
+        btnActivos.addEventListener("click", () => {
+            cards.forEach(card => {
+                const estado = card.getAttribute("data-estado");
+
+                card.style.display = (estado == "1") ? "flex" : "none";
+            });
+        });
+    }
+
+    if (btnInactivos) {
+        btnInactivos.addEventListener("click", () => {
+            cards.forEach(card => {
+                const estado = card.getAttribute("data-estado");
+
+                card.style.display = (estado == "0") ? "flex" : "none";
+            });
+        });
+    }
+
+    const modal = document.getElementById("modalEliminar");
+
+    if (modal) {
+        modal.addEventListener("click", function (e) {
+            if (e.target === this) {
+                cerrarEliminarUsuario();
+            }
+        });
+    }
+
+});
+
+window.formIdPendiente = null;
+window.confirmarEliminar = function (id, nombre) {
+    window.formIdPendiente = id;
+    const nombreEl = document.getElementById("delete_nombre");
+    if (nombreEl) {
+        nombreEl.textContent = nombre;
+    }
+    const modal = document.getElementById("modalEliminar");
+
+    if (modal) {
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+    }
+};
+
+window.cerrarEliminarUsuario = function () {
+
+    const modal = document.getElementById("modalEliminar");
+
+    if (modal) {
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+    }
+
+    window.formIdPendiente = null;
+};
+
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("formEliminarUsuario");
+    if (form) {
+        form.addEventListener("submit", function (e) {
+
+            if (window.formIdPendiente) {
+                this.action = `/admin/Usuarios/${window.formIdPendiente}`;
+            }
+
+        });
+    }
+
+});
+
+//  PREVIEW DE IMAGEN
+window.previewImagen = function (input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            const preview = document.getElementById('previewFoto');
+
+            if (preview) {
+                preview.src = e.target.result;
+            }
+        };
+
+        reader.readAsDataURL(input.files[0]);
+    }
+};
+
+//  TOGGLE PASSWORD VISIBILITY
+window.togglePassword = function () {
+    const input = document.getElementById('passwordInput');
+    const icon = document.getElementById('eyeIcon');
+
+    if (!input || !icon) return;
+
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+    } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+    }
+};
+
+//admin Libro de reclamaciones
+document.addEventListener("DOMContentLoaded", function () {
+    const buscador = document.getElementById("buscador");
+    const btnTodos = document.getElementById("btnTodos");
+    const btnActivos = document.getElementById("btnActivos");
+    const btnInactivos = document.getElementById("btnInactivos");
+
+    const cards = document.querySelectorAll(".reclamo-card");
+
+    //  BUSCADOR EN TIEMPO REAL
+    if (buscador) {
+        buscador.addEventListener("input", function () {
+
+            const texto = this.value.toLowerCase();
+
+            cards.forEach(card => {
+                const contenido = card.innerText.toLowerCase();
+
+                card.style.display = contenido.includes(texto) ? "block" : "none";
+            });
+        });
+    }
+
+    //  MOSTRAR TODOS
+    if (btnTodos) {
+        btnTodos.addEventListener("click", () => {
+
+            cards.forEach(card => {
+                card.style.display = "block";
+            });
+        });
+    }
+
+    //  ACTIVOS
+    if (btnActivos) {
+        btnActivos.addEventListener("click", () => {
+
+            cards.forEach(card => {
+
+                const estado = card.getAttribute("data-estado");
+
+                if (estado == "1" || estado == "activo") {
+                    card.style.display = "block";
+                } else {
+                    card.style.display = "none";
+                }
+            });
+        });
+    }
+
+    //  INACTIVOS
+    if (btnInactivos) {
+        btnInactivos.addEventListener("click", () => {
+
+            cards.forEach(card => {
+
+                const estado = card.getAttribute("data-estado");
+
+                if (estado == "0" || estado == "inactivo") {
+                    card.style.display = "block";
+                } else {
+                    card.style.display = "none";
+                }
+            });
+        });
+    }
+
+});

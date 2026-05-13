@@ -102,7 +102,7 @@
                     {{ $nombre }}
                 </a>
             @endforeach
-            <a href="#" id="open-login-modal-Celular" class="block w-full py-4 text-center bg-sky-600 text-white rounded-2xl font-black mt-4 shadow-md">
+            <a href="{{ route('inicio') }}" id="open-login-modal-Celular" class="block w-full py-4 text-center bg-sky-600 text-white rounded-2xl font-black mt-4 shadow-md">
                 INICIAR SESIÓN
             </a>
         </div>

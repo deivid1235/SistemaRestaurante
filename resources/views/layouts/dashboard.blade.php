@@ -443,7 +443,6 @@
 <div id="overlay" onclick="closeSidebar()"></div>
 
 <aside id="sidebar">
-
     <div class="logo-area">
         <img src="{{ asset('iconos/logotipo.jpg') }}" alt="Logo AOSC"
             onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='flex'">
@@ -494,9 +493,9 @@
             <span class="nav-text">Caja</span>
         </a>
 
-        <a href="#" class="flex items-center {{ request()->routeIs('admin.clientes.*') ? 'active-link' : '' }}">
+        <a href="{{ route('admin.Clientes.index') }}" class="flex items-center {{ request()->routeIs('admin.Clientes.*') ? 'active-link' : '' }}">
             <span class="nav-icon"><i class="fa fa-users"></i></span>
-            <span class="nav-text">Cliente</span>
+            <span class="nav-text">Clientes</span>
         </a>
 
         <p class="sidebar-section">Operaciones</p>

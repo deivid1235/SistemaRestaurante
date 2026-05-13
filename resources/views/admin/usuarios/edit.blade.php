@@ -175,22 +175,5 @@
     </form>
 </div>
 
-@push('scripts')
-<script>
-    function previewImagen(input) {
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = e => document.getElementById('previewFoto').src = e.target.result;
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-    function togglePassword() {
-        const input = document.getElementById('passwordInput');
-        const icon = document.getElementById('eyeIcon');
-        input.type = input.type === 'password' ? 'text' : 'password';
-        icon.classList.toggle('fa-eye');
-        icon.classList.toggle('fa-eye-slash');
-    }
-</script>
-@endpush
+
 @endsection

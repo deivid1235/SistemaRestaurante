@@ -76,7 +76,7 @@ class UsuarioController extends Controller
 
         $usuario->save();
 
-        return redirect()->route('admin.Usuario.index')
+        return redirect()->route('admin.Usuarios.index')
             ->with('success', 'Usuario creado correctamente.');
     }
 

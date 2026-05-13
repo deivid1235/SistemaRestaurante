@@ -2,8 +2,7 @@
 @section('title', 'Ajustes')
 @section('content')
 
-<div class="w-full md:p-8 bg-gray-100 min-h-full transition-all duration-500">
-
+<div class="relative space-y-6">
     <div class="rounded-t-3xl p-6 text-white shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4 relative overflow-hidden"
         style="background: linear-gradient(135deg, var(--primary) 0%, #4fc3f7 100%);">
         <div class="flex items-center gap-4 z-10">
@@ -152,31 +151,40 @@
                         </div>
                     </a>
 
-                   <div class="group relative flex items-center gap-4 p-4 rounded-2xl border border-gray-100 shadow-sm transition-all duration-300 hover:shadow-md hover:-translate-y-1 hover:border-emerald-200 bg-white">
-                        <div class="w-12 h-12 bg-emerald-600 rounded-xl flex items-center justify-center text-white shadow-inner group-hover:rotate-6 transition-transform">
+                    <div class="group relative flex items-center gap-4 p-4 rounded-2xl border border-gray-100 shadow-sm transition-all duration-300 hover:shadow-md hover:-translate-y-1 hover:border-emerald-200 bg-white">
+                        <div class="w-12 h-12 bg-emerald-600 rounded-xl flex items-center justify-center text-white shadow-inner group-hover:rotate-6 transition-transform shrink-0">
                             <i class="fa fa-boxes text-xl"></i>
                         </div>
                         
                         <div class="flex-1">
-                            <h4 class="font-bold text-gray-800 text-sm leading-tight mb-1">Productos y Categorías</h4>
+                            <h4 class="font-bold text-gray-800 text-sm leading-tight mb-2">Gestión de Inventario</h4>
                             
-                            <div class="flex gap-3">
+                            <div class="grid grid-cols-2 gap-y-2 gap-x-4">
                                 <a href="{{ url('admin/Categoria') }}" 
-                                class="text-[11px] font-black uppercase tracking-wider text-emerald-600 hover:text-emerald-700 transition-colors">
-                                    <i class="fa fa-tags mr-1"></i> Categorías
+                                class="text-[10px] font-black uppercase tracking-wider text-emerald-600 hover:text-emerald-700 transition-colors flex items-center">
+                                    <i class="fa fa-tags mr-1.5 w-4 text-center"></i> Categorías
                                 </a>
-                                <span class="text-gray-300 text-xs">|</span>
                                 
                                 <a href="{{ url('admin/Producto') }}" 
-                                class="text-[11px] font-black uppercase tracking-wider text-emerald-600 hover:text-emerald-700 transition-colors">
-                                    <i class="fa fa-hamburger mr-1"></i> Productos
+                                class="text-[10px] font-black uppercase tracking-wider text-emerald-600 hover:text-emerald-700 transition-colors flex items-center">
+                                    <i class="fa fa-hamburger mr-1.5 w-4 text-center"></i> Productos
+                                </a>
+
+                                <a href="{{ url('admin/Combos') }}" 
+                                class="text-[10px] font-black uppercase tracking-wider text-emerald-600 hover:text-emerald-700 transition-colors flex items-center">
+                                    <i class="fa fa-layer-group mr-1.5 w-4 text-center"></i> Combos
+                                </a>
+
+                                <a href="{{ url('admin/Insumo') }}" 
+                                class="text-[10px] font-black uppercase tracking-wider text-emerald-600 hover:text-emerald-700 transition-colors flex items-center">
+                                    <i class="fa fa-flask mr-1.5 w-4 text-center"></i> Insumos
                                 </a>
                             </div>
                             
-                            <p class="text-[10px] text-gray-400 mt-1 italic">Administra el catálogo completo aquí.</p>
+                            <p class="text-[10px] text-gray-400 mt-2 italic">Administra el catálogo y suministros.</p>
                         </div>
                         
-                        <div class="text-gray-200 group-hover:text-emerald-300 transition-colors">
+                        <div class="text-gray-200 group-hover:text-emerald-300 transition-colors shrink-0">
                             <i class="fa fa-chevron-right text-xs"></i>
                         </div>
                     </div>

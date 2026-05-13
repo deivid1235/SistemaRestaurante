@@ -186,14 +186,24 @@
                     </span>
                 </div>
 
-                @if($prod->imagen && $prod->imagen != 'NULL')
-                    <img src="{{ asset('storage/'.$prod->imagen) }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                @php
+                $tieneImagen = !empty($prod->imagen) && $prod->imagen !== 'NULL';
+                @endphp
+
+                @if($tieneImagen)
+                    <img src="{{ asset('storage/'.$prod->imagen) }}"
+                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+
+                    {{-- fallback por si la imagen falla --}}
+                    <div class="w-full h-full hidden items-center justify-center bg-slate-50">
+                        <i class="fas fa-utensils text-slate-200 text-3xl"></i>
+                    </div>
                 @else
                     <div class="w-full h-full flex items-center justify-center bg-slate-50">
                         <i class="fas fa-utensils text-slate-200 text-3xl"></i>
                     </div>
                 @endif
-
                 <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4 backdrop-blur-[2px]">
                     @if($prod->codigo_qr)
                         <div class="bg-white p-1 rounded-lg shadow-xl translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
@@ -264,13 +274,13 @@
                         <i class="fas fa-edit text-xs"></i>
                         <span class="text-[10px] font-bold uppercase">Editar</span>
                     </a>
-                   <button 
-                        onclick="abrirModalQR(
-                            '{{ asset('storage/' . $prod->codigo_qr) }}',
-                            '{{ asset('storage/' . $prod->codigo_barra) }}',
-                            '{{ $prod->nombre }}',
-                            '{{ route('admin.Producto.ticket', $prod->id) }}'
-                        )"
+                    <button 
+                        onclick='abrirModalQR(
+                            {{ json_encode(asset("storage/".$prod->codigo_qr)) }},
+                            {{ json_encode(asset("storage/".$prod->codigo_barra)) }},
+                            {{ json_encode($prod->nombre) }},
+                            {{ json_encode(route("admin.Producto.ticket", $prod->id)) }}
+                        )'
                         class="w-10 h-10 flex items-center justify-center bg-sky-50 text-sky-500 hover:bg-sky-100 rounded-xl">
 
                         <i class="fas fa-qrcode text-sm"></i>
@@ -335,9 +345,7 @@
     </div>
 </div>
 <!-- Modal QR & Barcode -->
-
 <div id="modalQR" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center z-[100] transition-all duration-300">
-
     <div class="bg-white rounded-[2.5rem] shadow-2xl w-[340px] overflow-hidden relative border border-slate-100 transform transition-all">
         
         {{-- Header con Gradiente --}}
@@ -389,20 +397,14 @@
                     <i class="fas fa-print"></i>
                     Imprimir Etiqueta
                 </button>
-
-                {{-- Botón Descargar PDF --}}
-                @foreach($productos as $prod)
-                <div class="producto">
-                    <a id="btnDownloadPDF"
-                    href="{{ route('admin.Producto.ticket', $prod->id) }}"
-                    target="_blank"
-                    class="w-full py-3 bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200 rounded-xl text-[9px] font-black uppercase tracking-[2px] transition-all flex items-center justify-center gap-2">
-                        <i class="fas fa-file-pdf text-red-500"></i>
-                        Descargar en PDF
-                    </a>
-                </div>
-
-                @endforeach
+                <a id="btnPdf"
+                href="#"
+                target="_blank"
+                class="w-full py-3.5 bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200 rounded-xl text-[10px] font-black uppercase tracking-[2px] flex items-center justify-center gap-2">
+                    <i class="fas fa-file-pdf text-red-500 text-sm"></i>
+                    DESCARGAR PDF
+                </a>
+                
             </div>
         </div>
 

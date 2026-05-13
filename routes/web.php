@@ -22,6 +22,8 @@ use App\Http\Controllers\CartaDigitalController;
 use App\Http\Controllers\ConfiguracionInicialController;
 use App\Http\Controllers\OptimizacionController;
 use App\Http\Controllers\ProductoController;
+use App\Http\Controllers\ComboController;
+use App\Http\Controllers\ClienteController;
 
 
 Route::get('/', function () {
@@ -36,6 +38,7 @@ Route::post('/register', [LoginController::class, 'register'])->name('register')
 Route::get('/LibroReclamacion', function () { return view('home.LibroReclamacion');})->name('libro.reclamacion');
 Route::post('/LibroReclamacion', [LibroReclamacionController::class, 'store'])->name('libro.reclamacion.store');
 Route::get('/producto/{id}', [HomeController::class, 'productoDetalle'])->name('home.producto.show');
+Route::get('/productos/categoria/{id}', [HomeController::class, 'byCategoria']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
@@ -157,6 +160,19 @@ Route::middleware('auth')->group(function () {
     Route::get('admin/Producto/ticket/{id}', [ProductoController::class, 'ticket']) ->name('admin.Producto.ticket');
     Route::get('admin/Producto/{producto}', [ProductoController::class, 'show'])->name('admin.Producto.show');
     Route::get('admin/Producto/{id}/print', [ProductoController::class, 'print'])->name('admin.Producto.print');
+    // Rutas para Combos
+    Route::get('/admin/Combos', [ComboController::class, 'index'])->name('admin.Combos.index');
+    Route::post('/admin/Combos', [ComboController::class, 'store'])->name('admin.Combos.store');
+    Route::get('/admin/Combos/{id}/edit', [ComboController::class, 'edit'])->name('admin.Combos.edit');
+    Route::put('/admin/Combos/{id}', [ComboController::class, 'update'])->name('admin.Combos.update');
+    Route::delete('/admin/Combos/{id}', [ComboController::class, 'destroy'])->name('admin.Combos.destroy');
+    //Clientes
+    Route::get('/admin/Clientes', [ClienteController::class, 'index'])->name('admin.Clientes.index');
+    Route::get('/admin/Clientes/create', [ClienteController::class, 'create'])->name('admin.Clientes.create');
+    Route::post('/admin/Clientes', [ClienteController::class, 'store'])->name('admin.Clientes.store');
+    Route::get('/admin/Clientes/{id}/edit', [ClienteController::class, 'edit'])->name('admin.Clientes.edit');
+    Route::put('/admin/Clientes/{id}', [ClienteController::class, 'update'])->name('admin.Clientes.update');
+    Route::delete('/admin/Clientes/{id}', [ClienteController::class, 'destroy'])->name('admin.Clientes.destroy');
 
 });
 

@@ -41,71 +41,71 @@
         <div class="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-3xl transition-transform duration-700 group-hover:scale-150"></div>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-    @php
-        $totalUsuarios = $usuarios->count();
-        $activosUser = $usuarios->where('estado', 1)->count();
-        $inactivosUser = $usuarios->where('estado', 0)->count();
+        @php
+            $totalUsuarios = $usuarios->count();
+            $activosUser = $usuarios->where('estado', 1)->count();
+            $inactivosUser = $usuarios->where('estado', 0)->count();
 
-        $divisor = $totalUsuarios > 0 ? $totalUsuarios : 1;
-        $porcActivo = round(($activosUser / $divisor) * 100);
-        $porcInactivo = round(($inactivosUser / $divisor) * 100);
-    @endphp
+            $divisor = $totalUsuarios > 0 ? $totalUsuarios : 1;
+            $porcActivo = round(($activosUser / $divisor) * 100);
+            $porcInactivo = round(($inactivosUser / $divisor) * 100);
+        @endphp
 
-    {{-- Total Usuarios --}}
-    <div class="group relative bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4 transition-all duration-300 hover:shadow-md hover:-translate-y-1 overflow-hidden">
-        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-lg shadow-sm transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3"
-            style="background: linear-gradient(135deg, #00B5E2 0%, #0082a3 100%); color: white;">
-            <i class="fa fa-users"></i>
-        </div>
-        <div>
-            <p class="text-2xl font-black text-slate-800 leading-none">{{ $totalUsuarios }}</p>
-            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tight mt-1">Total Usuarios</p>
-        </div>
-        <div class="absolute bottom-0 left-0 w-full h-1 bg-[#00B5E2] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
-    </div>
-
-    {{-- Usuarios Activos --}}
-    <div class="group relative bg-white p-4 rounded-2xl shadow-sm border border-slate-100 transition-all duration-300 hover:shadow-md hover:-translate-y-1 overflow-hidden">
-        <div class="flex items-center gap-4 mb-3">
-            <div class="w-11 h-11 rounded-xl flex items-center justify-center text-lg shadow-sm transition-transform duration-500 group-hover:rotate-12"
-                style="background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: white;">
-                <i class="fas fa-user-check"></i>
+        {{-- Total Usuarios --}}
+        <div class="group relative bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4 transition-all duration-300 hover:shadow-md hover:-translate-y-1 overflow-hidden">
+            <div class="w-11 h-11 rounded-xl flex items-center justify-center text-lg shadow-sm transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3"
+                style="background: linear-gradient(135deg, #00B5E2 0%, #0082a3 100%); color: white;">
+                <i class="fa fa-users"></i>
             </div>
             <div>
-                <p class="text-2xl font-black text-slate-800 leading-none">{{ $activosUser }}</p>
-                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tight mt-1">Usuarios Activos</p>
+                <p class="text-2xl font-black text-slate-800 leading-none">{{ $totalUsuarios }}</p>
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tight mt-1">Total Usuarios</p>
             </div>
-            <span class="ml-auto text-[9px] font-black bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded-md border border-emerald-100 transition-colors group-hover:bg-emerald-500 group-hover:text-white">
-                {{ $porcActivo }}%
-            </span>
+            <div class="absolute bottom-0 left-0 w-full h-1 bg-[#00B5E2] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
         </div>
-        <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
-            <div class="h-full rounded-full transition-all duration-1000 group-hover:animate-pulse" 
-                style="width: {{ $porcActivo }}%; background: linear-gradient(90deg, #10B981, #059669);"></div>
-        </div>
-    </div>
 
-    {{-- Usuarios Inactivos --}}
-    <div class="group relative bg-white p-4 rounded-2xl shadow-sm border border-slate-100 transition-all duration-300 hover:shadow-md hover:-translate-y-1 overflow-hidden">
-        <div class="flex items-center gap-4 mb-3">
-            <div class="w-11 h-11 rounded-xl flex items-center justify-center text-lg shadow-sm transition-transform duration-500 group-hover:scale-110"
-                style="background: linear-gradient(135deg, #EF4444 0%, #B91C1C 100%); color: white;">
-                <i class="fas fa-user-slash"></i>
+        {{-- Usuarios Activos --}}
+        <div class="group relative bg-white p-4 rounded-2xl shadow-sm border border-slate-100 transition-all duration-300 hover:shadow-md hover:-translate-y-1 overflow-hidden">
+            <div class="flex items-center gap-4 mb-3">
+                <div class="w-11 h-11 rounded-xl flex items-center justify-center text-lg shadow-sm transition-transform duration-500 group-hover:rotate-12"
+                    style="background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: white;">
+                    <i class="fas fa-user-check"></i>
+                </div>
+                <div>
+                    <p class="text-2xl font-black text-slate-800 leading-none">{{ $activosUser }}</p>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tight mt-1">Usuarios Activos</p>
+                </div>
+                <span class="ml-auto text-[9px] font-black bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded-md border border-emerald-100 transition-colors group-hover:bg-emerald-500 group-hover:text-white">
+                    {{ $porcActivo }}%
+                </span>
             </div>
-            <div>
-                <p class="text-2xl font-black text-slate-800 leading-none">{{ $inactivosUser }}</p>
-                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tight mt-1">Usuarios Inactivos</p>
+            <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                <div class="h-full rounded-full transition-all duration-1000 group-hover:animate-pulse" 
+                    style="width: {{ $porcActivo }}%; background: linear-gradient(90deg, #10B981, #059669);"></div>
             </div>
-            <span class="ml-auto text-[9px] font-black bg-red-50 text-red-600 px-2 py-0.5 rounded-md border border-red-100 transition-colors group-hover:bg-red-500 group-hover:text-white">
-                {{ $porcInactivo }}%
-            </span>
         </div>
-        <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
-            <div class="h-full rounded-full transition-all duration-1000 group-hover:animate-pulse"    
-                style="width: {{ $porcInactivo }}%; background: linear-gradient(90deg, #EF4444, #B91C1C);"></div>
+
+        {{-- Usuarios Inactivos --}}
+        <div class="group relative bg-white p-4 rounded-2xl shadow-sm border border-slate-100 transition-all duration-300 hover:shadow-md hover:-translate-y-1 overflow-hidden">
+            <div class="flex items-center gap-4 mb-3">
+                <div class="w-11 h-11 rounded-xl flex items-center justify-center text-lg shadow-sm transition-transform duration-500 group-hover:scale-110"
+                    style="background: linear-gradient(135deg, #EF4444 0%, #B91C1C 100%); color: white;">
+                    <i class="fas fa-user-slash"></i>
+                </div>
+                <div>
+                    <p class="text-2xl font-black text-slate-800 leading-none">{{ $inactivosUser }}</p>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tight mt-1">Usuarios Inactivos</p>
+                </div>
+                <span class="ml-auto text-[9px] font-black bg-red-50 text-red-600 px-2 py-0.5 rounded-md border border-red-100 transition-colors group-hover:bg-red-500 group-hover:text-white">
+                    {{ $porcInactivo }}%
+                </span>
+            </div>
+            <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                <div class="h-full rounded-full transition-all duration-1000 group-hover:animate-pulse"    
+                    style="width: {{ $porcInactivo }}%; background: linear-gradient(90deg, #EF4444, #B91C1C);"></div>
+            </div>
         </div>
     </div>
-</div>
     {{-- Buscador y Filtros Segmentados para caja --}}
     <div class="flex flex-col md:flex-row md:items-center gap-4 mb-6">
         <div class="flex-1 relative group">
@@ -130,23 +130,23 @@
         </div>
     </div>
     {{-- ── CARD TABLA ── --}}
-    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-6 mb-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         @foreach($usuarios as $usuario)
-        <div class="area-card group bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-row h-48 max-w-2xl">
+        <div class="area-card group bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-row h-48"
+        data-estado="{{ $usuario->estado }}">
             
-            {{-- IZQUIERDA: FOTO Y ESTADO --}}
-            <div class="relative w-40 flex-shrink-0 bg-slate-50 flex items-center justify-center border-r border-slate-100">
+            <div class="relative w-32 flex-shrink-0 bg-slate-50 flex items-center justify-center border-r border-slate-100">
                 <div class="absolute top-2 left-2 z-10">
                     <span class="px-2 py-0.5 rounded-lg text-[7px] font-black uppercase tracking-wider text-white shadow-sm {{ $usuario->estado ? 'bg-emerald-500' : 'bg-rose-500' }}">
                         {{ $usuario->estado ? 'ACTIVO' : 'INACTIVO' }}
                     </span>
                 </div>
 
-                <div class="w-24 h-24 rounded-full bg-white shadow-md flex items-center justify-center border-2 border-white overflow-hidden group-hover:scale-105 transition-transform duration-500">
+                <div class="w-20 h-20 rounded-full bg-white shadow-md flex items-center justify-center border-2 border-white overflow-hidden group-hover:scale-105 transition-transform duration-500">
                     @if($usuario->foto)
                         <img src="{{ asset('storage/'.$usuario->foto) }}" class="w-full h-full object-cover">
                     @else
-                        <i class="fa fa-user text-4xl text-slate-200"></i>
+                        <i class="fa fa-user text-3xl text-slate-200"></i>
                     @endif
                 </div>
 
@@ -157,61 +157,52 @@
                 </div>
             </div>
 
-            {{-- DERECHA: DATOS Y ACCIONES --}}
-            <div class="flex-1 p-4 flex flex-col justify-between">
+            <div class="flex-1 p-3 flex flex-col justify-between min-w-0">
                 <div>
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h3 class="text-sm font-black text-slate-800 uppercase leading-none truncate">
+                    <div class="flex justify-between items-start gap-1">
+                        <div class="min-w-0">
+                            <h3 class="text-[11px] font-black text-slate-800 uppercase leading-none truncate">
                                 {{ $usuario->nombres }}
                             </h3>
-                            <p class="text-[9px] text-slate-400 font-bold uppercase mt-1">
-                                {{ $usuario->apellido_paterno }} {{ $usuario->apellido_materno }}
+                            <p class="text-[8px] text-slate-400 font-bold uppercase mt-1 truncate">
+                                {{ $usuario->apellido_paterno }}
                             </p>
                         </div>
-                        <span class="text-[9px] font-black text-slate-500 bg-slate-100 px-2 py-1 rounded-lg border border-slate-200">
+                        <span class="text-[8px] font-black text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded-lg border border-slate-200 shrink-0">
                             {{ $usuario->dni }}
                         </span>
                     </div>
 
                     {{-- INFO GRID --}}
-                    <div class="grid grid-cols-2 gap-2 mt-3">
+                    <div class="grid grid-cols-1 gap-1 mt-2">
                         <div class="flex items-center gap-1.5 min-w-0">
-                            <i class="fa fa-envelope text-[9px] text-sky-400"></i>
-                            <span class="text-[9px] text-slate-500 truncate">{{ $usuario->email }}</span>
+                            <i class="fa fa-envelope text-[8px] text-sky-400"></i>
+                            <span class="text-[8px] text-slate-500 truncate">{{ $usuario->email }}</span>
                         </div>
                         <div class="flex items-center gap-1.5 min-w-0">
-                            <i class="fa fa-at text-[9px] text-purple-400"></i>
-                            <span class="text-[9px] text-slate-600 font-bold italic truncate">{{ $usuario->username }}</span>
-                        </div>
-                        <div class="flex items-center gap-1.5 min-w-0">
-                            <i class="fa fa-briefcase text-[9px] text-slate-400"></i>
-                            <span class="text-[8px] font-black text-slate-500 uppercase truncate">{{ $usuario->cargo_rrhh ?? 'Sin cargo' }}</span>
-                        </div>
-                        <div class="flex items-center gap-1.5 min-w-0">
-                            <i class="fa fa-shield-alt text-[9px] text-blue-400"></i>
-                            <span class="text-[9px] font-black text-blue-600 uppercase truncate">{{ $usuario->rol }}</span>
+                            <i class="fa fa-shield-alt text-[8px] text-blue-400"></i>
+                            <span class="text-[8px] font-black text-blue-600 uppercase truncate">{{ $usuario->rol }}</span>
                         </div>
                     </div>
                 </div>
 
                 {{-- FOOTER: FECHA Y BOTONES --}}
-                <div class="flex justify-between items-center mt-3 pt-3 border-t border-slate-50">
-                    <p class="text-[7px] text-slate-300 font-bold uppercase tracking-widest">
-                        Desde: {{ \Carbon\Carbon::parse($usuario->created_at)->format('d/m/Y') }}
+                <div class="flex justify-between items-center mt-2 pt-2 border-t border-slate-50">
+                    <p class="text-[7px] text-slate-300 font-bold uppercase">
+                        {{ \Carbon\Carbon::parse($usuario->created_at)->format('d/m/y') }}
                     </p>
                     
-                    <div class="flex gap-2">
+                    <div class="flex gap-1.5">
                         <a href="{{ route('admin.Usuarios.edit', $usuario->id) }}"
-                            class="h-7 px-4 flex items-center gap-2 text-white rounded-lg transition-all active:scale-95 shadow-sm hover:shadow-sky-100"
+                            class="h-6 px-3 flex items-center gap-1 text-white rounded-lg transition-all active:scale-95 shadow-sm"
                             style="background: linear-gradient(135deg, #0ea5e9 0%, #0096D9 100%);">
-                            <i class="fas fa-edit text-[8px]"></i>
-                            <span class="text-[8px] font-black uppercase">Perfil</span>
+                            <i class="fas fa-edit text-[7px]"></i>
+                            <span class="text-[7px] font-black uppercase">Perfil</span>
                         </a>
 
                         <button onclick="confirmarEliminar({{ $usuario->id }}, '{{ $usuario->nombres }}')"
-                            class="w-7 h-7 flex items-center justify-center rounded-lg bg-rose-50 text-rose-500 hover:bg-rose-500 hover:text-white transition-all border border-rose-100 shadow-sm">
-                            <i class="fa fa-trash text-[9px]"></i>
+                            class="w-6 h-6 flex items-center justify-center rounded-lg bg-rose-50 text-rose-500 hover:bg-rose-500 hover:text-white transition-all border border-rose-100">
+                            <i class="fa fa-trash text-[8px]"></i>
                         </button>
                     </div>
                 </div>
@@ -222,77 +213,47 @@
 </div>
 
 {{-- ── MODAL ELIMINAR ── --}}
-<div id="modalEliminar" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-    <div class="bg-white rounded-[2rem] shadow-2xl p-8 w-full max-w-sm mx-4">
-        <div class="flex flex-col items-center text-center gap-4">
-            <div class="w-16 h-16 rounded-2xl bg-rose-100 flex items-center justify-center">
-                <i class="fa fa-trash text-rose-500 text-2xl"></i>
-            </div>
-            <div>
-                <h3 class="font-black text-slate-800 text-lg">Eliminar usuario</h3>
-                <p class="text-xs text-slate-400 mt-1">Esta acción no se puede deshacer.</p>
-            </div>
-            <p class="text-sm text-slate-600">
-                ¿Eliminar a <strong id="nombreEliminar" class="text-slate-800"></strong>?
-            </p>
-            <div class="flex gap-3 w-full mt-2">
-                <button onclick="cerrarModal()"
-                        class="flex-1 py-3 rounded-2xl border border-slate-200 text-sm font-bold text-slate-500 hover:bg-slate-50 transition-colors active:scale-95">
+<div id="modalEliminar"
+    class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+    <div class="bg-white rounded-2xl w-full max-w-sm shadow-2xl p-8 text-center">
+
+        <div class="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+            <i class="fa fa-trash"></i>
+        </div>
+
+        <h3 class="text-lg font-bold text-gray-800">
+            ¿Eliminar Usuario?
+        </h3>
+
+        <p class="text-gray-500 mt-2 mb-6 text-xs">
+            Estás a punto de eliminar:
+            <span id="delete_nombre" class="font-bold text-red-600"></span>
+        </p>
+
+        <form id="formEliminarUsuario" method="POST">
+            @csrf
+            @method('DELETE')
+
+            <div class="flex gap-3">
+
+                <!-- CANCELAR -->
+                <button type="button"
+                    onclick="cerrarEliminarUsuario()"
+                    class="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-xl font-bold hover:bg-gray-200 text-xs">
                     Cancelar
                 </button>
-                <button onclick="ejecutarEliminar()"
-                        class="flex-1 py-3 rounded-2xl bg-rose-500 hover:bg-rose-600 text-white text-sm font-black transition-colors active:scale-95">
-                    Eliminar
+
+                <!-- ELIMINAR -->
+                <button type="submit"
+                    class="flex-1 px-4 py-2 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 text-xs">
+                    Sí, eliminar
                 </button>
+
             </div>
-        </div>
+        </form>
+
     </div>
 </div>
 
-@push('scripts')
-<script>
-    let formIdPendiente = null;
-
-    function confirmarEliminar(id, nombre) {
-        formIdPendiente = id;
-        document.getElementById('nombreEliminar').textContent = nombre;
-        document.getElementById('modalEliminar').classList.remove('hidden');
-    }
-    function cerrarModal() {
-        document.getElementById('modalEliminar').classList.add('hidden');
-        formIdPendiente = null;
-    }
-    function ejecutarEliminar() {
-        if (formIdPendiente) document.getElementById('form-delete-' + formIdPendiente).submit();
-    }
-    document.getElementById('modalEliminar').addEventListener('click', function(e) {
-        if (e.target === this) cerrarModal();
-    });
-
-    let debounceTimer;
-    function liveSearch(value) {
-        clearTimeout(debounceTimer);
-        debounceTimer = setTimeout(() => {
-            const url = new URL(window.location.href);
-            url.searchParams.set('search', value);
-            url.searchParams.set('page', 1);
-            window.location.href = url.toString();
-        }, 400);
-    }
-
-    let sortDir = {};
-    function sortTable(colIndex) {
-        const tbody = document.querySelector('#usuariosTable tbody');
-        const rows  = Array.from(tbody.querySelectorAll('tr'));
-        sortDir[colIndex] = !sortDir[colIndex];
-        rows.sort((a, b) => {
-            const aT = a.cells[colIndex]?.innerText.trim().toLowerCase() ?? '';
-            const bT = b.cells[colIndex]?.innerText.trim().toLowerCase() ?? '';
-            return sortDir[colIndex] ? aT.localeCompare(bT) : bT.localeCompare(aT);
-        });
-        rows.forEach(r => tbody.appendChild(r));
-    }
-</script>
-@endpush
 
 @endsection
