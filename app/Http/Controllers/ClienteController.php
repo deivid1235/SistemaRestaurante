@@ -39,6 +39,7 @@ class ClienteController extends Controller
             'numero_documento' => 'required|max:13',
             'nombres' => 'required',
             'correo' => 'required|email',
+            'password' => 'required|min:6',
         ]);
 
         Cliente::create([
@@ -50,6 +51,7 @@ class ClienteController extends Controller
             'telefono' => $request->telefono,
             'fecha_nac' => $request->fecha_nac,
             'correo' => $request->correo,
+            'password' => bcrypt($request->password),
             'direccion' => $request->direccion,
             'referencia' => $request->referencia,
             'estado' => $request->estado ?? 'a',
@@ -89,6 +91,7 @@ class ClienteController extends Controller
             'numero_documento' => 'required|max:13',
             'nombres' => 'required',
             'correo' => 'required|email',
+            'password' => 'nullable|min:6',
             'fecha_nac' => 'nullable|date',
         ]);
 
@@ -103,6 +106,7 @@ class ClienteController extends Controller
             'telefono' => $request->telefono,
             'fecha_nac' => $request->fecha_nac,
             'correo' => $request->correo,
+            'password' => $request->password ? bcrypt($request->password) : $cliente->password,
             'direccion' => $request->direccion,
             'referencia' => $request->referencia,
             'estado' => $request->estado ?? 'i',

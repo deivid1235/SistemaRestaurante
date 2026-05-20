@@ -24,6 +24,8 @@ use App\Http\Controllers\OptimizacionController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\ComboController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\AperturasCajaController;
+use App\Http\Controllers\Auth\LoginCliente;
 
 
 Route::get('/', function () {
@@ -39,6 +41,14 @@ Route::get('/LibroReclamacion', function () { return view('home.LibroReclamacion
 Route::post('/LibroReclamacion', [LibroReclamacionController::class, 'store'])->name('libro.reclamacion.store');
 Route::get('/producto/{id}', [HomeController::class, 'productoDetalle'])->name('home.producto.show');
 Route::get('/productos/categoria/{id}', [HomeController::class, 'byCategoria']);
+Route::post('/home/cliente/store', [HomeController::class, 'storeClientePublico'])->name('home.cliente.store');
+Route::get('/home/cliente/buscar/{tipo}/{numero}', [ClienteController::class, 'buscarDocumento']);
+// CLIENTE (TIENDA)
+Route::post('/cliente/login', [LoginCliente::class, 'login'])->name('cliente.login');
+Route::post('/cliente/logout', [LoginCliente::class, 'logout'])->name('cliente.logout');
+Route::get('/login', function () {
+    return view('home.IniciarSeccion');
+})->name('inicio');
 
 Route::middleware('auth')->group(function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
@@ -174,5 +184,13 @@ Route::middleware('auth')->group(function () {
     Route::put('/admin/Clientes/{id}', [ClienteController::class, 'update'])->name('admin.Clientes.update');
     Route::delete('/admin/Clientes/{id}', [ClienteController::class, 'destroy'])->name('admin.Clientes.destroy');
     Route::get('admin/Clientes/buscar/{tipo}/{numero}', [ClienteController::class, 'buscarDocumento'])->name('admin.Clientes.buscar');
+    //Rutas apertura/caja
+    Route::get('/admin/AperturaCaja', [AperturasCajaController::class, 'index'])->name('admin.AperturaCaja.index');
+    Route::get('/admin/AperturaCaja/create', [AperturasCajaController::class, 'create'])->name('admin.AperturaCaja.create');
+    Route::post('/admin/AperturaCaja/store', [AperturasCajaController::class, 'store'])->name('admin.AperturaCaja.store');
+    Route::get('/admin/AperturaCaja/edit/{id}', [AperturasCajaController::class, 'edit'])->name('admin.AperturaCaja.edit');
+    Route::put('/admin/AperturaCaja/update/{id}', [AperturasCajaController::class, 'update'])->name('admin.AperturaCaja.update');
+    Route::delete('/admin/AperturaCaja/delete/{id}', [AperturasCajaController::class, 'destroy'])->name('admin.AperturaCaja.destroy');
+    
 });
 

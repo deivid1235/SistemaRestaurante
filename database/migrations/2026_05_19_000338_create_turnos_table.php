@@ -6,18 +6,27 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
-        Schema::create('cajas', function (Blueprint $table) {
+        Schema::create('turnos', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', 100);
+            $table->string('nombre', 50); 
+            $table->time('hora_inicio');  
+            $table->time('hora_fin');     
+
             $table->enum('estado', ['activo', 'inactivo'])->default('activo');
             $table->timestamps();
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
-        Schema::dropIfExists('cajas');
+        Schema::dropIfExists('turnos');
     }
 };

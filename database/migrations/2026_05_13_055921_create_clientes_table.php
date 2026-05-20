@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('telefono', 15);
             $table->date('fecha_nac');
             $table->string('correo', 100);
+            $table->string('password'); 
             $table->string('direccion', 100);
             $table->string('referencia', 100)->nullable();
             $table->enum('estado', ['a', 'i'])->default('a');

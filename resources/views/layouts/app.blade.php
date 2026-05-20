@@ -84,29 +84,113 @@
         </div>
 
         <div class="flex items-center space-x-4">
-            <a href="{{ route('inicio') }}"
-            class="hidden md:inline-flex px-6 py-2.5 bg-sky-600 text-white text-xs font-black rounded-full shadow-lg shadow-sky-200 hover:bg-sky-700 hover:-translate-y-0.5 transition-all uppercase tracking-widest">
-                Iniciar Sesión
-            </a>
-            <button id="mobile-menu-button" class="md:hidden p-2 text-sky-600 hover:bg-sky-50 rounded-xl transition-colors">
-                <i class="bi bi-grid-3x3-gap-fill text-2xl"></i>
+            @auth('cliente')
+                <div class="hidden md:flex items-center gap-4 bg-white border border-slate-200/80 p-1.5 pr-3.5 rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 group/card">
+                    
+                    <div class="flex items-center gap-3">
+                        <div class="relative w-9 h-9 rounded-xl text-white flex items-center justify-center shadow-sm select-none group-hover/card:scale-105 transition-transform duration-300"
+                            style="background: linear-gradient(135deg, #00629b 0%, #004d7c 100%);">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white/95" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                            <span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 border-2 border-white rounded-full"></span>
+                        </div>
+                        
+                        <div class="flex flex-col">
+                            <span class="text-[9px] font-black uppercase tracking-widest leading-none" style="color: #00629b;">
+                                Panel Cliente
+                            </span>
+                            <span class="text-xs font-bold text-slate-700 tracking-tight mt-1 max-w-[150px] truncate group-hover/card:text-slate-900 transition-colors">
+                                {{ Auth::guard('cliente')->user()->nombres }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="h-6 w-[1px] bg-slate-200"></div>
+
+                    <form action="{{ route('cliente.logout') }}" method="POST" class="flex items-center">
+                        @csrf
+                        <button type="submit"
+                            class="flex items-center justify-center gap-2 px-3 py-1.5 bg-slate-50 hover:bg-rose-50 text-slate-500 hover:text-rose-600 rounded-xl text-[11px] font-bold transition-all duration-300 active:scale-95 group/btn border border-slate-100 hover:border-rose-100"
+                            title="Cerrar sesión">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 transition-transform group-hover/btn:translate-x-0.5 duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                            </svg>
+                            <span class="font-bold tracking-wide">Salir</span>
+                        </button>
+                    </form>
+                </div>
+            @else
+                <a href="{{ route('inicio') }}"
+                    class="hidden md:inline-flex items-center gap-2 px-6 py-3 text-white text-xs font-bold rounded-2xl shadow-lg transition-all duration-300 uppercase tracking-widest border hover:-translate-y-0.5 active:translate-y-0"
+                    style="background: linear-gradient(135deg, #00629b 0%, #004d7c 100%); border-color: #005587; box-shadow: 0 10px 15px -3px rgba(0, 98, 155, 0.25);">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white/90" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </svg>
+                    Iniciar Sesión
+                </a>
+            @endauth
+
+            <button id="mobile-menu-button" 
+                class="md:hidden w-11 h-11 flex flex-col items-center justify-center gap-1 bg-slate-50 text-slate-700 active:scale-95 rounded-2xl border border-slate-200 transition-all duration-300 shadow-sm group"
+                onmouseover="this.style.color='#00629b'; this.style.backgroundColor='#f0f7ff'; this.style.borderColor='#bee0ff';"
+                onmouseout="this.style.color=''; this.style.backgroundColor=''; this.style.borderColor='';">
+                <span class="w-5 h-0.5 bg-current rounded-full transition-all group-hover:w-4"></span>
+                <span class="w-5 h-0.5 bg-current rounded-full transition-all"></span>
+                <span class="w-5 h-0.5 bg-current rounded-full transition-all group-hover:w-3"></span>
             </button>
         </div>
+
     </nav>
 
-    <div id="mobile-menu-Celular" class="md:hidden bg-white px-6">
-        <div class="flex flex-col space-y-2 border-t border-sky-50 pt-4">
+    <div id="mobile-menu-Celular" class="md:hidden bg-white px-6 pb-6 border-b border-slate-100 shadow-sm animate-fade-in">
+        <div class="flex flex-col space-y-1.5 border-t border-slate-100 pt-4">
+            
             @foreach($menuItems as $nombre => $data)
-                <a href="{{ $data['url'] }}" class="flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-slate-700 hover:bg-sky-50 hover:text-sky-600 transition">
-                    <i class="{{ $data['icon'] }} text-sky-500"></i>
-                    {{ $nombre }}
+                <a href="{{ $data['url'] }}" 
+                class="flex items-center gap-3.5 px-4 py-3 rounded-2xl font-bold text-slate-600 hover:bg-sky-50/60 hover:text-sky-600 transition-all active:scale-[0.99]">
+                    <div class="w-8 h-8 rounded-xl bg-sky-50 flex items-center justify-center text-sky-500 transition-colors">
+                        <i class="{{ $data['icon'] }} text-base"></i>
+                    </div>
+                    <span class="text-sm tracking-tight">{{ $nombre }}</span>
                 </a>
             @endforeach
-            <a href="{{ route('inicio') }}" id="open-login-modal-Celular" class="block w-full py-4 text-center bg-sky-600 text-white rounded-2xl font-black mt-4 shadow-md">
-                INICIAR SESIÓN
-            </a>
+
+            @if(session('cliente_logueado'))
+                <div class="mt-4 p-4 bg-slate-50 border border-slate-100 rounded-2xl flex flex-col items-center text-center gap-3.5">
+                    
+                    <div class="flex items-center gap-3 w-full border-b border-slate-200/60 pb-3">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-sky-500 to-blue-600 text-white flex items-center justify-center shadow-md shadow-sky-100 shrink-0">
+                            <i class="fa fa-user text-sm"></i>
+                        </div>
+                        <div class="text-left overflow-hidden">
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-wider leading-none">Sesión Activa</p>
+                            <p class="text-sm font-extrabold text-slate-700 truncate tracking-tight mt-1">
+                               {{ session('cliente_nombre') }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <form action="{{ route('cliente.logout') }}" method="POST" class="w-full">
+                        @csrf
+                        <button type="submit"
+                            class="w-full py-3 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-xl font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 active:scale-[0.98]">
+                            <i class="fa fa-sign-out-alt text-sm"></i> Cerrar sesión
+                        </button>
+                    </form>
+                </div>
+            @else
+                <div class="pt-2">
+                    <a href="{{ route('inicio') }}" id="open-login-modal-Celular"
+                        class="flex items-center justify-center gap-2 w-full py-3.5 bg-gradient-to-r from-sky-500 to-blue-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg shadow-sky-100 hover:opacity-95 active:scale-[0.98] transition-all">
+                        <i class="fa fa-user-circle text-sm"></i> INICIAR SESIÓN
+                    </a>
+                </div>
+            @endauth
+
         </div>
     </div>
+
 </header>
 
 <main>

@@ -182,46 +182,7 @@
                         <i class="fas fa-user-tag mr-1 text-blue-400/60"></i> Punto de Cobro
                     </p>
                 </div>
-                
-                {{-- SECCIÓN NUEVA: FECHAS DE APERTURA Y CIERRE --}}
-                <div class="grid grid-cols-1 gap-2 mb-4 bg-slate-50 p-3 rounded-xl border border-slate-100">
-                    {{-- Apertura --}}
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-2">
-                            <div class="w-5 h-5 rounded bg-emerald-100 flex items-center justify-center">
-                                <i class="fas fa-clock text-emerald-500 text-[8px]"></i>
-                            </div>
-                            <span class="text-[9px] font-black text-slate-400 uppercase tracking-tighter">Apertura</span>
-                        </div>
-                        <span class="text-[10px] font-bold text-slate-700">
-                            {{ $caja->fecha_apertura ? \Carbon\Carbon::parse($caja->fecha_apertura)->format('d/m H:i') : '--:--' }}
-                        </span>
-                    </div>
-                    
-                    {{-- Separador Visual --}}
-                    <div class="border-t border-slate-200/50 my-0.5"></div>
-
-                    {{-- Cierre --}}
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-2">
-                            <div class="w-5 h-5 rounded bg-slate-200 flex items-center justify-center">
-                                <i class="fas fa-lock text-slate-500 text-[8px]"></i>
-                            </div>
-                            <span class="text-[9px] font-black text-slate-400 uppercase tracking-tighter">Cierre</span>
-                        </div>
-                        <span class="text-[10px] font-bold text-slate-700">
-                            @if($caja->estado == 'inactivo')
-                                <span class="text-[10px] font-bold text-red-500">
-                                    Cerrada
-                                </span>
-                            @else
-                                <span class="text-[10px] font-bold text-emerald-600">
-                                    Abierta
-                                </span>
-                            @endif
-                        </span>
-                    </div>
-                </div>
+               
 
                 {{-- Usuarios Asignados --}}
                 <div class="mb-4">
@@ -312,32 +273,6 @@
                            class="w-full bg-white border border-slate-100 p-3.5 pl-11 rounded-xl focus:border-blue-400 outline-none font-bold text-slate-500 text-sm transition-all placeholder:text-slate-200 uppercase">
                 </div>
             </div>
-
-            {{-- GRID PARA FECHAS --}}
-            <div class="grid grid-cols-2 gap-3">
-                {{-- FECHA APERTURA --}}
-                <div class="space-y-1.5">
-                    <label class="flex items-center gap-2 text-[9px] font-black uppercase text-slate-400 tracking-widest ml-1">
-                        <i class="fa fa-clock text-emerald-400 text-[7px]"></i> Apertura
-                    </label>
-                    <div class="relative group">
-                        <input type="datetime-local" name="fecha_apertura" id="fecha_apertura"
-                               class="w-full bg-slate-50 border border-slate-100 p-3 rounded-xl focus:border-blue-400 outline-none font-bold text-slate-500 text-[10px] transition-all">
-                    </div>
-                </div>
-
-                {{-- FECHA CIERRE --}}
-                <div class="space-y-1.5">
-                    <label class="flex items-center gap-2 text-[9px] font-black uppercase text-slate-400 tracking-widest ml-1">
-                        <i class="fa fa-lock text-red-400 text-[7px]"></i> Cierre
-                    </label>
-                    <div class="relative group">
-                        <input type="datetime-local" name="fecha_cierre" id="fecha_cierre"
-                               class="w-full bg-slate-50 border border-slate-100 p-3 rounded-xl focus:border-blue-400 outline-none font-bold text-slate-500 text-[10px] transition-all">
-                    </div>
-                </div>
-            </div>
-
             {{-- SELECT: ESTADO --}}
             <div class="space-y-1.5">
                 <label class="flex items-center gap-2 text-[9px] font-black uppercase text-slate-400 tracking-widest ml-1">

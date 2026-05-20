@@ -2,11 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Cliente extends Model
+class Cliente extends Authenticatable
 {
-    //
     protected $table = 'clientes';
     protected $primaryKey = 'id';
 
@@ -19,6 +18,7 @@ class Cliente extends Model
         'telefono',
         'fecha_nac',
         'correo',
+        'password',
         'direccion',
         'referencia',
         'estado'
@@ -26,5 +26,9 @@ class Cliente extends Model
 
     protected $casts = [
         'fecha_nac' => 'date',
+    ];
+
+    protected $hidden = [
+        'password',
     ];
 }

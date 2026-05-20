@@ -488,10 +488,60 @@
             <span class="nav-text">Punto de Venta</span>
         </a>
 
-        <a href="#" class="flex items-center {{ request()->routeIs('admin.caja.*') ? 'active-link' : '' }}">
-            <span class="nav-icon"><i class="fa fa-desktop"></i></span>
-            <span class="nav-text">Caja</span>
-        </a>
+        <li class="nav-item">
+
+    <!-- BOTÓN PRINCIPAL -->
+        <a href="#" onclick="toggleSubmenu('submenu-caja', this)" 
+            class="flex items-center justify-between {{ request()->routeIs('admin.caja.*','admin.AperturaCaja.index') ? 'active-link' : '' }}">
+
+                <div class="flex items-center">
+                    <span class="nav-icon"><i class="fa fa-cash-register"></i></span>
+                    <span class="nav-text ml-2">Caja</span>
+                </div>
+
+                <i class="fa fa-chevron-right chevron 
+                {{ request()->routeIs('admin.caja.*', 'admin.AperturaCaja.index') ? 'rotate-90' : '' }}"></i>
+            </a>
+
+            <!-- SUBMENÚ -->
+            <ul id="submenu-caja"
+            class="submenu ml-8 mt-2 space-y-2 
+            {{ request()->routeIs('admin.caja.*','admin.AperturaCaja.index') ? '' : 'hidden' }}">
+
+                <li>
+                    <a href="{{ route('admin.AperturaCaja.index') }}"
+                    class="flex items-center gap-2 {{ request()->routeIs('admin.AperturaCaja.index') ? 'active-link' : '' }}">
+                        <i class="fa fa-door-open text-green-500"></i>
+                        <span>Apertura y Cierre</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href=""  
+                    class="flex items-center gap-2 {{ request()->routeIs('admin.caja.ingresos') ? 'active-link' : '' }}">
+                        <i class="fa fa-arrow-down text-green-400"></i>
+                        <span>Ingresos</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href=""
+                    class="flex items-center gap-2 {{ request()->routeIs('admin.caja.egresos') ? 'active-link' : '' }}">
+                        <i class="fa fa-arrow-up text-red-400"></i>
+                        <span>Egresos</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href=""
+                    class="flex items-center gap-2 {{ request()->routeIs('admin.caja.monitor') ? 'active-link' : '' }}">
+                        <i class="fa fa-chart-line text-blue-400"></i>
+                        <span>Monitor de Ventas</span>
+                    </a>
+                </li>
+
+            </ul>
+        </li>
 
         <a href="{{ route('admin.Clientes.index') }}" class="flex items-center {{ request()->routeIs('admin.Clientes.*') ? 'active-link' : '' }}">
             <span class="nav-icon"><i class="fa fa-users"></i></span>
@@ -685,6 +735,16 @@
 
     /* ── Submenú Ajustes ── */
         function toggleAjustes(id, el) {
+        const sub = document.getElementById(id);
+        const icon = el.querySelector('.chevron');
+
+        sub.classList.toggle('hidden');
+
+        if (icon) {
+            icon.classList.toggle('rotate-90');
+        }
+    }
+    function toggleSubmenu(id, el) {
         const sub = document.getElementById(id);
         const icon = el.querySelector('.chevron');
 

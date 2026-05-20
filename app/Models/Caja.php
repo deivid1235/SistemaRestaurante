@@ -16,8 +16,6 @@ class Caja extends Model
     protected $fillable = [
         'nombre',
         'estado',
-        'fecha_apertura',
-        'fecha_cierre'
     ];
 
     public function scopeActivas(Builder $query)

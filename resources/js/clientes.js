@@ -1,3 +1,4 @@
+
 document.addEventListener("DOMContentLoaded", function () {
     const btnBuscar = document.getElementById("btnBuscar");
     if (!btnBuscar) return;
@@ -215,3 +216,99 @@ document.addEventListener("DOMContentLoaded", () => {
     window.cerrarEliminarCliente = cerrarEliminarCliente;
 
 });
+
+
+// APERTURA CAJA 
+document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('modalEliminarAperturaCaja');
+    const form = document.getElementById('formEliminar');
+    const nombreSpan = document.getElementById('delete_nombre');
+    if (!modal || !form || !nombreSpan) return;
+    window.abrirModalEliminar = function (id, nombre) {
+        nombreSpan.textContent = nombre;
+        form.action = `/admin/AperturaCaja/delete/${id}`;
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    };
+
+    window.cerrarModalEliminar = function () {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    };
+
+    document.querySelectorAll('.btn-eliminar').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const id = btn.dataset.id;
+            const nombre = btn.dataset.nombre;
+
+            window.abrirModalEliminar(id, nombre);
+        });
+    });
+
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            window.cerrarModalEliminar();
+        }
+    });
+
+    const buscador = document.getElementById('buscadorApertura');
+    const btnTodos = document.getElementById('btnTodosApertura');
+    const btnActivos = document.getElementById('btnActivosApertura');
+    const btnInactivos = document.getElementById('btnInactivosApertura');
+
+    const cards = document.querySelectorAll('.card-apertura');
+
+    let filtroEstado = 'todos';
+
+    function filtrarTodo() {
+        const texto = (buscador?.value || '').toLowerCase();
+
+        cards.forEach(card => {
+            const contenido = card.innerText.toLowerCase();
+            const estado = card.dataset.estado;
+
+            const coincideTexto = contenido.includes(texto);
+
+            let coincideEstado = filtroEstado === 'todos'
+                || (filtroEstado === 'activos' && estado === 'activo')
+                || (filtroEstado === 'inactivos' && estado === 'cerrado');
+
+            card.style.display = (coincideTexto && coincideEstado) ? 'flex' : 'none';
+        });
+    }
+
+    buscador?.addEventListener('keyup', filtrarTodo);
+
+    btnTodos?.addEventListener('click', () => {
+        filtroEstado = 'todos';
+        activarBoton(btnTodos);
+        filtrarTodo();
+    });
+
+    btnActivos?.addEventListener('click', () => {
+        filtroEstado = 'activos';
+        activarBoton(btnActivos);
+        filtrarTodo();
+    });
+
+    btnInactivos?.addEventListener('click', () => {
+        filtroEstado = 'inactivos';
+        activarBoton(btnInactivos);
+        filtrarTodo();
+    });
+
+    function activarBoton(botonActivo) {
+        [btnTodos, btnActivos, btnInactivos].forEach(btn => {
+            if (!btn) return;
+
+            btn.classList.remove('text-white', 'shadow-md', 'shadow-blue-200');
+            btn.classList.add('text-slate-400');
+            btn.style.background = 'transparent';
+        });
+
+        botonActivo.classList.remove('text-slate-400');
+        botonActivo.classList.add('text-white', 'shadow-md', 'shadow-blue-200');
+        botonActivo.style.background = 'linear-gradient(135deg, var(--primary, #0ea5e9) 0%, #0096D9 100%)';
+    }
+});
+

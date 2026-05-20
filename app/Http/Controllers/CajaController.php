@@ -32,8 +32,6 @@ class CajaController extends Controller
         Caja::create([
             'nombre' => strtoupper($request->nombre),
             'estado' => $request->estado,
-            'fecha_apertura' => $request->fecha_apertura ?: null,
-            'fecha_cierre' => $request->fecha_cierre ?: null,
         ]);
 
         return redirect()->route('admin.Caja.index')
@@ -57,16 +55,9 @@ class CajaController extends Controller
         $caja->update([
             'nombre' => strtoupper($request->nombre),
             'estado' => $request->estado,
-            'fecha_apertura' => $request->fecha_apertura 
-                ? str_replace('T', ' ', $request->fecha_apertura) 
-                : null,
-            'fecha_cierre' => $request->fecha_cierre 
-                ? str_replace('T', ' ', $request->fecha_cierre) 
-                : null,
         ]);
 
-        return redirect()->route('admin.Caja.index')
-                        ->with('success', 'Caja actualizada correctamente.');
+        return redirect()->route('admin.Caja.index')->with('success', 'Caja actualizada correctamente.');
     }
     public function destroy(int $id)
     {
@@ -87,8 +78,6 @@ class CajaController extends Controller
         }
 
         $caja->update([
-            'fecha_apertura' => now(),
-            'fecha_cierre' => null,
             'estado' => 'activo'
         ]);
 

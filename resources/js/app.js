@@ -1,10 +1,13 @@
 import './clientes';
+import './home';
 
 function setupMobileMenu() {
     const button = document.getElementById('mobile-menu-button');
     const menu   = document.getElementById('mobile-menu');
 
-    button?.addEventListener('click', () => {
+    if (!button || !menu) return; // 🔥 CLAVE
+
+    button.addEventListener('click', () => {
         menu.classList.toggle('hidden');
     });
 }
