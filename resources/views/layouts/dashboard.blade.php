@@ -490,7 +490,6 @@
 
         <li class="nav-item">
 
-    <!-- BOTÓN PRINCIPAL -->
         <a href="#" onclick="toggleSubmenu('submenu-caja', this)" 
             class="flex items-center justify-between {{ request()->routeIs('admin.caja.*','admin.AperturaCaja.index') ? 'active-link' : '' }}">
 
@@ -550,10 +549,46 @@
 
         <p class="sidebar-section">Operaciones</p>
 
-        <a href="#" class="flex items-center {{ request()->routeIs('admin.compras.*') ? 'active-link' : '' }}">
-            <span class="nav-icon"><i class="fa fa-shopping-cart"></i></span>
-            <span class="nav-text">Compras</span>
-        </a>
+        <li>
+            <a href="#" onclick="toggleSubmenu('submenu-compras', this)" 
+            class="flex items-center justify-between
+            {{ request()->routeIs('admin.compras.*','admin.Proveedor.*') ? 'active-link' : '' }}">
+
+                <div class="flex items-center">
+                    <span class="nav-icon"><i class="fa fa-shopping-cart"></i></span>
+                    <span class="nav-text ml-2">Compras</span>
+                </div>
+
+                <i class="fa fa-chevron-right chevron 
+                {{ request()->routeIs('admin.compras.*','admin.Proveedor.*') ? 'rotate-90' : '' }}"></i>
+            </a>
+
+            <!-- SUBMENÚ -->
+            <ul id="submenu-compras"
+                class="submenu ml-8 mt-2 space-y-2
+                {{ request()->routeIs('admin.compras.*','admin.Proveedor.*') ? '' : 'hidden' }}">
+
+                <!-- Compras -->
+                <li>
+                    <a href=""
+                    class="flex items-center gap-2 {{ request()->routeIs('admin.compras.*') ? 'active-link' : '' }}">
+                        <i class="fa fa-circle text-blue-400 text-[8px]"></i>
+                        <span>Compras</span>
+                    </a>
+                </li>
+
+                <!-- Proveedores -->
+                <li>
+                    <a href="{{ route('admin.Proveedor.index') }}"
+                    class="flex items-center gap-2 {{ request()->routeIs('admin.Proveedor.*') ? 'active-link' : '' }}">
+                        <i class="fa fa-circle text-green-400 text-[8px]"></i>
+                        <span>Proveedores</span>
+                    </a>
+                </li>
+
+            </ul>
+        </li>
+        
 
         <a href="#" class="flex items-center {{ request()->routeIs('admin.creditos.*') ? 'active-link' : '' }}">
             <span class="nav-icon"><i class="fa fa-credit-card"></i></span>

@@ -26,6 +26,8 @@ use App\Http\Controllers\ComboController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\AperturasCajaController;
 use App\Http\Controllers\Auth\LoginCliente;
+use App\Http\Controllers\ProveedorController;
+
 
 
 Route::get('/', function () {
@@ -46,9 +48,7 @@ Route::get('/home/cliente/buscar/{tipo}/{numero}', [ClienteController::class, 'b
 // CLIENTE (TIENDA)
 Route::post('/cliente/login', [LoginCliente::class, 'login'])->name('cliente.login');
 Route::post('/cliente/logout', [LoginCliente::class, 'logout'])->name('cliente.logout');
-Route::get('/login', function () {
-    return view('home.IniciarSeccion');
-})->name('inicio');
+Route::get('/login', function () {return view('home.IniciarSeccion');})->name('inicio');
 
 Route::middleware('auth')->group(function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
@@ -191,6 +191,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/AperturaCaja/edit/{id}', [AperturasCajaController::class, 'edit'])->name('admin.AperturaCaja.edit');
     Route::put('/admin/AperturaCaja/update/{id}', [AperturasCajaController::class, 'update'])->name('admin.AperturaCaja.update');
     Route::delete('/admin/AperturaCaja/delete/{id}', [AperturasCajaController::class, 'destroy'])->name('admin.AperturaCaja.destroy');
+    // Rutas para Proveedores
+    Route::get('/admin/Proveedor', [ProveedorController::class, 'index'])->name('admin.Proveedor.index');
+    Route::get('/admin/Proveedor/create', [ProveedorController::class, 'create'])->name('admin.Proveedor.create');
+    Route::post('/admin/Proveedor', [ProveedorController::class, 'store'])->name('admin.Proveedor.store');
+    Route::get('/admin/Proveedor/{proveedor}/edit', [ProveedorController::class, 'edit'])->name('admin.Proveedor.edit');
+    Route::put('/admin/Proveedor/{proveedor}', [ProveedorController::class, 'update'])->name('admin.Proveedor.update');
+    Route::delete('/admin/Proveedor/{proveedor}', [ProveedorController::class, 'destroy'])->name('admin.Proveedor.destroy');
     
 });
 

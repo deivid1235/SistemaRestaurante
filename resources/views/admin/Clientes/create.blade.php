@@ -142,16 +142,32 @@
                     </div>
                 </div>
 
-                <div class="md:col-span-2 relative group">
-                    <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1.5 ml-1 tracking-wide">Contraseña</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-500 transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                            </svg>
+               <div class="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="relative group">
+                        <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1.5 ml-1 tracking-wide">Contraseña</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-500 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                </svg>
+                            </div>
+                            <input type="password" name="password" id="password" placeholder="••••••••" required
+                                class="w-full min-w-0 bg-[#f8fafc] border-none rounded-2xl py-3.5 pl-11 pr-4 text-sm text-slate-600 placeholder:text-slate-300 focus:ring-2 focus:ring-blue-500/20 focus:bg-white transition-all outline-none">
                         </div>
-                        <input type="password" name="password" id="password" placeholder="••••••••" required
-                            class="w-full min-w-0 bg-[#f8fafc] border-none rounded-2xl py-3.5 pl-11 pr-4 text-sm text-slate-600 placeholder:text-slate-300 focus:ring-2 focus:ring-blue-500/20 focus:bg-white transition-all outline-none">
+                    </div>
+
+                    <div class="relative group">
+                        <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1.5 ml-1 tracking-wide">Referencia</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-500 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                            </div>
+                            <input type="text" name="referencia" id="referencia" placeholder="Ej. Frente al parque central"
+                                class="w-full min-w-0 bg-[#f8fafc] border-none rounded-2xl py-3.5 pl-11 pr-4 text-sm text-slate-600 placeholder:text-slate-300 focus:ring-2 focus:ring-blue-500/20 focus:bg-white transition-all outline-none">
+                        </div>
                     </div>
                 </div>
 

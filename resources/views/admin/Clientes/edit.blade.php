@@ -122,10 +122,18 @@
                         class="w-full min-w-0 bg-[#f8fafc] border-none rounded-2xl py-3.5 px-4 text-sm text-slate-600 focus:ring-2 focus:ring-blue-500/20 focus:bg-white transition-all outline-none">
                 </div>
 
-                <div class="md:col-span-2 relative group">
-                    <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1.5 ml-1 tracking-wide">Contraseña</label>
-                    <input type="password" name="password" id="password" placeholder="Dejar en blanco para no cambiar" 
-                        class="w-full min-w-0 bg-[#f8fafc] border-none rounded-2xl py-3.5 px-4 text-sm text-slate-600 placeholder:text-slate-300 focus:ring-2 focus:ring-blue-500/20 focus:bg-white transition-all outline-none">
+                <div class="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="relative group">
+                        <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1.5 ml-1 tracking-wide">Contraseña</label>
+                        <input type="password" name="password" id="password" placeholder="Dejar en blanco para no cambiar" 
+                            class="w-full min-w-0 bg-[#f8fafc] border-none rounded-2xl py-3.5 px-4 text-sm text-slate-600 placeholder:text-slate-300 focus:ring-2 focus:ring-blue-500/20 focus:bg-white transition-all outline-none">
+                    </div>
+
+                    <div class="relative group">
+                        <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1.5 ml-1 tracking-wide">Referencia</label>
+                        <input type="text" name="referencia" id="referencia" value="{{ $cliente->referencia }}" placeholder="Ej. Frente al parque central" 
+                            class="w-full min-w-0 bg-[#f8fafc] border-none rounded-2xl py-3.5 px-4 text-sm text-slate-600 placeholder:text-slate-300 focus:ring-2 focus:ring-blue-500/20 focus:bg-white transition-all outline-none">
+                    </div>
                 </div>
 
                 <div class="relative">

@@ -132,33 +132,39 @@ class ClienteController extends Controller
     public function buscarDocumento(string $tipo, string $numero)
     {
         try {
-            
+
             $token = config('api.token');
             $endpoints = config('api.endpoints');
-
             if (!$token) {
                 return response()->json([
                     'error' => 'Token no configurado'
                 ], 500);
             }
 
-            
+            if (
+                !$endpoints ||
+                !isset($endpoints['dni']) ||
+                !isset($endpoints['ruc'])
+            ) {
+                return response()->json([
+                    'error' => 'Endpoints no configurados correctamente'
+                ], 500);
+            }
+
             if ($tipo === 'DNI') {
                 $url = $endpoints['dni'] . $numero;
             } elseif ($tipo === 'RUC') {
                 $url = $endpoints['ruc'] . $numero;
             } else {
                 return response()->json([
-                    'error' => 'Tipo no válido'
+                    'error' => 'Tipo no válido (solo DNI o RUC)'
                 ], 400);
             }
 
-           
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . $token
             ])->get($url);
 
-            
             if ($response->failed()) {
 
                 if ($tipo === 'DNI') {
@@ -175,8 +181,7 @@ class ClienteController extends Controller
                 }
             }
 
-           
-            $data = $response->json();
+            $data = $response->json() ?? [];
 
             if ($tipo === 'DNI') {
                 return response()->json([
@@ -193,7 +198,7 @@ class ClienteController extends Controller
 
         } catch (\Exception $e) {
             return response()->json([
-                'error' => 'Error interno',
+                'error' => 'Error interno del servidor',
                 'mensaje' => $e->getMessage()
             ], 500);
         }

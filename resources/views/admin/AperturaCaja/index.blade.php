@@ -284,45 +284,44 @@
     <div id="modalEliminarAperturaCaja"
      class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-black/50 backdrop-blur-sm transition-all">
 
-    <div class="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl p-8 text-center border border-gray-100">
+        <div class="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl p-8 text-center border border-gray-100">
 
-        <div class="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl shadow-inner">
-            <i class="fa fa-trash"></i>
-        </div>
-
-        <h3 class="text-lg font-bold text-gray-800">
-            ¿Eliminar Apertura de Caja?
-        </h3>
-
-        <p class="text-gray-500 mt-2 mb-6 text-xs leading-relaxed">
-            Esta acción eliminará
-            <span id="delete_nombre" class="font-bold text-red-600"></span>
-            y no se puede deshacer.
-        </p>
-
-        <form id="formEliminar" method="POST">
-            @csrf
-            @method('DELETE')
-
-            <div class="flex gap-3">
-
-                <button type="button"
-                        onclick="cerrarModalEliminar()"
-                        class="flex-1 px-4 py-3 bg-gray-100 text-gray-700 rounded-xl font-bold hover:bg-gray-200 text-xs transition-all">
-                    No, volver
-                </button>
-
-                <button type="submit"
-                        class="flex-1 px-4 py-3 bg-[#e74c3c] text-white rounded-xl font-bold hover:bg-red-700 shadow-lg shadow-red-100 text-xs transition-all">
-                    Sí, eliminar
-                </button>
-
+            <div class="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl shadow-inner">
+                <i class="fa fa-trash"></i>
             </div>
-        </form>
 
+            <h3 class="text-lg font-bold text-gray-800">
+                ¿Eliminar Apertura de Caja?
+            </h3>
+
+            <p class="text-gray-500 mt-2 mb-6 text-xs leading-relaxed">
+                Esta acción eliminará
+                <span id="delete_nombre" class="font-bold text-red-600"></span>
+                y no se puede deshacer.
+            </p>
+
+            <form id="formEliminar" method="POST">
+                @csrf
+                @method('DELETE')
+
+                <div class="flex gap-3">
+
+                    <button type="button"
+                            onclick="cerrarModalEliminar()"
+                            class="flex-1 px-4 py-3 bg-gray-100 text-gray-700 rounded-xl font-bold hover:bg-gray-200 text-xs transition-all">
+                        No, volver
+                    </button>
+
+                    <button type="submit"
+                            class="flex-1 px-4 py-3 bg-[#e74c3c] text-white rounded-xl font-bold hover:bg-red-700 shadow-lg shadow-red-100 text-xs transition-all">
+                        Sí, eliminar
+                    </button>
+
+                </div>
+            </form>
+
+        </div>
     </div>
-</div>
-
 </div>
 
 @endsection

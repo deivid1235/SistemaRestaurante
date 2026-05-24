@@ -1,3 +1,16 @@
+Table proveedor {
+    id_prov int [pk, increment]
+    tipo_documento varchar // DNI o RUC
+    numero varchar
+    razon_social varchar
+    direccion varchar
+    telefono varchar
+    email varchar
+    contacto varchar
+    estado char
+}
+
+
 Table aperturas_caja {
     id int [pk, increment]
     usuario_id int [ref: > usuarios.id]

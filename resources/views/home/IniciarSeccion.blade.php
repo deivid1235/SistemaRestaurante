@@ -287,10 +287,17 @@
                                 <input type="password" name="password" placeholder="Mínimo 6 caracteres"
                                        class="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-xl text-sm outline-none transition-all focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-50 text-gray-700 placeholder-gray-400 font-medium">
                             </div>
+                           
                             <div class="flex flex-col gap-1.5">
                                 <label class="text-[11px] font-bold text-gray-500 uppercase tracking-wide px-1">Teléfono / Celular</label>
                                 <input type="text" name="telefono" placeholder="Ej. 987654321"
-                                       class="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-xl text-sm outline-none transition-all focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-50 text-gray-700 placeholder-gray-400 font-medium">
+                                    class="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-xl text-sm outline-none transition-all focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-50 text-gray-700 placeholder-gray-400 font-medium">
+                            </div>
+
+                            <div class="flex flex-col gap-1.5">
+                                <label class="text-[11px] font-bold text-gray-500 uppercase tracking-wide px-1">Referencia</label>
+                                <input type="text" name="referencia" placeholder="Ej. Frente al parque central"
+                                    class="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-xl text-sm outline-none transition-all focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-50 text-gray-700 placeholder-gray-400 font-medium">
                             </div>
                         </div>
 
