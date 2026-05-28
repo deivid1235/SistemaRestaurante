@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Usuario;
+use App\Models\Roles;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
@@ -10,17 +11,17 @@ use Illuminate\Validation\Rule;
 class UsuarioController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Listar usuarios
      */
     public function index(Request $request)
     {
         $search = $request->get('search', '');
 
-        $usuarios = Usuario::when($search, function ($query, $search) {
+        $usuarios = Usuario::with('rol')
+            ->when($search, function ($query, $search) {
                 $query->where('nombres', 'like', "%{$search}%")
                       ->orWhere('apellido_paterno', 'like', "%{$search}%")
-                      ->orWhere('apellido_materno', 'like', "%{$search}%")
-                      ->orWhere('cargo_rrhh', 'like', "%{$search}%");
+                      ->orWhere('apellido_materno', 'like', "%{$search}%");
             })
             ->orderBy('nombres')
             ->paginate(10)
@@ -30,16 +31,16 @@ class UsuarioController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Form crear usuario
      */
     public function create()
     {
-        $roles = ['ADMINISTRADOR', 'CAJERO', 'PRODUCCION', 'MOZO', 'REPARTIDOR', 'PERSONALIZADO'];
+        $roles = Roles::all();
         return view('admin.Usuarios.create', compact('roles'));
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Guardar usuario
      */
     public function store(Request $request)
     {
@@ -52,7 +53,7 @@ class UsuarioController extends Controller
             'cargo_rrhh'       => 'nullable|max:100',
             'username'         => 'required|max:50|unique:usuarios,username',
             'password'         => 'required|min:6',
-            'rol'              => 'required|in:ADMINISTRADOR,CAJERO,PRODUCCION,MOZO,REPARTIDOR,PERSONALIZADO',
+            'rol_id'           => 'required|exists:roles,id',
             'foto'             => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
@@ -71,7 +72,7 @@ class UsuarioController extends Controller
         $usuario->cargo_rrhh       = $request->cargo_rrhh;
         $usuario->username         = $request->username;
         $usuario->password         = bcrypt($request->password);
-        $usuario->rol              = $request->rol;
+        $usuario->rol_id           = $request->rol_id;
         $usuario->estado           = $request->has('estado') ? 1 : 0;
 
         $usuario->save();
@@ -81,19 +82,20 @@ class UsuarioController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Form editar usuario
      */
-    public function edit(int $id)
+    public function edit($id)
     {
         $usuario = Usuario::findOrFail($id);
-        $roles   = ['ADMINISTRADOR', 'CAJERO', 'PRODUCCION', 'MOZO', 'REPARTIDOR', 'PERSONALIZADO'];
+        $roles = Roles::all();
+
         return view('admin.Usuarios.edit', compact('usuario', 'roles'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Actualizar usuario
      */
-    public function update(Request $request, int $id)
+    public function update(Request $request, $id)
     {
         $usuario = Usuario::findOrFail($id);
 
@@ -102,19 +104,19 @@ class UsuarioController extends Controller
             'nombres'          => 'required|max:100',
             'apellido_paterno' => 'nullable|max:100',
             'apellido_materno' => 'nullable|max:100',
-            'email'            => ['nullable', 'email', Rule::unique('usuarios', 'email')->ignore($usuario->id)],
+            'email'            => ['nullable', 'email', Rule::unique('usuarios')->ignore($usuario->id)],
             'cargo_rrhh'       => 'nullable|max:100',
-            'username'         => ['required', 'max:50', Rule::unique('usuarios', 'username')->ignore($usuario->id)],
+            'username'         => ['required', Rule::unique('usuarios')->ignore($usuario->id)],
             'password'         => 'nullable|min:6',
-            'rol'              => 'required|in:ADMINISTRADOR,CAJERO,PRODUCCION,MOZO,REPARTIDOR,PERSONALIZADO',
+            'rol_id'           => 'required|exists:roles,id',
             'foto'             => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
         if ($request->hasFile('foto')) {
-            // Eliminar foto anterior si existe
             if ($usuario->foto && Storage::exists('public/' . $usuario->foto)) {
                 Storage::delete('public/' . $usuario->foto);
             }
+
             $path = $request->file('foto')->store('usuarios', 'public');
             $usuario->foto = $path;
         }
@@ -126,10 +128,9 @@ class UsuarioController extends Controller
         $usuario->email            = $request->email;
         $usuario->cargo_rrhh       = $request->cargo_rrhh;
         $usuario->username         = $request->username;
-        $usuario->rol              = $request->rol;
+        $usuario->rol_id           = $request->rol_id;
         $usuario->estado           = $request->has('estado') ? 1 : 0;
 
-        // Solo actualizar contraseña si se envió una nueva
         if ($request->filled('password')) {
             $usuario->password = bcrypt($request->password);
         }
@@ -141,7 +142,7 @@ class UsuarioController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Eliminar usuario
      */
     public function destroy(int $id)
     {
@@ -153,7 +154,7 @@ class UsuarioController extends Controller
 
         $usuario->delete();
 
-        return redirect()->route('usuarios.index')
+        return redirect()->route('admin.Usuarios.index')
             ->with('success', 'Usuario eliminado correctamente.');
     }
 }

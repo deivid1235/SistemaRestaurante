@@ -1,11 +1,12 @@
 import './clientes';
 import './home';
+import './main';
 
 function setupMobileMenu() {
     const button = document.getElementById('mobile-menu-button');
     const menu   = document.getElementById('mobile-menu');
 
-    if (!button || !menu) return; // 🔥 CLAVE
+    if (!button || !menu) return; // CLAVE
 
     button.addEventListener('click', () => {
         menu.classList.toggle('hidden');
@@ -1886,22 +1887,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 //  USUARIOS 
-
 document.addEventListener("DOMContentLoaded", function () {
-
     const buscador = document.getElementById("buscador");
     const btnTodos = document.getElementById("btnTodos");
     const btnActivos = document.getElementById("btnActivos");
     const btnInactivos = document.getElementById("btnInactivos");
-
     const cards = document.querySelectorAll(".area-card");
+    const modal = document.getElementById("modalEliminarUsuario");
+    const form = document.getElementById("formEliminarUsuario");
+    const nombreEl = document.getElementById("delete_nombre");
+    const botonesEliminar = document.querySelectorAll(".btnEliminarUsuario");
+    window.formIdPendiente = null;
     if (buscador) {
         buscador.addEventListener("input", function () {
             const texto = this.value.toLowerCase();
 
             cards.forEach(card => {
                 const contenido = card.innerText.toLowerCase();
-
                 card.style.display = contenido.includes(texto) ? "flex" : "none";
             });
         });
@@ -1909,9 +1911,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (btnTodos) {
         btnTodos.addEventListener("click", () => {
-            cards.forEach(card => {
-                card.style.display = "flex";
-            });
+            cards.forEach(card => card.style.display = "flex");
         });
     }
 
@@ -1919,8 +1919,7 @@ document.addEventListener("DOMContentLoaded", function () {
         btnActivos.addEventListener("click", () => {
             cards.forEach(card => {
                 const estado = card.getAttribute("data-estado");
-
-                card.style.display = (estado == "1") ? "flex" : "none";
+                card.style.display = (estado === "1") ? "flex" : "none";
             });
         });
     }
@@ -1929,42 +1928,51 @@ document.addEventListener("DOMContentLoaded", function () {
         btnInactivos.addEventListener("click", () => {
             cards.forEach(card => {
                 const estado = card.getAttribute("data-estado");
-
-                card.style.display = (estado == "0") ? "flex" : "none";
+                card.style.display = (estado === "0") ? "flex" : "none";
             });
         });
     }
 
-    const modal = document.getElementById("modalEliminar");
+    botonesEliminar.forEach(btn => {
+        btn.addEventListener("click", function () {
+
+            const id = this.getAttribute("data-id");
+            const nombre = this.getAttribute("data-nombre");
+
+            window.formIdPendiente = id;
+
+            if (nombreEl) nombreEl.textContent = nombre;
+
+            if (modal) {
+                modal.classList.remove("hidden");
+                modal.classList.add("flex");
+            }
+        });
+    });
 
     if (modal) {
         modal.addEventListener("click", function (e) {
-            if (e.target === this) {
+            if (e.target === modal) {
                 cerrarEliminarUsuario();
+            }
+        });
+    }
+
+
+    if (form) {
+        form.addEventListener("submit", function () {
+            if (window.formIdPendiente) {
+                this.action = `/admin/Usuarios/${window.formIdPendiente}`;
+            } else {
+                alert("Error: No se seleccionó usuario");
             }
         });
     }
 
 });
 
-window.formIdPendiente = null;
-window.confirmarEliminar = function (id, nombre) {
-    window.formIdPendiente = id;
-    const nombreEl = document.getElementById("delete_nombre");
-    if (nombreEl) {
-        nombreEl.textContent = nombre;
-    }
-    const modal = document.getElementById("modalEliminar");
-
-    if (modal) {
-        modal.classList.remove("hidden");
-        modal.classList.add("flex");
-    }
-};
-
 window.cerrarEliminarUsuario = function () {
-
-    const modal = document.getElementById("modalEliminar");
+    const modal = document.getElementById("modalEliminarUsuario");
 
     if (modal) {
         modal.classList.add("hidden");
@@ -1974,38 +1982,19 @@ window.cerrarEliminarUsuario = function () {
     window.formIdPendiente = null;
 };
 
-document.addEventListener("DOMContentLoaded", function () {
-    const form = document.getElementById("formEliminarUsuario");
-    if (form) {
-        form.addEventListener("submit", function (e) {
-
-            if (window.formIdPendiente) {
-                this.action = `/admin/Usuarios/${window.formIdPendiente}`;
-            }
-
-        });
-    }
-
-});
-
-//  PREVIEW DE IMAGEN
 window.previewImagen = function (input) {
     if (input.files && input.files[0]) {
         const reader = new FileReader();
 
         reader.onload = function (e) {
             const preview = document.getElementById('previewFoto');
-
-            if (preview) {
-                preview.src = e.target.result;
-            }
+            if (preview) preview.src = e.target.result;
         };
 
         reader.readAsDataURL(input.files[0]);
     }
 };
 
-//  TOGGLE PASSWORD VISIBILITY
 window.togglePassword = function () {
     const input = document.getElementById('passwordInput');
     const icon = document.getElementById('eyeIcon');
@@ -2014,12 +2003,10 @@ window.togglePassword = function () {
 
     if (input.type === 'password') {
         input.type = 'text';
-        icon.classList.remove('fa-eye');
-        icon.classList.add('fa-eye-slash');
+        icon.classList.replace('fa-eye', 'fa-eye-slash');
     } else {
         input.type = 'password';
-        icon.classList.remove('fa-eye-slash');
-        icon.classList.add('fa-eye');
+        icon.classList.replace('fa-eye-slash', 'fa-eye');
     }
 };
 

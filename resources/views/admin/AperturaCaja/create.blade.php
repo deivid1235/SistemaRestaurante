@@ -2,201 +2,175 @@
 @section('title', 'Nueva Apertura de Caja')
 
 @section('content')
-<div class="max-w-8xl mx-auto space-y-5 animate-fade-in text-gray-800">
-    
-    <div class="group relative overflow-hidden rounded-2xl p-6 text-white shadow-md transition-all duration-500"
-        style="background: linear-gradient(135deg, var(--primary) 0%, #0096D9 100%);">
-        <div class="relative z-10 flex items-center justify-between">
-            <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/20">
-                    <i class="fa fa-cash-register text-xl"></i>
-                </div>
-                <div>
-                    <h1 class="text-2xl font-bold tracking-tight">Nueva Apertura de Caja</h1>
-                    <p class="text-xs font-light opacity-90 mt-0.5">Registre una nueva apertura para iniciar operaciones de caja.</p>
-                </div>
+
+<div class="w-full px-0 sm:px-6 animate-fade-in text-slate-700 space-y-6">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+        <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center text-xl shadow-sm border border-sky-100/50 flex-shrink-0">
+                <i class="fas fa-cash-register"></i>
             </div>
-            <a href="{{ route('admin.AperturaCaja.index') }}" 
-                class="flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-md border border-white/30 rounded-xl font-semibold text-xs transition-all hover:bg-white hover:text-[#0096D9] active:scale-95">
-                <i class="fa fa-arrow-left text-[10px]"></i> Cancelar
-            </a>
+            <div>
+                <h2 class="text-xl font-black text-slate-800 tracking-tight">
+                    Nueva Apertura de Caja
+                </h2>
+                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                    Registre una nueva apertura para iniciar operaciones de caja
+                </p>
+            </div>
         </div>
-        <div class="absolute -right-10 -top-10 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
-        
-        <div class="group relative flex flex-col items-center justify-center p-6 overflow-hidden text-center select-none min-h-[340px]">
-            <div class="absolute w-72 h-72 rounded-full bg-sky-200/30 blur-3xl top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none transition-transform duration-700 group-hover:scale-125"></div>
-            <div class="absolute w-56 h-56 rounded-full bg-blue-200/20 blur-3xl top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none transition-transform duration-700 group-hover:scale-95"></div>
+    <div class="bg-white rounded-2xl border border-slate-100 p-4 sm:p-6 shadow-sm transition-all hover:shadow-md">
 
-            <div class="relative z-10 flex flex-col items-center gap-6">
-                
-                <div class="relative flex items-center justify-center w-48 h-48">
-                    <div class="absolute inset-0 rounded-full bg-sky-400/10 scale-125 animate-ping duration-[3s]"></div>
-                    <div class="absolute inset-6 rounded-full bg-blue-400/5 scale-110 animate-ping duration-[2s]"></div>
-                    
-                    <div class="transition-all duration-500 group-hover:scale-110 drop-shadow-[0_10px_20px_rgba(0,150,217,0.25)]">
-                        <i class="fa fa-cash-register text-9xl transition-transform duration-500 group-hover:rotate-2"
-                        style="background: linear-gradient(135deg, var(--primary, #0ea5e9) 0%, #0096D9 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
-                        </i>
+        <form action="{{ route('admin.AperturaCaja.store') }}" method="POST" class="space-y-6">
+            @csrf
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+
+                <div class="space-y-1.5">
+                    <label class="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                        <i class="fas fa-user text-slate-400"></i> Usuario <span class="text-red-500">*</span>
+                    </label>
+                    <div class="relative">
+                        <select name="usuario_id" 
+                            class="w-full bg-slate-50/60 border border-slate-200 text-slate-700 p-2.5 px-3 rounded-xl focus:bg-white focus:border-sky-500 focus:ring-4 focus:ring-sky-500/10 transition-all appearance-none outline-none font-medium text-sm" required>
+                            <option value="" disabled selected>Seleccione usuario</option>
+                            @foreach($usuarios as $u)
+                                <option value="{{ $u->id }}">{{ $u->nombres }}</option>
+                            @endforeach
+                        </select>
+                        <div class="absolute inset-y-0 right-3 flex items-center pointer-events-none text-slate-400 text-xs">
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
                     </div>
                 </div>
-                
-                <div class="space-y-2">
-                    <h4 class="text-sm font-black text-gray-400 tracking-widest uppercase">
-                        Control de Caja
-                    </h4>
-                    <div class="h-0.5 w-8 bg-sky-400 mx-auto rounded-full transition-all duration-500 group-hover:w-16"></div>
-                    <p class="text-xs font-medium text-gray-500/90 max-w-[260px] mx-auto pt-1 leading-relaxed">
-                        Inicialice el turno abriendo la caja para registrar las ventas y transacciones del día de forma segura.
-                    </p>
+
+                <div class="space-y-1.5">
+                    <label class="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                        <i class="fas fa-box text-slate-400"></i> Caja <span class="text-red-500">*</span>
+                    </label>
+                    <div class="relative">
+                        <select name="caja_id" 
+                            class="w-full bg-slate-50/60 border border-slate-200 text-slate-700 p-2.5 px-3 rounded-xl focus:bg-white focus:border-sky-500 focus:ring-4 focus:ring-sky-500/10 transition-all appearance-none outline-none font-medium text-sm" required>
+                            <option value="" disabled selected>Seleccione caja</option>
+                            @foreach($cajas as $c)
+                                <option value="{{ $c->id }}">{{ $c->nombre }}</option>
+                            @endforeach
+                        </select>
+                        <div class="absolute inset-y-0 right-3 flex items-center pointer-events-none text-slate-400 text-xs">
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
                 </div>
+
+                <div class="space-y-1.5">
+                    <label class="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                        <i class="fas fa-clock text-slate-400"></i> Turno <span class="text-red-500">*</span>
+                    </label>
+                    <div class="relative">
+                        <select name="turno_id" 
+                            class="w-full bg-slate-50/60 border border-slate-200 text-slate-700 p-2.5 px-3 rounded-xl focus:bg-white focus:border-sky-500 focus:ring-4 focus:ring-sky-500/10 transition-all appearance-none outline-none font-medium text-sm" required>
+                            <option value="" disabled selected>Seleccione turno</option>
+                            @foreach($turnos as $t)
+                                <option value="{{ $t->id }}">{{ $t->nombre }}</option>
+                            @endforeach
+                        </select>
+                        <div class="absolute inset-y-0 right-3 flex items-center pointer-events-none text-slate-400 text-xs">
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-1.5">
+                    <label class="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                        <i class="fas fa-calendar-alt text-slate-400"></i> Fecha Apertura <span class="text-red-500">*</span>
+                    </label>
+                    <input type="datetime-local" name="fecha_apertura"
+                        class="w-full bg-slate-50/60 border border-slate-200 text-slate-700 p-2.5 px-3 rounded-xl focus:bg-white focus:border-sky-500 focus:ring-4 focus:ring-sky-500/10 transition-all outline-none font-medium text-sm" required>
+                </div>
+
+                <div class="space-y-1.5">
+                    <label class="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                        <i class="fas fa-money-bill-wave text-slate-400"></i> Monto Apertura <span class="text-red-500">*</span>
+                    </label>
+                    <div class="relative flex items-center">
+                        <span class="absolute left-3.5 text-sm font-semibold text-slate-400">S/</span>
+                        <input type="number" step="0.01" name="monto_apertura" placeholder="0.00"
+                            class="w-full bg-slate-50/60 border border-slate-200 text-slate-700 pl-9 pr-3 p-2.5 rounded-xl focus:bg-white focus:border-sky-500 focus:ring-4 focus:ring-sky-500/10 transition-all outline-none font-medium text-sm" required>
+                    </div>
+                </div>
+
+                <div class="space-y-1.5">
+                    <label class="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                        <i class="fas fa-calendar-check text-slate-400"></i> Fecha Cierre (Opcional)
+                    </label>
+                    <input type="datetime-local" name="fecha_cierre"
+                        class="w-full bg-slate-50/60 border border-slate-200 text-slate-700 p-2.5 px-3 rounded-xl focus:bg-white focus:border-sky-500 focus:ring-4 focus:ring-sky-500/10 transition-all outline-none font-medium text-sm">
+                </div>
+
+                <div class="space-y-1.5">
+                    <label class="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                        <i class="fas fa-coins text-slate-400"></i> Monto Cierre (Opcional)
+                    </label>
+                    <div class="relative flex items-center">
+                        <span class="absolute left-3.5 text-sm font-semibold text-slate-400">S/</span>
+                        <input type="number" step="0.01" name="monto_cierre" placeholder="0.00"
+                            class="w-full bg-slate-50/60 border border-slate-200 text-slate-700 pl-9 pr-3 p-2.5 rounded-xl focus:bg-white focus:border-sky-500 focus:ring-4 focus:ring-sky-500/10 transition-all outline-none font-medium text-sm">
+                    </div>
+                </div>
+
+                <div class="space-y-1.5">
+                    <label class="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                        <i class="fas fa-laptop-code text-slate-400"></i> Monto Sistema (Opcional)
+                    </label>
+                    <div class="relative flex items-center">
+                        <span class="absolute left-3.5 text-sm font-semibold text-slate-400">S/</span>
+                        <input type="number" step="0.01" name="monto_sistema" placeholder="0.00"
+                            class="w-full bg-slate-50/60 border border-slate-200 text-slate-700 pl-9 pr-3 p-2.5 rounded-xl focus:bg-white focus:border-sky-500 focus:ring-4 focus:ring-sky-500/10 transition-all outline-none font-medium text-sm">
+                    </div>
+                </div>
+
+                <div class="space-y-1.5">
+                    <label class="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                        <i class="fas fa-toggle-on text-slate-400"></i> Estado Inicial
+                    </label>
+                    <div class="relative">
+                        <select name="estado" 
+                            class="w-full bg-slate-50/60 border border-slate-200 text-slate-700 p-2.5 px-3 rounded-xl focus:bg-white focus:border-sky-500 focus:ring-4 focus:ring-sky-500/10 transition-all appearance-none outline-none font-medium text-sm">
+                            <option value="a" selected>Activo (Abierta)</option>
+                            <option value="c">Cerrado</option>
+                        </select>
+                        <div class="absolute inset-y-0 right-3 flex items-center pointer-events-none text-slate-400 text-xs">
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-        </div>
 
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 lg:col-span-2">
-            <form action="{{ route('admin.AperturaCaja.store') }}" method="POST" class="space-y-6">
-                @csrf
+            <div class="space-y-1.5">
+                <label class="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                    <i class="fas fa-comment-alt text-slate-400"></i> Observación
+                </label>
+                <textarea name="observacion" rows="3" placeholder="Ingrese alguna anotación u observación si es necesario..."
+                    class="w-full bg-slate-50/60 border border-slate-200 text-slate-700 px-4 py-3 rounded-xl focus:bg-white focus:border-sky-500 focus:ring-4 focus:ring-sky-500/10 transition-all outline-none font-medium text-sm resize-none"></textarea>
+            </div>
 
-                <div>
-                    <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4 flex items-center gap-2">
-                        <i class="fa fa-info-circle text-xs"></i> Información General
-                    </h3>
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
-                        <div class="flex flex-col gap-1.5">
-                            <label class="text-xs font-bold text-gray-700 uppercase tracking-wide">Usuario <span class="text-red-500">*</span></label>
-                            <div class="relative">
-                                <select name="usuario_id" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none transition-all focus:bg-white focus:border-[#0096D9] focus:ring-4 focus:ring-sky-100 appearance-none">
-                                    <option value="">Seleccione usuario</option>
-                                    @foreach($usuarios as $u)
-                                        <option value="{{ $u->id }}">{{ $u->nombres }}</option>
-                                    @endforeach
-                                </select>
-                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-400">
-                                    <i class="fa fa-chevron-down text-xs"></i>
-                                </div>
-                            </div>
-                        </div>
+            <div class="mt-8 pt-5 border-t border-slate-100 flex flex-col-reverse sm:flex-row items-center justify-end gap-3">
+                <a href="{{ route('admin.AperturaCaja.index') }}"
+                    class="w-full sm:w-auto px-5 py-2.5 rounded-xl border border-slate-200 text-slate-500 font-bold text-xs uppercase tracking-wider hover:bg-slate-50 transition-colors text-center">
+                    Cancelar
+                </a>
+                
+                <button type="submit"
+                    class="w-full sm:w-auto text-white px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider shadow-[0_4px_12px_rgba(14,165,233,0.2)] hover:shadow-[0_6px_20px_rgba(14,165,233,0.3)] transition-all flex items-center justify-center gap-2"
+                    style="background: linear-gradient(135deg, var(--primary) 0%, #0096D9 100%);">
+                    <i class="fas fa-save text-[11px]"></i> Guardar Apertura
+                </button>
+            </div>
 
-                        <div class="flex flex-col gap-1.5">
-                            <label class="text-xs font-bold text-gray-700 uppercase tracking-wide">Caja <span class="text-red-500">*</span></label>
-                            <div class="relative">
-                                <select name="caja_id" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none transition-all focus:bg-white focus:border-[#0096D9] focus:ring-4 focus:ring-sky-100 appearance-none">
-                                    <option value="">Seleccione caja</option>
-                                    @foreach($cajas as $c)
-                                        <option value="{{ $c->id }}">{{ $c->nombre }}</option>
-                                    @endforeach
-                                </select>
-                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-400">
-                                    <i class="fa fa-chevron-down text-xs"></i>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="flex flex-col gap-1.5">
-                            <label class="text-xs font-bold text-gray-700 uppercase tracking-wide">Turno <span class="text-red-500">*</span></label>
-                            <div class="relative">
-                                <select name="turno_id" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none transition-all focus:bg-white focus:border-[#0096D9] focus:ring-4 focus:ring-sky-100 appearance-none">
-                                    <option value="">Seleccione turno</option>
-                                    @foreach($turnos as $t)
-                                        <option value="{{ $t->id }}">{{ $t->nombre }}</option>
-                                    @endforeach
-                                </select>
-                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-400">
-                                    <i class="fa fa-chevron-down text-xs"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <hr class="border-gray-100">
-
-                <div>
-                    <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4 flex items-center gap-2">
-                        <i class="fa fa-money-bill-wave text-xs"></i> Control de Apertura
-                    </h3>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                        <div class="flex flex-col gap-1.5">
-                            <label class="text-xs font-bold text-gray-700 uppercase tracking-wide">Fecha Apertura <span class="text-red-500">*</span></label>
-                            <input type="datetime-local" name="fecha_apertura" required 
-                                class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none transition-all focus:bg-white focus:border-[#0096D9] focus:ring-4 focus:ring-sky-100">
-                        </div>
-
-                        <div class="flex flex-col gap-1.5">
-                            <label class="text-xs font-bold text-gray-700 uppercase tracking-wide">Monto Apertura <span class="text-red-500">*</span></label>
-                            <div class="relative flex items-center">
-                                <span class="absolute left-3.5 text-sm font-semibold text-gray-400">S/</span>
-                                <input type="number" step="0.01" name="monto_apertura" required placeholder="0.00"
-                                    class="w-full bg-gray-50 border border-gray-200 rounded-xl pl-9 pr-3 py-2.5 text-sm outline-none transition-all focus:bg-white focus:border-[#0096D9] focus:ring-4 focus:ring-sky-100 font-medium">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <hr class="border-gray-100">
-
-                <div>
-                    <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4 flex items-center gap-2">
-                        <i class="fa fa-history text-xs"></i> Datos de Cierre (Opcionales)
-                    </h3>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
-                        <div class="flex flex-col gap-1.5">
-                            <label class="text-xs font-bold text-gray-600 uppercase tracking-wide">Fecha Cierre</label>
-                            <input type="datetime-local" name="fecha_cierre"
-                                class="w-full bg-gray-50 border border-gray-100 rounded-xl px-3 py-2 text-sm outline-none transition-all focus:bg-white focus:border-[#0096D9] focus:ring-4 focus:ring-sky-100">
-                        </div>
-
-                        <div class="flex flex-col gap-1.5">
-                            <label class="text-xs font-bold text-gray-600 uppercase tracking-wide">Monto Cierre</label>
-                            <div class="relative flex items-center">
-                                <span class="absolute left-3 text-xs text-gray-400">S/</span>
-                                <input type="number" step="0.01" name="monto_cierre" placeholder="0.00"
-                                    class="w-full bg-gray-50 border border-gray-100 rounded-xl pl-8 pr-3 py-2 text-sm outline-none transition-all focus:bg-white focus:border-[#0096D9] focus:ring-4 focus:ring-sky-100">
-                            </div>
-                        </div>
-
-                        <div class="flex flex-col gap-1.5">
-                            <label class="text-xs font-bold text-gray-600 uppercase tracking-wide">Monto Sistema</label>
-                            <div class="relative flex items-center">
-                                <span class="absolute left-3 text-xs text-gray-400">S/</span>
-                                <input type="number" step="0.01" name="monto_sistema" placeholder="0.00"
-                                    class="w-full bg-gray-50 border border-gray-100 rounded-xl pl-8 pr-3 py-2 text-sm outline-none transition-all focus:bg-white focus:border-[#0096D9] focus:ring-4 focus:ring-sky-100">
-                            </div>
-                        </div>
-
-                        <div class="flex flex-col gap-1.5">
-                            <label class="text-xs font-bold text-gray-600 uppercase tracking-wide">Estado</label>
-                            <div class="relative">
-                                <select name="estado" class="w-full bg-gray-50 border border-gray-100 rounded-xl px-3 py-2 text-sm outline-none transition-all focus:bg-white focus:border-[#0096D9] focus:ring-4 focus:ring-sky-100 appearance-none">
-                                    <option value="a" selected>Activo</option>
-                                    <option value="c">Cerrado</option>
-                                </select>
-                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-400">
-                                    <i class="fa fa-chevron-down text-xs"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex flex-col gap-1.5">
-                    <label class="text-xs font-bold text-gray-700 uppercase tracking-wide">Observación</label>
-                    <textarea name="observacion" rows="3" placeholder="Ingrese alguna anotación u observación si es necesario..."
-                        class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none transition-all focus:bg-white focus:border-[#0096D9] focus:ring-4 focus:ring-sky-100 resize-none"></textarea>
-                </div>
-
-                <div class="flex justify-end pt-2">
-                    <button type="submit"
-                        class="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-3.5 text-white font-bold text-xs rounded-xl shadow-lg shadow-sky-100 transition-all hover:opacity-90 active:scale-95 uppercase tracking-widest"
-                        style="background: linear-gradient(135deg, var(--primary, #0ea5e9) 0%, #0096D9 100%);">
-                        <i class="fa fa-save text-sm"></i> Guardar Apertura
-                    </button>
-                </div>
-            </form>
-        </div>
-
+        </form>
     </div>
 </div>
+
 @endsection

@@ -312,3 +312,82 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+document.addEventListener('DOMContentLoaded', function () {
+    const buscador = document.getElementById('buscador');
+    const btnTodos = document.getElementById('btnTodos');
+    const btnActivos = document.getElementById('btnActivos');
+    const btnInactivos = document.getElementById('btnInactivos');
+
+    const insumos = document.querySelectorAll('.insumo');
+
+    let filtroEstado = 'todos';
+
+    function filtrar() {
+        if (!buscador) return;
+
+        const texto = buscador.value.toLowerCase();
+
+        insumos.forEach(ins => {
+            const nombre = (ins.dataset.nombre || '').toLowerCase();
+            const estado = ins.dataset.estado;
+
+            let coincideTexto = nombre.includes(texto);
+            let coincideEstado = false;
+
+            if (filtroEstado === 'todos') {
+                coincideEstado = true;
+            } else {
+                coincideEstado = estado === filtroEstado;
+            }
+
+            ins.style.display = (coincideTexto && coincideEstado) ? 'flex' : 'none';
+        });
+    }
+
+    if (buscador) {
+        buscador.addEventListener('input', filtrar);
+    }
+
+    function activarBoton(botonActivo) {
+        [btnTodos, btnActivos, btnInactivos].forEach(btn => {
+            if (!btn) return;
+
+            btn.classList.remove('text-white', 'shadow-md');
+            btn.classList.add('text-slate-400');
+            btn.style.background = 'transparent';
+        });
+
+        if (botonActivo) {
+            botonActivo.classList.remove('text-slate-400');
+            botonActivo.classList.add('text-white', 'shadow-md');
+            botonActivo.style.background = "linear-gradient(135deg, var(--primary, #0ea5e9) 0%, #0096D9 100%)";
+        }
+    }
+
+    if (btnTodos) {
+        btnTodos.addEventListener('click', () => {
+            filtroEstado = 'todos';
+            activarBoton(btnTodos);
+            filtrar();
+        });
+    }
+
+    if (btnActivos) {
+        btnActivos.addEventListener('click', () => {
+            filtroEstado = 'a';
+            activarBoton(btnActivos);
+            filtrar();
+        });
+    }
+
+    if (btnInactivos) {
+        btnInactivos.addEventListener('click', () => {
+            filtroEstado = 'i';
+            activarBoton(btnInactivos);
+            filtrar();
+        });
+    }
+
+    
+
+});

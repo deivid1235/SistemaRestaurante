@@ -2,11 +2,13 @@
 
 namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
+use App\Models\Roles;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Usuario extends Authenticatable
 {
     protected $table = 'usuarios';
+    protected $guard_name = 'usuario'; 
 
     protected $fillable = [
         'dni',
@@ -46,5 +48,10 @@ class Usuario extends Authenticatable
     public function cajas()
     {
         return $this->belongsToMany(Caja::class, 'caja_usuario');
+    }
+
+    public function rol()
+    {
+        return $this->belongsTo(Roles::class, 'rol_id');
     }
 }

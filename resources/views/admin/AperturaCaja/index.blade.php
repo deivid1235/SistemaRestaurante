@@ -271,12 +271,34 @@
                 </div>
             </div>
         @empty
-            <div class="col-span-full bg-white rounded-xl border border-slate-100 p-10 text-center shadow-sm">
-                <div class="w-14 h-14 bg-slate-50 border border-slate-100 rounded-lg flex items-center justify-center mx-auto mb-3 text-slate-400">
-                    <i class="fa fa-folder-open text-3xl text-slate-300"></i>
+            <div class="col-span-full relative overflow-hidden bg-gradient-to-br from-red-50/50 to-white rounded-2xl border border-red-100 p-8 text-center shadow-sm transition-all hover:shadow-md">
+                <div class="absolute top-0 left-0 right-0 h-[3px]" style="background: linear-gradient(90deg, #ef4444 0%, #f87171 100%);"></div>
+                <div class="relative z-10 max-w-md mx-auto space-y-4">
+                    <div class="w-16 h-16 bg-red-50/80 rounded-2xl flex items-center justify-center mx-auto text-red-500 ring-4 ring-red-50/30 border border-red-100 shadow-sm">
+                        <div class="w-10 h-10 bg-red-100/70 rounded-xl flex items-center justify-center animate-pulse">
+                            <i class="fas fa-cash-register text-lg"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-1">
+                        <h3 class="text-base font-black text-slate-800 tracking-tight">
+                            Control de Caja Inactivo
+                        </h3>
+                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-widest text-red-500/90">
+                            ¡Atención Requerida!
+                        </p>
+                        <p class="text-xs font-medium text-slate-500 pt-1 leading-relaxed">
+                            No se ha detectado ninguna apertura de caja activa para este turno. Debe inicializar el flujo financiero antes de procesar ventas o movimientos.
+                        </p>
+                    </div>
+
+                    <div class="pt-2">
+                        <a href="{{ route('admin.AperturaCaja.create') }}" 
+                        class="inline-flex items-center gap-2 px-4 py-2 bg-red-50 hover:bg-red-100 border border-red-200/60 rounded-xl text-red-700 text-xs font-bold uppercase tracking-wider transition-all active:scale-95 shadow-sm">
+                            <i class="fas fa-plus text-[10px]"></i> Abrir Caja Ahora
+                        </a>
+                    </div>
                 </div>
-                <h3 class="text-sm font-bold text-slate-700">No hay aperturas registradas</h3>
-                <p class="text-xs text-slate-400 mt-0.5">Presione "Nueva Apertura" para inicializar operaciones.</p>
             </div>
         @endforelse
     </div>

@@ -1,3 +1,144 @@
+Table venta {
+    id_venta int [pk, increment]
+
+    // RELACIONES PRINCIPALES
+    id_pedido int [ref: > pedidos.id]
+    id_tipo_pedido int [ref: > tipo_pedido.id]
+    id_cliente int [ref: > clientes.id]
+    id_tipo_doc int [ref: > tipo_documentos.id]
+    id_tipo_pago int [ref: > tipo_pagos.id]
+    id_usu int [ref: > usuarios.id]
+    id_apc int [ref: > aperturas_caja.id]
+
+    // DOCUMENTO
+    serie_doc char(4)
+    nro_doc varchar(8)
+
+    // PAGOS
+    pago_efe decimal(10,2) [default: 0]
+    pago_efe_none decimal(10,2) [default: 0]
+    pago_tar decimal(10,2) [default: 0]
+
+    // DESCUENTOS
+    descuento_tipo char(1)
+    descuento_personal int
+    descuento_monto decimal(10,2) [default: 0]
+    descuento_motivo varchar(200)
+
+    // COMISIONES
+    comision_tarjeta decimal(10,2) [default: 0]
+    comision_delivery decimal(10,2) [default: 0]
+
+    // IMPUESTOS Y TOTAL
+    igv decimal(10,2) [default: 0]
+    total decimal(10,2) [default: 0]
+
+    // SUNAT
+    codigo_operacion varchar(20)
+    fecha_venta datetime
+    estado varchar(15) [default: 'a']
+    enviado_sunat char(1)
+
+    code_respuesta_sunat varchar(5)
+    descripcion_sunat_cdr varchar(300)
+    name_file_sunat varchar(80)
+    hash_cdr varchar(200)
+    hash_cpe varchar(200)
+
+    fecha_vencimiento date
+
+    // PAGOS EXTRA
+    pago_yape varchar(100)
+    pago_plin varchar(100)
+    pago_transferencia varchar(100)
+
+    // REFERENCIA NOTA
+    id_documento_referencia int
+    motivo_nota_id char(2)
+    motivo_sustento varchar(500)
+
+    created_at datetime
+    updated_at datetime
+}
+
+Table pedido_delivery {
+    id int [pk, increment]
+    id_cliente int [ref: > clientes.id]
+    id_repartidor int [ref: > usuarios.id]
+    tipo_pago int [ref: > tipo_pagos.id]
+    entrega enum('domicilio','recoger')
+    canal  varchar 
+    pedido_programado boolean [default: false]
+    hora_entrega time
+    paga_con decimal(10,2)
+    comision_delivery decimal(10,2)
+    amortizacion decimal(10,2)
+    nro_pedido varchar(10)
+    nombre_cliente varchar(100)
+    telefono_cliente varchar(20)
+    direccion_cliente varchar(100)
+    referencia_cliente varchar(100)
+    email_cliente varchar(200)
+    fecha_preparacion datetime
+    fecha_envio datetime
+    fecha_entrega datetime
+    created_at datetime
+    updated_at datetime
+}
+
+
+Table Pedido_mesa {
+    id int [pk, increment]
+    id_pedido int [ref: > pedidos.id]
+    id_mesa int [ref: > mesas.id_mesa]
+    id_mozo int [ref: > usuarios.id]
+    nombre_cliente varchar(150)
+    nro_personas int
+    created_at datetime
+    updated_at datetime
+}
+
+
+Table pedidos {
+    id int [pk, increment]
+    id_tipo_pedido int [ref: > tipo_pedido.id]
+    id_usuario int [ref: > usuarios.id]
+    fecha_pedido datetime
+    estado varchar(20)
+    created_at datetime
+    updated_at datetime
+}
+
+Table tipo_pedido {
+    id int [pk, increment]
+    nombre varchar(50) // mesa, llevar, delivery
+}
+
+
+Table insumo {
+    id int [pk, increment]
+    insumo_catg_id int [ref: > insumo_catg.id]
+    tipomedida_id int [ref: > tipomedida.id]
+    codigo varchar(50)
+    nombre varchar(100)
+    stock varchar(50)
+    costo decimal(10,2)
+    estado char(1) [default: 'a']
+}
+
+
+Table insumo_catg {
+    id int [pk, increment]
+    descripcion VARCHAR(100) 
+    estado char(1) [default: 'a']
+}
+
+Table tipomedida {
+    id int [pk, increment]
+    descripcion varchar(100)
+    grupo varchar(50)
+}
+
 Table proveedor {
     id_prov int [pk, increment]
     tipo_documento varchar // DNI o RUC
@@ -9,7 +150,6 @@ Table proveedor {
     contacto varchar
     estado char
 }
-
 
 Table aperturas_caja {
     id int [pk, increment]
@@ -110,6 +250,14 @@ Table areas_produccion {
     updated_at datetime
 }
 
+Table roles{
+    id bigint [pk, increment]
+    nombre varchar(50) [unique]
+    descripcion varchar(255)
+    created_at timestamp
+    updated_at timestamp
+}
+
 Table usuarios {
     id int [pk, increment]
     dni varchar
@@ -121,7 +269,7 @@ Table usuarios {
     foto varchar
     username varchar
     password varchar
-    rol varchar
+    rol_id int [ref: > roles.id]
     estado int
     created_at datetime
     updated_at datetime

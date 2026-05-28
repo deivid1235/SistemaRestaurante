@@ -26,13 +26,12 @@ use App\Http\Controllers\ComboController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\AperturasCajaController;
 use App\Http\Controllers\Auth\LoginCliente;
+use App\Http\Controllers\InsumoController;
 use App\Http\Controllers\ProveedorController;
+use App\Http\Controllers\VentaController;
 
 
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
 Route::get('/', [HomeController::class, 'index']);
 Route::post('/login', [LoginController::class, 'login'])->name('login');
@@ -49,6 +48,11 @@ Route::get('/home/cliente/buscar/{tipo}/{numero}', [ClienteController::class, 'b
 Route::post('/cliente/login', [LoginCliente::class, 'login'])->name('cliente.login');
 Route::post('/cliente/logout', [LoginCliente::class, 'logout'])->name('cliente.logout');
 Route::get('/login', function () {return view('home.IniciarSeccion');})->name('inicio');
+
+Route::get('/carrito', [HomeController::class, 'verCarrito'])->name('carrito');
+Route::get('/agregar-carrito/{id}', [HomeController::class, 'agregarCarrito'])->name('carrito.add');
+Route::get('/eliminar-carrito/{id}', [HomeController::class, 'eliminarCarrito'])->name('carrito.remove');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
@@ -198,6 +202,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/Proveedor/{proveedor}/edit', [ProveedorController::class, 'edit'])->name('admin.Proveedor.edit');
     Route::put('/admin/Proveedor/{proveedor}', [ProveedorController::class, 'update'])->name('admin.Proveedor.update');
     Route::delete('/admin/Proveedor/{proveedor}', [ProveedorController::class, 'destroy'])->name('admin.Proveedor.destroy');
+    //Rutas de los insumos y categorias de insumos
+    Route::get('/admin/Insumo', [InsumoController::class, 'index'])->name('admin.Insumo.index');
+    Route::get('/admin/Insumo/create', [InsumoController::class, 'create'])->name('admin.Insumo.create');
+    Route::post('/admin/Insumo', [InsumoController::class, 'store'])->name('admin.Insumo.store');
+    Route::get('/admin/Insumo/ {insumo}/edit', [InsumoController::class, 'edit'])->name('admin.Insumo.edit');
+    Route::put('/admin/Insumo/{insumo}', [InsumoController::class, 'update'])->name('admin.Insumo.update');
+    Route::delete('/admin/Insumo/{insumo}', [InsumoController::class, 'destroy'])->name('admin.Insumo.destroy');
+    //Ruta de Venta
+    Route::get('/admin/Venta', [VentaController::class, 'index'])->name('admin.Venta.index');
+ 
     
 });
 

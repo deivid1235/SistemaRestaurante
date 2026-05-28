@@ -7,38 +7,39 @@
     <div class="group relative overflow-hidden rounded-2xl p-7 text-white shadow-md transition-all duration-500 hover:shadow-lg"
         style="background: linear-gradient(135deg, var(--primary) 0%, #0096D9 100%);">
         
-        <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-            
-            <div class="flex items-center gap-5">
+        <div class="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+            <div class="flex items-center gap-4 w-full">
+                
                 <div class="relative flex items-center justify-center flex-shrink-0">
                     <div class="absolute inset-0 rounded-full border-2 border-dashed border-white/40 scale-125 animate-[spin_3s_linear_infinite]"></div>
-                    <div class="relative w-16 h-16 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/20 shadow-inner animate-[spin_5s_linear_infinite]">
-                        <i class="fas fa-truck text-3xl"></i>
+                    
+                    <div class="relative w-14 h-14 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/20 shadow-inner">
+                        <i class="fas fa-truck text-2xl"></i>
                     </div>
                 </div>
-
-                <div>
-                    <div class="flex items-center gap-3">
-                        <h1 class="text-3xl font-extrabold tracking-tight">
-                            Proveedores
-                        </h1>
-                    </div>
-                    <p class="text-base font-light opacity-90 mt-1">
-                        Panel de administración de proveedores. Aquí puedes gestionar la lista de abastecedores, registrar nuevos contactos y controlar tus compras de manera centralizada.
+                <div class="text-left">
+                    <h1 class="text-xl sm:text-2xl font-extrabold leading-tight">
+                        Proveedores
+                    </h1>
+                    <p class="text-sm opacity-90">
+                        Gestiona tus proveedores y contactos.
                     </p>
                 </div>
-                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                    <a href="{{ route('admin.Proveedor.create') }}"
-                        class="flex items-center gap-2 px-6 py-3 rounded-xl text-white font-bold text-[11px] transition-all hover:opacity-90 active:scale-95 shadow-xl border border-white/10 uppercase tracking-widest"
-                        style="background: linear-gradient(135deg, var(--primary, #0ea5e9) 0%, #0096D9 100%);">
-                        <i class="fa fa-user-plus text-[9px]"></i>
-                        NUEVO PROVEEDOR
-                    </a>
-                </div>
+
+            </div>
+            <div class="w-full sm:w-auto">
+                <a href="{{ route('admin.Proveedor.create') }}"
+                    class="w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-white font-bold text-xs transition-all hover:opacity-90 active:scale-95 shadow-lg border border-white/10 uppercase tracking-wider"
+                    style="background: linear-gradient(135deg, var(--primary, #0ea5e9) 0%, #0096D9 100%);">
+                    
+                    <i class="fa fa-user-plus text-[10px]"></i>
+                    Nuevo
+                </a>
             </div>
 
         </div>
-        <div class="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-3xl transition-transform duration-700 group-hover:scale-150"></div>
+
+        <div class="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
@@ -159,10 +160,10 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         @foreach($proveedores as $proveedor)
-        <div class="area-card group bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-row h-48"
+        <div class="area-card group bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col sm:flex-row h-auto sm:h-48"
             data-estado="{{ $proveedor->estado }}">
             
-            <div class="relative w-32 flex-shrink-0 bg-slate-50 flex items-center justify-center border-r border-slate-100">
+            <div class="relative w-full sm:w-32 flex-shrink-0 bg-slate-50 flex items-center justify-center border-b sm:border-b-0 sm:border-r border-slate-100 py-6 sm:py-0">
                 <div class="absolute top-2 left-2 z-10">
                     <span class="px-2 py-0.5 rounded-lg text-[9px] font-black uppercase tracking-wider text-white shadow-sm {{ $proveedor->estado == 'a' ? 'bg-emerald-500' : 'bg-rose-500' }}">
                         {{ $proveedor->estado == 'a' ? 'ACTIVO' : 'INACTIVO' }}
@@ -175,20 +176,24 @@
                     </span>
                 </div>
 
-                <div class="absolute bottom-2 right-2 left-2 text-center">
+                <div class="absolute bottom-2 right-2 left-2 text-center hidden sm:block">
                     <span class="bg-slate-900 text-white text-[9px] font-black px-2 py-1 rounded-md shadow-sm block truncate">
                         {{ $proveedor->tipo_documento }}: {{ $proveedor->numero }}
                     </span>
                 </div>
             </div>
 
-            <div class="flex-1 p-4 flex flex-col justify-between min-w-0">
+            <div class="flex-1 p-4 flex flex-col justify-between min-w-0 gap-3 sm:gap-0">
                 <div>
-                    <div class="flex justify-between items-start gap-1">
+                    <div class="flex justify-between items-start gap-2">
                         <div class="min-w-0">
                             <h3 class="text-[13px] font-black text-slate-800 uppercase leading-tight truncate">
                                 {{ $proveedor->razon_social }}
                             </h3>
+                            <span class="inline-block sm:hidden bg-slate-900 text-white text-[9px] font-black px-1.5 py-0.5 rounded mt-1">
+                                {{ $proveedor->tipo_documento }}: {{ $proveedor->numero }}
+                            </span>
+                            
                             @if($proveedor->contacto)
                             <p class="text-[10px] text-sky-600 font-black uppercase mt-1 truncate">
                                 <i class="fas fa-user-tie mr-1"></i>Contacto: {{ $proveedor->contacto }}
@@ -206,15 +211,15 @@
 
                     <div class="grid grid-cols-1 gap-1.5 mt-3">
                         <div class="flex items-center gap-2 min-w-0">
-                            <i class="fa fa-phone text-[10px] text-emerald-500"></i>
+                            <i class="fa fa-phone text-[10px] text-emerald-500 w-3 text-center"></i>
                             <span class="text-[10px] text-slate-700 font-bold">{{ $proveedor->telefono ?? 'Sin Teléfono' }}</span>
                         </div>
                         <div class="flex items-center gap-2 min-w-0">
-                            <i class="fa fa-envelope text-[10px] text-sky-500"></i>
+                            <i class="fa fa-envelope text-[10px] text-sky-500 w-3 text-center"></i>
                             <span class="text-[10px] text-slate-600 font-medium truncate">{{ $proveedor->email ?? 'Sin Correo' }}</span>
                         </div>
                         <div class="flex items-center gap-2 min-w-0">
-                            <i class="fa fa-map-marker-alt text-[10px] text-rose-500"></i>
+                            <i class="fa fa-map-marker-alt text-[10px] text-rose-500 w-3 text-center"></i>
                             <span class="text-[10px] text-slate-500 truncate italic">{{ $proveedor->direccion ?? 'Sin Dirección Fiscal' }}</span>
                         </div>
                     </div>
@@ -225,7 +230,7 @@
                         ID PROVEEDOR: #{{ str_pad($proveedor->id, 4, '0', STR_PAD_LEFT) }}
                     </p>
                     
-                    <div class="flex gap-2">
+                    <div class="flex items-center gap-2">
                         <a href="{{ route('admin.Proveedor.edit', $proveedor->id) }}"
                             class="h-7 px-3 flex items-center gap-1.5 text-white rounded-xl transition-all active:scale-95 shadow-md shadow-blue-100"
                             style="background: linear-gradient(135deg, #0ea5e9 0%, #0096D9 100%);">
@@ -233,8 +238,9 @@
                             <span class="text-[9px] font-black uppercase">Gestionar</span>
                         </a>
 
-                        <button onclick="confirmarEliminar({{ $proveedor->id }}, `{{ $proveedor->razon_social }}`)"
-                            class="w-7 h-7 flex items-center justify-center rounded-xl bg-rose-50 text-rose-500 hover:bg-rose-500 hover:text-white transition-all border border-rose-100">
+                        <button class="btnEliminarProveedor w-7 h-7 flex items-center justify-center rounded-xl bg-slate-50 text-red-400 hover:bg-red-600 hover:text-white transition-all shadow-sm border border-red-50 flex-shrink-0"
+                            data-id="{{ $proveedor->id }}" 
+                            data-nombre="{{ $proveedor->nombre }}">
                             <i class="fa fa-trash text-[10px]"></i>
                         </button>
                     </div>
@@ -244,8 +250,27 @@
         @endforeach
     </div>
 
-
 </div>
+
+{{--Modal de elimiar--}}
+<div id="modalEliminarProveedor" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-black/50 backdrop-blur-sm transition-all">
+    <div class="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl p-8 text-center border border-gray-100">
+        <div class="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl shadow-inner">
+            <i class="fa fa-trash"></i>
+        </div>
+        <h3 class="text-lg font-bold text-gray-800">¿Eliminar Proveedor?</h3>
+        <p class="text-gray-500 mt-2 mb-6 text-xs leading-relaxed">Esta acción eliminará <span id="delete_nombre" class="font-bold text-red-600"></span> y no se puede deshacer.</p>
+        <form id="formEliminarProveedor" method="POST">
+            @csrf
+            @method('DELETE')
+            <div class="flex gap-3">
+                <button type="button" onclick="document.getElementById('modalEliminarProveedor').classList.add('hidden')" class="flex-1 px-4 py-3 bg-gray-100 text-gray-700 rounded-xl font-bold hover:bg-gray-200 text-xs transition-all">No, volver</button>
+                <button type="submit" class="flex-1 px-4 py-3 bg-[#e74c3c] text-white rounded-xl font-bold hover:bg-red-700 shadow-lg shadow-red-100 text-xs transition-all">Sí, eliminar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 
 
 @endsection

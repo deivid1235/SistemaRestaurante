@@ -483,7 +483,7 @@
         </a>
 
         <p class="sidebar-section">Principal</p>
-        <a href="#" class="flex items-center {{ request()->routeIs('admin.pos.*') ? 'active-link' : '' }}">
+        <a href="{{ route('admin.Venta.index')}}" class="flex items-center {{ request()->routeIs('admin.Venta.*') ? 'active-link' : '' }}">
             <span class="nav-icon"><i class="fa fa-store"></i></span>
             <span class="nav-text">Punto de Venta</span>
         </a>

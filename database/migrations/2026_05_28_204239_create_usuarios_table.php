@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('foto')->nullable();
             $table->string('username')->unique();
             $table->string('password');
-            $table->enum('rol', ['ADMINISTRADOR', 'CAJERO', 'PRODUCCION', 'MOZO', 'REPARTIDOR', 'PERSONALIZADO'])->default('MOZO');
+            $table->foreignId('rol_id')->constrained('roles')->default(5);
             $table->boolean('estado')->default(true);
             $table->timestamps();
         });

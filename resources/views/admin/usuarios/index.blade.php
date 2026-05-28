@@ -132,128 +132,124 @@
     {{-- ── CARD TABLA ── --}}
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         @foreach($usuarios as $usuario)
-        <div class="area-card group bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-row h-48"
-        data-estado="{{ $usuario->estado }}">
-            
-            <div class="relative w-32 flex-shrink-0 bg-slate-50 flex items-center justify-center border-r border-slate-100">
-                <div class="absolute top-2 left-2 z-10">
-                    <span class="px-2 py-0.5 rounded-lg text-[7px] font-black uppercase tracking-wider text-white shadow-sm {{ $usuario->estado ? 'bg-emerald-500' : 'bg-rose-500' }}">
+        <div class="area-card group bg-white rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 overflow-hidden flex flex-col sm:flex-row h-auto sm:h-48"
+            data-estado="{{ $usuario->estado }}">
+            <div class="relative w-full sm:w-32 h-36 sm:h-full flex-shrink-0 bg-slate-50 flex items-center justify-center border-b sm:border-b-0 sm:border-r border-slate-100">
+                <!-- Badge Estado -->
+                <div class="absolute top-3 left-3 z-10">
+                    <span class="px-2.5 py-1 rounded-full text-[9px] font-black tracking-wider text-white shadow-sm flex items-center gap-1 {{ $usuario->estado ? 'bg-emerald-500' : 'bg-rose-500' }}">
+                        <span class="w-1 h-1 rounded-full bg-white animate-pulse"></span>
                         {{ $usuario->estado ? 'ACTIVO' : 'INACTIVO' }}
                     </span>
                 </div>
 
-                <div class="w-20 h-20 rounded-full bg-white shadow-md flex items-center justify-center border-2 border-white overflow-hidden group-hover:scale-105 transition-transform duration-500">
+                <!-- Contenedor Foto de Perfil -->
+                <div class="w-20 h-20 rounded-2xl bg-white shadow-sm flex items-center justify-center border border-slate-100 overflow-hidden group-hover:scale-105 transition-transform duration-300">
                     @if($usuario->foto)
                         <img src="{{ asset('storage/'.$usuario->foto) }}" class="w-full h-full object-cover">
                     @else
-                        <i class="fa fa-user text-3xl text-slate-200"></i>
+                        <div class="w-full h-full bg-slate-100 flex items-center justify-center text-slate-400">
+                            <i class="fa fa-user text-2xl"></i>
+                        </div>
                     @endif
                 </div>
 
-                <div class="absolute bottom-2 right-2">
-                    <span class="bg-slate-800 text-white text-[8px] font-black px-1.5 py-0.5 rounded-md">
-                        ID: #{{ $usuario->id }}
+                <!-- Badge ID -->
+                <div class="absolute bottom-3 right-3">
+                    <span class="bg-slate-800/90 backdrop-blur-xs text-white text-[9px] font-mono font-bold px-2 py-0.5 rounded-md tracking-tight">
+                        #{{ $usuario->id }}
                     </span>
                 </div>
             </div>
 
-            <div class="flex-1 p-3 flex flex-col justify-between min-w-0">
+            <!-- SECCIÓN DE INFORMACIÓN -->
+            <div class="flex-1 p-4 flex flex-col justify-between min-w-0 bg-white">
                 <div>
-                    <div class="flex justify-between items-start gap-1">
+                    <!-- Nombre y DNI -->
+                    <div class="flex justify-between items-start gap-2">
                         <div class="min-w-0">
-                            <h3 class="text-[11px] font-black text-slate-800 uppercase leading-none truncate">
+                            <h3 class="text-sm font-bold text-slate-800 tracking-tight truncate uppercase leading-tight">
                                 {{ $usuario->nombres }}
                             </h3>
-                            <p class="text-[8px] text-slate-400 font-bold uppercase mt-1 truncate">
-                                {{ $usuario->apellido_paterno }}
+                            <p class="text-xs text-slate-400 font-medium truncate uppercase mt-0.5">
+                                {{ $usuario->apellido_paterno }} {{ $usuario->apellido_materno ?? '' }}
                             </p>
                         </div>
-                        <span class="text-[8px] font-black text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded-lg border border-slate-200 shrink-0">
+                        <span class="text-[10px] font-mono font-bold text-slate-500 bg-slate-50 px-2 py-0.5 rounded-md border border-slate-200/60 shrink-0">
                             {{ $usuario->dni }}
                         </span>
                     </div>
 
-                    {{-- INFO GRID --}}
-                    <div class="grid grid-cols-1 gap-1 mt-2">
-                        <div class="flex items-center gap-1.5 min-w-0">
-                            <i class="fa fa-envelope text-[8px] text-sky-400"></i>
-                            <span class="text-[8px] text-slate-500 truncate">{{ $usuario->email }}</span>
+                    <!-- Detalles del Usuario (Email & Rol) -->
+                    <div class="space-y-1.5 mt-3">
+                        <div class="flex items-center gap-2 min-w-0 text-slate-500">
+                            <div class="w-4 h-4 rounded-md bg-sky-50 flex items-center justify-center shrink-0">
+                                <i class="fa fa-envelope text-[10px] text-sky-500"></i>
+                            </div>
+                            <span class="text-xs truncate text-slate-600">{{ $usuario->email }}</span>
                         </div>
-                        <div class="flex items-center gap-1.5 min-w-0">
-                            <i class="fa fa-shield-alt text-[8px] text-blue-400"></i>
-                            <span class="text-[8px] font-black text-blue-600 uppercase truncate">{{ $usuario->rol }}</span>
+                        
+                        <div class="flex items-center gap-2 min-w-0">
+                            <div class="w-4 h-4 rounded-md bg-indigo-50 flex items-center justify-center shrink-0">
+                                <i class="fa fa-shield-halved text-[10px] text-indigo-500"></i>
+                            </div>
+                            <span class="text-xs font-bold text-indigo-600 uppercase truncate">
+                                {{ $usuario->rol->nombre }}
+                            </span>
                         </div>
                     </div>
                 </div>
 
-                {{-- FOOTER: FECHA Y BOTONES --}}
-                <div class="flex justify-between items-center mt-2 pt-2 border-t border-slate-50">
-                    <p class="text-[7px] text-slate-300 font-bold uppercase">
-                        {{ \Carbon\Carbon::parse($usuario->created_at)->format('d/m/y') }}
-                    </p>
+                <!-- ACCIONES Y FECHA DE CREACIÓN -->
+                <div class="flex justify-between items-center mt-4 pt-3 border-t border-slate-100">
+                    <div class="flex flex-col">
+                        <span class="text-[9px] text-slate-300 font-bold uppercase tracking-wider">Registro</span>
+                        <span class="text-[11px] text-slate-500 font-semibold">
+                            {{ \Carbon\Carbon::parse($usuario->created_at)->format('d/m/Y') }}
+                        </span>
+                    </div>
                     
-                    <div class="flex gap-1.5">
+                    <div class="flex items-center gap-2">
+                        <!-- Botón Perfil (Editar) -->
                         <a href="{{ route('admin.Usuarios.edit', $usuario->id) }}"
-                            class="h-6 px-3 flex items-center gap-1 text-white rounded-lg transition-all active:scale-95 shadow-sm"
-                            style="background: linear-gradient(135deg, #0ea5e9 0%, #0096D9 100%);">
-                            <i class="fas fa-edit text-[7px]"></i>
-                            <span class="text-[7px] font-black uppercase">Perfil</span>
+                        class="h-8 px-3.5 flex items-center gap-1.5 text-white bg-gradient-to-br from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 rounded-xl transition-all active:scale-95 shadow-xs shadow-sky-200">
+                            <i class="fas fa-edit text-[10px]"></i>
+                            <span class="text-xs font-bold tracking-tight">Perfil</span>
                         </a>
 
-                        <button onclick="confirmarEliminar({{ $usuario->id }}, '{{ $usuario->nombres }}')"
-                            class="w-6 h-6 flex items-center justify-center rounded-lg bg-rose-50 text-rose-500 hover:bg-rose-500 hover:text-white transition-all border border-rose-100">
-                            <i class="fa fa-trash text-[8px]"></i>
+                        <!-- Botón Eliminar -->
+                        <button class="btnEliminarUsuario w-8 h-8 flex items-center justify-center rounded-xl bg-slate-50 border border-slate-200 text-slate-400 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 transition-all active:scale-95 shrink-0"
+                                data-id="{{ $usuario->id }}" 
+                                data-nombre="{{ $usuario->nombres }}">
+                            <i class="fa-regular fa-trash-can text-xs"></i>
                         </button>
                     </div>
                 </div>
             </div>
+
         </div>
         @endforeach
     </div>
+
 </div>
 
 {{-- ── MODAL ELIMINAR ── --}}
-<div id="modalEliminar"
-    class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-    <div class="bg-white rounded-2xl w-full max-w-sm shadow-2xl p-8 text-center">
-
-        <div class="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+<div id="modalEliminarUsuario" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-black/50 backdrop-blur-sm transition-all">
+    <div class="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl p-8 text-center border border-gray-100">
+        <div class="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl shadow-inner">
             <i class="fa fa-trash"></i>
         </div>
-
-        <h3 class="text-lg font-bold text-gray-800">
-            ¿Eliminar Usuario?
-        </h3>
-
-        <p class="text-gray-500 mt-2 mb-6 text-xs">
-            Estás a punto de eliminar:
-            <span id="delete_nombre" class="font-bold text-red-600"></span>
-        </p>
-
+        <h3 class="text-lg font-bold text-gray-800">¿Eliminar Usuario?</h3>
+        <p class="text-gray-500 mt-2 mb-6 text-xs leading-relaxed">Esta acción eliminará <span id="delete_nombre" class="font-bold text-red-600"></span> y no se puede deshacer.</p>
         <form id="formEliminarUsuario" method="POST">
             @csrf
             @method('DELETE')
-
             <div class="flex gap-3">
-
-                <!-- CANCELAR -->
-                <button type="button"
-                    onclick="cerrarEliminarUsuario()"
-                    class="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-xl font-bold hover:bg-gray-200 text-xs">
-                    Cancelar
-                </button>
-
-                <!-- ELIMINAR -->
-                <button type="submit"
-                    class="flex-1 px-4 py-2 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 text-xs">
-                    Sí, eliminar
-                </button>
-
+                <button type="button" onclick="document.getElementById('modalEliminarUsuario').classList.add('hidden')" class="flex-1 px-4 py-3 bg-gray-100 text-gray-700 rounded-xl font-bold hover:bg-gray-200 text-xs transition-all">No, volver</button>
+                <button type="submit" class="flex-1 px-4 py-3 bg-[#e74c3c] text-white rounded-xl font-bold hover:bg-red-700 shadow-lg shadow-red-100 text-xs transition-all">Sí, eliminar</button>
             </div>
         </form>
-
     </div>
 </div>
-
 
 @endsection
