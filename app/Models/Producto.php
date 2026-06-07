@@ -15,16 +15,6 @@ class Producto extends Model
         'notas',
         'descripcion',
         'imagen',
-        'codigo_qr',
-        'codigo_barra',
-        'precio',
-        'costo',
-        'stock',
-        'stock_minimo',
-        'preparacion',
-        'tiempo_preparacion',
-        'delivery',
-        'destacado',
         'estado',
         'orden',
     ];
@@ -39,14 +29,12 @@ class Producto extends Model
         return $this->belongsTo(AreaProduccion::class, 'id_areap');
     }
 
-    public function getPrecioFormatAttribute()
+    public function presentaciones()
     {
-        return number_format($this->precio, 2);
+        return $this->hasMany(ProductoPres::class, 'producto_id');
     }
 
-    public function getStockBajoAttribute()
-    {
-        return $this->stock <= $this->stock_minimo;
-    }
+    
+    
     
 }

@@ -2,386 +2,137 @@
 @section('title', 'Nuevo Producto')
 
 @section('content')
-<div class="relative space-y-6 px-2 md:ml-4">
-    <div class="w-full flex flex-col md:flex-row justify-between items-center mb-8 gap-4 pr-0 md:pr-4">
-        <div class="flex items-center gap-4 text-center md:text-left">
-            <div class="hidden md:flex items-center justify-center w-14 h-14 rounded-2xl shadow-lg shadow-orange-200 animate-bounce" 
-                    style="background: linear-gradient(135deg, var(--primary, #0ea5e9) 0%, #0096D9 100%);">
 
-                <i class="fas fa-utensils text-white text-2xl"></i>
+<div class="w-full px-0 sm:px-6 animate-fade-in text-slate-700 space-y-6">
+    {{-- CABECERA --}}
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+        <div class="flex items-center gap-3">
+            <div class="w-14 h-14 rounded-2xl text-white flex items-center justify-center text-2xl shadow-sm border border-sky-100/50 flex-shrink-0" style="background: linear-gradient(135deg, var(--primary, #0ea5e9) 0%, #0096D9 100%);">
+                <i class="fas fa-box-open"></i>
             </div>
-
             <div>
-                <span class="inline-flex items-center bg-orange-50 text-orange-600 text-[10px] font-black px-3 py-1 rounded-full border border-orange-100 uppercase tracking-wider mb-1">
-                    <i class="fas fa-hamburger mr-1.5 text-[9px]"></i> GESTIÓN DE MENÚ
-                </span>
-                <h1 class="text-3xl font-black text-slate-800 tracking-tight">Nuevo Plato</h1>
+                <h2 class="text-xl font-black text-slate-800 tracking-tight">Nuevo Producto</h2>
+                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Complete los datos para registrar un nuevo producto</p>
             </div>
         </div>
-
-        <!-- Botón Volver -->
-        <a href="{{ route('admin.Producto.index') }}" 
-        class="flex items-center gap-3 px-2 py-2 pr-6 bg-white border border-slate-200 rounded-2xl text-[11px] font-black text-slate-600 uppercase tracking-tight hover:bg-slate-50 hover:border-slate-300 hover:text-slate-800 transition-all duration-300 shadow-sm group w-full md:w-auto">  
-            <div class="w-10 h-10 flex-shrink-0 rounded-xl flex items-center justify-center text-white shadow-md transition-all duration-300 group-hover:scale-110 group-hover:-rotate-12" 
-               style="background: linear-gradient(135deg, var(--primary, #0ea5e9) 0%, #0096D9 100%);">
-                <i class="fas fa-chevron-left text-[10px] transition-transform group-hover:-translate-x-0.5"></i>
-            </div>
-
-            <span>Volver a la lista</span>
-        </a>
     </div>
 
-    <div class="w-full bg-white rounded-xl border-t-4 border-t-[#0ea5e9] border-x border-b border-slate-200 shadow-sm">
-        <form action="{{ route('admin.Producto.store') }}" method="POST" enctype="multipart/form-data" class="p-4 md:p-8">
+    {{-- FORMULARIO --}}
+    <div class="bg-white rounded-2xl border border-slate-100 p-4 sm:p-6 shadow-sm">
+        <form action="{{ route('admin.producto.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
             @csrf
 
-            {{-- Grid de 4 columnas en desktop --}}
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-6">
-                
-                {{-- 1. Nombre --}}
-                <div class="col-span-1 group/field">
-                    <label class="block text-[11px] font-black text-slate-700 uppercase mb-2 ml-1 tracking-tight">
-                        Nombre del Plato <span class="text-red-500 font-bold"></span>
-                    </label>
-                    
-                    <div class="flex items-center gap-4 transition-transform duration-300 hover:translate-x-1">
-                    
-                        <div class="w-10 h-10 flex-shrink-0 rounded-xl flex items-center justify-center text-white shadow-md transition-all duration-300 group-hover/field:scale-110" 
-                           style="background: linear-gradient(135deg, var(--primary, #0ea5e9) 0%, #0096D9 100%);">
-                            <i class="fas fa-utensils text-xs"></i>
+            {{-- GRID SUPERIOR --}}
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {{-- Nombre --}}
+                <div class="space-y-1.5">
+                    <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Nombre <span class="text-red-500">*</span></label>
+                    <div class="flex h-[42px] rounded-xl border border-slate-200 overflow-hidden focus-within:ring-2 focus-within:ring-sky-500/20 transition-all bg-white">
+                        <div class="w-12 flex items-center justify-center bg-slate-50 border-r border-slate-200">
+                            <i class="fas fa-tag text-slate-400"></i>
                         </div>
-
-                    
-                        <div class="relative flex-1">
-                            <input type="text" 
-                                name="nombre" 
-                                placeholder="Ej: Lomo Saltado, Ceviche..." 
-                                class="block w-full px-4 py-3 bg-[#f8fafc] border border-slate-200 rounded-xl text-sm text-slate-600 placeholder:text-slate-400 outline-none transition-all duration-300 
-                                    focus:bg-white 
-                                    focus:border-slate-400
-                                    focus:ring-4 
-                                    focus:ring-slate-200/50" 
-                                required>
-                        </div>
-                    </div>
-                </div>
-                {{-- 2. Categoría --}}
-                <div class="col-span-1 group/field">
-                    <label class="block text-[11px] font-black text-slate-700 uppercase mb-2 ml-1 tracking-tight">
-                        Categoría <span class="text-red-500 font-bold"></span>
-                    </label>
-                    
-                    <div class="flex items-center gap-4 transition-transform duration-300 hover:translate-x-1">
-                        <div class="w-10 h-10 flex-shrink-0 rounded-xl flex items-center justify-center text-white shadow-md transition-all duration-300 group-hover/field:scale-110" 
-                           style="background: linear-gradient(135deg, var(--primary, #0ea5e9) 0%, #0096D9 100%);">
-                            <i class="fas fa-list-ul text-xs"></i>
-                        </div>
-
-                        <div class="relative flex-1">
-                            <select name="id_catg" 
-                                    class="block w-full px-4 py-3 bg-[#f8fafc] border border-slate-200 rounded-xl text-sm text-slate-600 outline-none appearance-none cursor-pointer transition-all duration-300 focus:bg-white focus:border-slate-400 focus:ring-4 focus:ring-slate-200/50" 
-                                    required>
-                                <option value="" disabled selected>Seleccione una categoría</option>
-                                @foreach($categorias as $cat)
-                                    <option value="{{ $cat->id }}">{{ $cat->descripcion }}</option>
-                                @endforeach
-                            </select>
-                            <i class="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-[10px] pointer-events-none"></i>
-                        </div>
+                        <input type="text" name="nombre" class="w-full bg-transparent px-3 outline-none text-sm text-slate-700" placeholder="Nombre del producto" required>
                     </div>
                 </div>
 
-                {{-- 3. Área de Preparación --}}
-                <div class="col-span-1 group/field">
-                    <label class="block text-[11px] font-black text-slate-700 uppercase mb-2 ml-1 tracking-tight">
-                        Área de Preparación <span class="text-red-500 font-bold"></span>
-                    </label>
-                    
-                    <div class="flex items-center gap-4 transition-transform duration-300 hover:translate-x-1">
-                        <div class="w-10 h-10 flex-shrink-0 rounded-xl flex items-center justify-center text-white shadow-md transition-all duration-300 group-hover/field:scale-110" 
-                            style="background: linear-gradient(135deg, var(--primary, #0ea5e9) 0%, #0096D9 100%);">
-                            <i class="fas fa-map-marker-alt text-xs"></i>
+                {{-- Categoría --}}
+                <div class="space-y-1.5">
+                    <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Categoría <span class="text-red-500">*</span></label>
+                    <div class="flex h-[42px] rounded-xl border border-slate-200 overflow-hidden bg-white">
+                        <div class="w-12 flex items-center justify-center bg-slate-50 border-r border-slate-200">
+                            <i class="fas fa-th-large text-slate-400"></i>
                         </div>
-
-                        <div class="relative flex-1">
-                            <select name="id_areap" 
-                                    class="block w-full px-4 py-3 bg-[#f8fafc] border border-slate-200 rounded-xl text-sm text-slate-600 outline-none appearance-none cursor-pointer transition-all duration-300 focus:bg-white focus:border-slate-400 focus:ring-4 focus:ring-slate-200/50" 
-                                    required>
-                                <option value="" disabled selected>Seleccione área...</option>
-                                @foreach($areas as $area)
-                                    <option value="{{ $area->id }}">{{ $area->nombre }}</option>
-                                @endforeach
-                            </select>
-                            <i class="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-[10px] pointer-events-none"></i>
-                        </div>
+                        <select name="id_catg" class="w-full bg-transparent px-3 outline-none text-sm text-slate-700" required>
+                            <option value="" disabled selected>Seleccione</option>
+                            @foreach($categorias as $cat)<option value="{{ $cat->id }}">{{ $cat->descripcion }}</option>@endforeach
+                        </select>
                     </div>
                 </div>
 
-                {{-- 4. Preparación --}}
-                <div class="col-span-1 group/field">
-                    <label class="block text-[11px] font-black text-slate-700 uppercase mb-2 ml-1 tracking-tight">
-                        Preparación
-                    </label>
-                    
-                    <div class="flex items-center gap-4 transition-transform duration-300 hover:translate-x-1">
-                        <div class="w-10 h-10 flex-shrink-0 rounded-xl flex items-center justify-center text-white shadow-md transition-all duration-300 group-hover/field:scale-110" 
-                           style="background: linear-gradient(135deg, var(--primary, #0ea5e9) 0%, #0096D9 100%);">
-                            <i class="fas fa-concierge-bell text-xs"></i>
+                {{-- Área --}}
+                <div class="space-y-1.5">
+                    <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Área <span class="text-red-500">*</span></label>
+                    <div class="flex h-[42px] rounded-xl border border-slate-200 overflow-hidden bg-white">
+                        <div class="w-12 flex items-center justify-center bg-slate-50 border-r border-slate-200">
+                            <i class="fas fa-industry text-slate-400"></i>
                         </div>
-
-                        <div class="relative flex-1">
-                            <select name="preparacion" 
-                                    class="block w-full px-4 py-3 bg-[#f8fafc] border border-slate-200 rounded-xl text-sm text-slate-600 outline-none appearance-none cursor-pointer transition-all duration-300 focus:bg-white focus:border-slate-400 focus:ring-4 focus:ring-slate-200/50">
-                                <option value="cocina">Cocina</option>
-                                <option value="bodega">Bodega</option>
-                            </select>
-                            <i class="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-[10px] pointer-events-none"></i>
-                        </div>
+                        <select name="id_areap" class="w-full bg-transparent px-3 outline-none text-sm text-slate-700" required>
+                            <option value="" disabled selected>Seleccione</option>
+                            @foreach($areas as $area)<option value="{{ $area->id }}">{{ $area->nombre }}</option>@endforeach
+                        </select>
                     </div>
-                </div>
-
-                {{-- 5. Precio Venta --}}
-                <div class="col-span-1 group/field">
-                    <label class="block text-[11px] font-black text-slate-700 uppercase mb-2 ml-1 tracking-tight">
-                        Precio Venta <span class="text-red-500 font-bold">*</span>
-                    </label>
-                    
-                    <div class="flex items-center gap-4 transition-transform duration-300 hover:translate-x-1">
-                        <div class="w-10 h-10 flex-shrink-0 rounded-xl flex items-center justify-center text-white shadow-md transition-all duration-300 group-hover/field:scale-110" 
-                            style="background: linear-gradient(135deg, var(--primary, #0ea5e9) 0%, #0096D9 100%);">
-                            <span class="text-[10px] font-black">S/</span>
-                        </div>
-
-                        <div class="relative flex-1">
-                            <input type="number" step="0.01" name="precio" placeholder="0.00" 
-                                class="block w-full px-4 py-3 bg-[#f8fafc] border border-slate-200 rounded-xl text-sm font-bold text-slate-700 outline-none transition-all duration-300 focus:bg-white focus:border-slate-400 focus:ring-4 focus:ring-slate-200/50" 
-                                required>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- 6. Costo --}}
-                <div class="col-span-1 group/field">
-                    <label class="block text-[11px] font-black text-slate-700 uppercase mb-2 ml-1 tracking-tight">Costo Ref.</label>
-                    
-                    <div class="flex items-center gap-4 transition-transform duration-300 hover:translate-x-1">
-                        <div class="w-10 h-10 flex-shrink-0 rounded-xl flex items-center justify-center text-white shadow-md transition-all duration-300 group-hover/field:scale-110" 
-                            style="background: linear-gradient(135deg, var(--primary, #0ea5e9) 0%, #0096D9 100%);">
-                            <i class="fas fa-hand-holding-usd text-xs"></i>
-                        </div>
-
-                        <div class="relative flex-1">
-                            <input type="number" step="0.01" name="costo" placeholder="0.00" 
-                                class="block w-full px-4 py-3 bg-[#f8fafc] border border-slate-200 rounded-xl text-sm text-slate-600 outline-none transition-all duration-300 focus:bg-white focus:border-slate-400 focus:ring-4 focus:ring-slate-200/50">
-                        </div>
-                    </div>
-                </div>
-
-                {{-- 7. Stock --}}
-                <div class="col-span-1 group/field">
-                    <label class="block text-[11px] font-black text-slate-700 uppercase mb-2 ml-1 tracking-tight">Stock Actual</label>
-                    
-                    <div class="flex items-center gap-4 transition-transform duration-300 hover:translate-x-1">
-                        <div class="w-10 h-10 flex-shrink-0 rounded-xl flex items-center justify-center text-white shadow-md transition-all duration-300 group-hover/field:scale-110" 
-                            style="background: linear-gradient(135deg, var(--primary, #0ea5e9) 0%, #0096D9 100%);">
-                            <i class="fas fa-boxes text-xs"></i>
-                        </div>
-
-                        <div class="relative flex-1">
-                            <input type="number" name="stock" value="0" 
-                                class="block w-full px-4 py-3 bg-[#f8fafc] border border-slate-200 rounded-xl text-sm text-slate-600 outline-none transition-all duration-300 focus:bg-white focus:border-slate-400 focus:ring-4 focus:ring-slate-200/50">
-                        </div>
-                    </div>
-                </div>
-                {{-- 8. Stock Mínimo --}}
-                <div class="col-span-1 group/field">
-                    <label class="block text-[11px] font-black text-slate-700 uppercase mb-2 ml-1 tracking-tight">Stock Mínimo</label>
-                    <div class="flex items-center gap-4 transition-transform duration-300 hover:translate-x-1">
-                        <div class="w-10 h-10 flex-shrink-0 rounded-xl flex items-center justify-center text-white shadow-md transition-all duration-300 group-hover/field:scale-110" 
-                            style="background: linear-gradient(135deg, var(--primary, #0ea5e9) 0%, #0096D9 100%);">
-                            <i class="fas fa-exclamation-triangle text-xs"></i>
-                        </div>
-                        <div class="relative flex-1">
-                            <input type="number" name="stock_minimo" value="0" 
-                                class="block w-full px-4 py-3 bg-[#f8fafc] border border-slate-200 rounded-xl text-sm text-slate-600 outline-none transition-all duration-300 focus:bg-white focus:border-slate-400 focus:ring-4 focus:ring-slate-200/50">
-                        </div>
-                    </div>
-                </div>
-
-                {{-- 9. Tiempo (Min) --}}
-                <div class="col-span-1 group/field">
-                    <label class="block text-[11px] font-black text-slate-700 uppercase mb-2 ml-1 tracking-tight">Tiempo (Min)</label>
-                    <div class="flex items-center gap-4 transition-transform duration-300 hover:translate-x-1">
-                        <div class="w-10 h-10 flex-shrink-0 rounded-xl flex items-center justify-center text-white shadow-md transition-all duration-300 group-hover/field:scale-110" 
-                            style="background: linear-gradient(135deg, var(--primary, #0ea5e9) 0%, #0096D9 100%);">
-                            <i class="fas fa-clock text-xs"></i>
-                        </div>
-                        <div class="relative flex-1">
-                            <input type="number" name="tiempo_preparacion" value="0" 
-                                class="block w-full px-4 py-3 bg-[#f8fafc] border border-slate-200 rounded-xl text-sm text-slate-600 outline-none transition-all duration-300 focus:bg-white focus:border-slate-400 focus:ring-4 focus:ring-slate-200/50">
-                        </div>
-                    </div>
-                </div>
-
-                {{-- 10. Código de Barras --}}
-                <div class="col-span-1 group/field">
-                    <label class="block text-[11px] font-black text-slate-700 uppercase mb-2 ml-1 tracking-tight">
-                        Cod. Barras
-                    </label>
-
-                    <div class="flex items-center gap-4 transition-transform duration-300 hover:translate-x-1">
-
-                        <!-- Icono -->
-                        <div class="w-10 h-10 flex-shrink-0 rounded-xl flex items-center justify-center text-white shadow-md"
-                            style="background: linear-gradient(135deg, var(--primary, #0ea5e9) 0%, #0096D9 100%);">
-                            <i class="fas fa-barcode text-xs"></i>
-                        </div>
-
-                        <!-- Input + botón -->
-                        <div class="relative flex-1 flex gap-2">
-                            <input id="codigo_barra" type="text" name="codigo_barra" placeholder="Opcional"
-                                class="block w-full px-4 py-3 bg-[#f8fafc] border border-slate-200 rounded-xl text-sm text-slate-600 outline-none">
-
-                            <!-- Botón generar -->
-                            <button type="button" id="btnGenerarCodigo"
-                                class="px-4 py-2 rounded-xl text-white text-xs font-bold shadow-md transition-all hover:scale-105"
-                                style="background: linear-gradient(135deg, #22c55e, #16a34a);">
-                                Generar
-                            </button>
-                        </div>
-
-                    </div>
-                </div>
-
-                {{-- 11. Estado --}}
-                <div class="col-span-1 group/field">
-                    <label class="block text-[11px] font-black text-slate-700 uppercase mb-2 ml-1 tracking-tight">Estado</label>
-                    <div class="flex items-center gap-4 transition-transform duration-300 hover:translate-x-1">
-                        <div class="w-10 h-10 flex-shrink-0 rounded-xl flex items-center justify-center text-white shadow-md transition-all duration-300 group-hover/field:scale-110" 
-                            style="background: linear-gradient(135deg, var(--primary, #0ea5e9) 0%, #0096D9 100%);">
-                            <i class="fas fa-toggle-on text-xs"></i>
-                        </div>
-                        <div class="relative flex-1">
-                            <select name="estado" 
-                                class="block w-full px-4 py-3 bg-[#f8fafc] border border-slate-200 rounded-xl text-sm text-slate-600 outline-none appearance-none cursor-pointer transition-all duration-300 focus:bg-white focus:border-slate-400 focus:ring-4 focus:ring-slate-200/50">
-                                <option value="a">Habilitado</option>
-                                <option value="i">Inhabilitado</option>
-                            </select>
-                            <i class="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-[10px] pointer-events-none"></i>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- 12. Orden --}}
-                <div class="col-span-1 group/field">
-                    <label class="block text-[11px] font-black text-slate-700 uppercase mb-2 ml-1 tracking-tight">Orden</label>
-                    <div class="flex items-center gap-4 transition-transform duration-300 hover:translate-x-1">
-                        <div class="w-10 h-10 flex-shrink-0 rounded-xl flex items-center justify-center text-white shadow-md transition-all duration-300 group-hover/field:scale-110" 
-                            style="background: linear-gradient(135deg, var(--primary, #0ea5e9) 0%, #0096D9 100%);">
-                            <i class="fas fa-sort-numeric-down text-xs"></i>
-                        </div>
-                        <div class="relative flex-1">
-                            <input type="number" name="orden" value="0" 
-                                class="block w-full px-4 py-3 bg-[#f8fafc] border border-slate-200 rounded-xl text-sm text-slate-600 outline-none transition-all duration-300 focus:bg-white focus:border-slate-400 focus:ring-4 focus:ring-slate-200/50">
-                        </div>
-                    </div>
-                </div>
-
-                {{-- 15. Switches --}}
-                <div class="col-span-1 sm:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
-                    {{-- 1. Switch Delivery --}}
-                    <div class="flex items-center justify-between py-2 px-4 bg-slate-50 border border-slate-200 rounded-2xl transition-all duration-300 hover:translate-x-1 group/sw h-[58px]">
-                        <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white shadow-sm transition-transform group-hover/sw:scale-110" 
-                                style="background: linear-gradient(135deg, #64748b 0%, #334155 100%);">
-                                <i class="fas fa-motorcycle text-[10px]"></i>
-                            </div>
-                            <span class="text-[10px] font-black text-slate-700 uppercase tracking-tight">Delivery</span>
-                        </div>
-                        <label class="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" name="delivery" checked value="1" class="sr-only peer">
-                            <div class="w-9 h-5 bg-slate-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500"></div>
-                        </label>
-                    </div>
-
-                    {{-- 2. Switch Destacado --}}
-                    <div class="flex items-center justify-between py-2 px-4 bg-slate-50 border border-slate-200 rounded-2xl transition-all duration-300 hover:translate-x-1 group/sw h-[58px]">
-                        <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white shadow-sm transition-transform group-hover/sw:scale-110" 
-                                style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
-                                <i class="fas fa-star text-[10px]"></i>
-                            </div>
-                            <span class="text-[10px] font-black text-slate-700 uppercase tracking-tight">Destacado</span>
-                        </div>
-                        <label class="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" name="destacado" value="1" class="sr-only peer">
-                            <div class="w-9 h-5 bg-slate-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-500"></div>
-                        </label>
-                    </div>
-
-                    {{-- 3. Carga de Imagen --}}
-                    <div class="flex items-center gap-2 transition-transform duration-300 hover:translate-x-1 group/img h-[58px]">
-                        {{-- Botón de Subida --}}
-                        <div class="relative flex flex-col items-center justify-center flex-1 h-full border-2 border-dashed border-slate-200 rounded-2xl bg-[#f8fafc] hover:bg-white hover:border-slate-400 transition-all cursor-pointer group/upload">
-                            <div class="flex items-center gap-2">
-                                <i class="fas fa-cloud-upload-alt text-slate-400 text-xs group-hover/upload:text-slate-600 transition-all"></i>
-                                <span class="text-[9px] font-black text-slate-400 uppercase group-hover/upload:text-slate-600">Subir Imagen</span>
-                            </div>
-                            <input type="file" name="imagen" class="absolute inset-0 opacity-0 cursor-pointer" accept="image/*" onchange="previewImage(event)">
-                        </div>
-
-                        {{-- Preview Reducido con mejor acabado --}}
-                        <div id="previewContainer" class="hidden w-[58px] h-[58px] rounded-2xl border-2 border-white shadow-sm overflow-hidden bg-slate-100 relative group/preview">
-                            <img id="imagePreview" class="w-full h-full object-cover transition-transform duration-500 group-hover/preview:scale-110">
-                            <div class="absolute inset-0 bg-emerald-500/10 flex items-center justify-center opacity-0 group-hover/preview:opacity-100 transition-opacity">
-                                <i class="fas fa-check-circle text-emerald-500 text-xs"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {{-- Contenedor de Notas y Descripción en una sola fila --}}
-                <div class="col-span-1 sm:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                    
-                    {{-- Notas Internas --}}
-                    <div class="group/field">
-                        <label class="block text-[11px] font-black text-slate-700 uppercase mb-2 ml-1 tracking-tight">Notas Internas</label>
-                        <div class="flex items-start gap-4 transition-transform duration-300 hover:translate-x-1">
-                            <div class="w-10 h-10 flex-shrink-0 rounded-xl flex items-center justify-center text-white shadow-md transition-all duration-300 group-hover/field:scale-110" 
-                                style="background: linear-gradient(135deg, var(--primary, #0ea5e9) 0%, #0096D9 100%);">
-                                <i class="fas fa-sticky-note text-xs"></i>
-                            </div>
-                            <div class="relative flex-1">
-                                <textarea name="notas" rows="2" placeholder="Escribe notas aquí..."
-                                    class="block w-full px-4 py-3 bg-[#f8fafc] border border-slate-200 rounded-xl text-sm text-slate-600 outline-none transition-all duration-300 focus:bg-white focus:border-slate-400 focus:ring-4 focus:ring-slate-200/50 resize-none"></textarea>
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- Descripción Pública --}}
-                    <div class="group/field">
-                        <label class="block text-[11px] font-black text-slate-700 uppercase mb-2 ml-1 tracking-tight">Descripción Pública</label>
-                        <div class="flex items-start gap-4 transition-transform duration-300 hover:translate-x-1">
-                            <div class="w-10 h-10 flex-shrink-0 rounded-xl flex items-center justify-center text-white shadow-md transition-all duration-300 group-hover/field:scale-110" 
-                                style="background: linear-gradient(135deg, var(--primary, #0ea5e9) 0%, #0096D9 100%);">
-                                <i class="fas fa-align-left text-xs"></i>
-                            </div>
-                            <div class="relative flex-1">
-                                <textarea name="descripcion" rows="2" placeholder="Describe el plato..."
-                                    class="block w-full px-4 py-3 bg-[#f8fafc] border border-slate-200 rounded-xl text-sm text-slate-600 outline-none transition-all duration-300 focus:bg-white focus:border-slate-400 focus:ring-4 focus:ring-slate-200/50 resize-none"></textarea>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
             </div>
 
-            {{-- Botón Guardar con degradado dinámico --}}
-            <div class="flex justify-end mt-12 border-t border-slate-100 pt-8">
-                <button type="submit" 
-                    style="background: linear-gradient(135deg, var(--primary, #0ea5e9) 0%, #0096D9 100%);" 
-                    class="w-full md:w-auto px-16 py-4 rounded-xl text-white font-[900] text-xs uppercase tracking-[2px] shadow-lg shadow-blue-100 hover:opacity-90 transition-all flex items-center justify-center group">
-                    <i class="fas fa-save mr-3 group-hover:scale-110 transition-transform text-base"></i> 
-                    GUARDAR PRODUCTO
+            {{-- BLOQUE MEDIO: Imagen a la izquierda, Estado/Orden y Editores a la derecha --}}
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 pt-4 border-t border-slate-100">
+                <div class="space-y-6 lg:col-span-1">
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Imagen</label>
+                        <input type="file" name="imagen" id="imagen" class="hidden" onchange="document.getElementById('file-text').textContent = this.files[0].name">
+                        <label for="imagen" class="flex flex-col items-center justify-center w-full h-[190px] border-2 border-dashed border-slate-200 rounded-2xl cursor-pointer bg-slate-50/50 hover:bg-white hover:border-sky-400 transition-all text-center p-3">
+                            <i class="fas fa-cloud-upload-alt text-4xl" style="background: linear-gradient(135deg, var(--primary, #0ea5e9) 0%, #0096D9 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
+                            <p class="text-[10px] font-bold text-slate-400 mt-1 uppercase tracking-wider" id="file-text">Seleccionar Archivo</p>
+                        </label>
+                    </div>
+                    
+                    {{-- Botones Estado y Orden debajo de la imagen --}}
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                            Estado del Producto
+                        </label>
+
+                        <div class="flex items-center">
+                            <label class="relative inline-flex items-center cursor-pointer">                               
+                                <input type="checkbox" name="estado" value="a" class="sr-only peer">
+
+                                <div class="relative w-14 h-7 bg-slate-300 rounded-full transition-all duration-300
+                                            peer-checked:bg-green-600
+                                            after:content-[''] after:absolute after:top-[2px] after:left-[2px] 
+                                            after:bg-white after:rounded-full after:h-6 after:w-6 
+                                            after:transition-all
+                                            peer-checked:after:translate-x-full">
+                                </div>
+                                <span class="ml-3 text-sm font-bold text-slate-700">
+                                    <span class="hidden peer-checked:inline text-green-600">Activo</span>
+                                    <span class="peer-checked:hidden">Inactivo</span>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                        
+                </div>
+
+                {{-- Columna Editores --}}
+                <div class="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                            Notas
+                        </label>
+                        <div class="rounded-xl border border-slate-200 overflow-hidden h-40">
+                            <textarea name="notas" id="editor-notas" rows="7"
+                                class="w-full h-full p-3 outline-none resize-none">
+                            </textarea>
+                        </div>
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                            Descripción
+                        </label>
+                        <div class="rounded-xl border border-slate-200 overflow-hidden h-40">
+                            <textarea name="descripcion" id="editor-descripcion" rows="7"
+                                class="w-full h-full p-3 outline-none resize-none">
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- BOTONES ACCIÓN --}}
+            <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+                <a href="{{ route('admin.producto.index') }}" class="px-6 py-3 rounded-xl border border-slate-200 text-slate-600 font-bold text-xs uppercase hover:bg-slate-50 transition-all">Cancelar</a>
+                <button type="submit" class="text-white px-8 py-3 rounded-xl font-bold text-xs uppercase shadow-lg transition-all" style="background: linear-gradient(135deg, var(--primary, #0ea5e9) 0%, #0096D9 100%);">
+                    Guardar Producto
                 </button>
             </div>
         </form>

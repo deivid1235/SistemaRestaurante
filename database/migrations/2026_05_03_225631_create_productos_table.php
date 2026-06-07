@@ -19,16 +19,6 @@ return new class extends Migration
             $table->text('notas')->nullable();
             $table->text('descripcion')->nullable();
             $table->string('imagen')->nullable();
-            $table->string('codigo_qr')->nullable();
-            $table->string('codigo_barra')->nullable();
-            $table->decimal('precio', 10, 2);
-            $table->decimal('costo', 10, 2)->nullable();
-            $table->integer('stock')->default(0);
-            $table->integer('stock_minimo')->default(0);
-            $table->enum('preparacion', ['cocina', 'bodega']);
-            $table->integer('tiempo_preparacion')->default(0);
-            $table->boolean('delivery')->default(true);
-            $table->boolean('destacado')->default(false);
             $table->char('estado', 1)->default('a');
             $table->integer('orden')->default(0);
             $table->timestamps();

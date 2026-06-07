@@ -29,6 +29,9 @@ use App\Http\Controllers\Auth\LoginCliente;
 use App\Http\Controllers\InsumoController;
 use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\VentaController;
+use App\Http\Controllers\ProductoPresController;
+use App\Http\Controllers\PedidoMesaController;
+
 
 
 
@@ -165,15 +168,20 @@ Route::middleware('auth')->group(function () {
     Route::delete('/admin/Categoria/delete/{id}', [ProductoCategoriaController::class, 'destroy'])->name('admin.Categoria.destroy');
     Route::get('/admin/Categoria/{id}/edit', [ProductoCategoriaController::class, 'edit'])->name('admin.Categoria.edit');
     //Producto
-    Route::get('admin/Producto', [ProductoController::class, 'index'])->name('admin.Producto.index');
-    Route::get('admin/Producto/create', [ProductoController::class, 'create'])->name('admin.Producto.create');
-    Route::post('admin/Producto', [ProductoController::class, 'store'])->name('admin.Producto.store');
-    Route::get('admin/Producto/{producto}/edit', [ProductoController::class, 'edit'])->name('admin.Producto.edit');
-    Route::put('admin/Producto/{id}', [ProductoController::class, 'update'])->name('admin.Producto.update');
-    Route::delete('admin/Producto/{producto}', [ProductoController::class, 'destroy'])->name('admin.Producto.destroy');
-    Route::get('admin/Producto/ticket/{id}', [ProductoController::class, 'ticket']) ->name('admin.Producto.ticket');
-    Route::get('admin/Producto/{producto}', [ProductoController::class, 'show'])->name('admin.Producto.show');
-    Route::get('admin/Producto/{id}/print', [ProductoController::class, 'print'])->name('admin.Producto.print');
+    Route::get('admin/producto', [ProductoController::class, 'index'])->name('admin.producto.index');
+    Route::get('admin/producto/create', [ProductoController::class, 'create'])->name('admin.producto.create');
+    Route::post('admin/producto', [ProductoController::class, 'store'])->name('admin.producto.store');
+    Route::get('admin/producto/{producto}/edit', [ProductoController::class, 'edit'])->name('admin.producto.edit');
+    Route::get('admin/producto/{id}/edit', [ProductoController::class, 'edit'])
+    ->name('admin.producto.edit');
+    Route::put('admin/producto/{id}', [ProductoController::class, 'update'])->name('admin.producto.update');
+    Route::delete('admin/producto/{producto}', [ProductoController::class, 'destroy'])->name('admin.producto.destroy');
+    // Rutas para Presentación de Producto
+    Route::get('/admin/producto_temp/{id}', [ProductoPresController::class, 'create'])->name('admin.producto_temp.create');
+    Route::post('/admin/producto_pres', [ProductoPresController::class, 'store'])->name('admin.producto_pres.store');
+    Route::get('producto_temp/form/{id}', [ProductoPresController::class, 'form'])->name('admin.producto_temp.form');
+    Route::put('producto_temp/{id}', [ProductoPresController::class, 'update'])->name('admin.producto_temp.update');
+
     // Rutas para Combos
     Route::get('/admin/Combos', [ComboController::class, 'index'])->name('admin.Combos.index');
     Route::post('/admin/Combos', [ComboController::class, 'store'])->name('admin.Combos.store');
@@ -211,7 +219,14 @@ Route::middleware('auth')->group(function () {
     Route::delete('/admin/Insumo/{insumo}', [InsumoController::class, 'destroy'])->name('admin.Insumo.destroy');
     //Ruta de Venta
     Route::get('/admin/Venta', [VentaController::class, 'index'])->name('admin.Venta.index');
- 
+    Route::get('admin/Venta/orden/{id}', [VentaController::class, 'orden'])->name('admin.Venta.orden');
+    Route::get('admin/Venta/agregar-carrito/{id}', [VentaController::class, 'agregar'])->name('admin.Venta.agregar-carrito');
+    Route::get('admin/Venta/carrito/{accion}/{id?}', [VentaController::class, 'carritoAccion'])->name('admin.Venta.carrito-accion');
+    Route::get('admin/Venta/pago', [VentaController::class, 'pago'])->name('admin.Venta.pago');
+    //Rutas para Pedido Mesa
+    Route::post('admin/Venta/pedido/guardar', [VentaController::class, 'GuardarPedido'])->name('admin.Venta.guardar');
+    Route::get('/venta/cancelar/{id}', [VentaController::class, 'cancelarPedido'])->name('admin.Venta.cancelar');
+        
     
 });
 

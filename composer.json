@@ -12,6 +12,7 @@
         "laravel/tinker": "^2.10.1",
         "laravel/ui": "^4.6",
         "milon/barcode": "^13.1",
+        "picqer/php-barcode-generator": "^3.2",
         "simplesoftwareio/simple-qrcode": "^4.2",
         "spatie/laravel-permission": "^7.4"
     },

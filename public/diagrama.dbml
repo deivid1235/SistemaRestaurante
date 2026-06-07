@@ -2,7 +2,7 @@ Table venta {
     id_venta int [pk, increment]
 
     // RELACIONES PRINCIPALES
-    id_pedido int [ref: > pedidos.id]
+    id_pedido_mesa int [ref: > Pedido_mesa.id]
     id_tipo_pedido int [ref: > tipo_pedido.id]
     id_cliente int [ref: > clientes.id]
     id_tipo_doc int [ref: > tipo_documentos.id]
@@ -89,7 +89,6 @@ Table pedido_delivery {
 
 Table Pedido_mesa {
     id int [pk, increment]
-    id_pedido int [ref: > pedidos.id]
     id_mesa int [ref: > mesas.id_mesa]
     id_mozo int [ref: > usuarios.id]
     nombre_cliente varchar(150)
@@ -99,15 +98,7 @@ Table Pedido_mesa {
 }
 
 
-Table pedidos {
-    id int [pk, increment]
-    id_tipo_pedido int [ref: > tipo_pedido.id]
-    id_usuario int [ref: > usuarios.id]
-    fecha_pedido datetime
-    estado varchar(20)
-    created_at datetime
-    updated_at datetime
-}
+
 
 Table tipo_pedido {
     id int [pk, increment]
@@ -215,7 +206,6 @@ Table combos {
     updated_at datetime
 }
 
-
 Table productos {
     id int [pk, increment]
     id_catg int [ref: > producto_categorias.id_catg]
@@ -223,23 +213,37 @@ Table productos {
     nombre varchar(255)
     notas text
     descripcion text
-    imagen varchar(255) //  ruta de la imagen
-    codigo_qr varchar(255) //  QR del producto (opcional)
-    codigo_barra varchar(100) //  para escáner
-    precio decimal(10,2) //  PRECIO (CLAVE)
-    costo decimal(10,2) //  opcional para ganancias
-    stock int //  control de inventario
-    stock_minimo int //  alerta de stock bajo
-    preparacion enum('cocina', 'bodega')
-    tiempo_preparacion int //  minutos
-    delivery boolean
-    destacado boolean //  producto destacado
-    estado char(1) // a = activo, i = inactivo
+    imagen varchar(255)
+    estado char(1)
     orden int
+    created_at datetime
+    updated_at datetime
+}
+
+Table producto_pres {
+    id int [pk, increment]
+    producto_id int [ref: > productos.id]
+    codigo varchar(50)
+    codigo_qr varchar(255)
+    codigo_barra varchar(100)
+    presentacion varchar(100)
+    descripcion varchar(150)
+    precio decimal(10,2)
+    precio_delivery decimal(10,2) [default: 0]
+    costo decimal(10,2) [default: 0]
+    stock int [default: 0]
+    stock_min int [default: 0]
+    igv decimal(5,2) [default: 18]
+    receta text
+    delivery boolean [default: true]
+    estado char(1) [default: 'a']
+    orden int [default: 0]
 
     created_at datetime
     updated_at datetime
 }
+
+
 
 Table areas_produccion {
     id int [pk, increment]

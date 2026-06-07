@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('ventas', function (Blueprint $table) {
             $table->id();
             // RELACIONES PRINCIPALES
-            $table->foreignId('id_pedido')->constrained('pedidos');
+            $table->foreignId('id_pedido_mesa')->constrained('pedido_mesas');
             $table->foreignId('id_tipo_pedido')->constrained('tipo_pedido');
             $table->foreignId('id_cliente')->constrained('clientes');
             $table->foreignId('id_tipo_doc')->constrained('tipo_documentos');

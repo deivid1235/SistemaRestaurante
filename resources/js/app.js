@@ -902,21 +902,51 @@ window.seleccionarSalon = function (id, nombre) {
     });
 };
 
-window.abrirEliminar = function (id, nombre, tipo) {
-    const form = document.getElementById('formEliminar');
-
-    let baseUrl = (tipo === 'mesa')
-        ? '/admin/mesa/'
-        : '/admin/Salon/';
-
-    form.action = baseUrl + id;
-
-    document.getElementById('delete_nombre').innerText = nombre;
+document.addEventListener('DOMContentLoaded', function () {
 
     const modal = document.getElementById('modalEliminar');
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
-};
+    const form = document.getElementById('formEliminar');
+    const texto = document.getElementById('delete_nombre');
+
+    if (!modal || !form || !texto) {
+        console.error('Faltan elementos del modal eliminar');
+        return;
+    }
+    document.querySelectorAll('.btnEliminarMesa, .btnEliminarSalon').forEach(btn => {
+        btn.addEventListener('click', function () {
+
+            const id = this.dataset.id;
+            const nombre = this.dataset.nombre;
+
+            let tipo = this.classList.contains('btnEliminarMesa')
+                ? 'mesa'
+                : 'salon';
+
+            let baseUrl = '';
+
+            if (tipo === 'mesa') {
+                baseUrl = '/admin/mesa/';
+            } else if (tipo === 'salon') {
+                baseUrl = '/admin/Salon/';
+            }
+
+            form.action = baseUrl + id;
+            texto.innerText = nombre;
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        });
+    });
+
+    window.cerrarModal = function (id) {
+        const m = document.getElementById(id);
+        if (!m) return;
+
+        m.classList.add('hidden');
+        m.classList.remove('flex');
+    };
+
+});
 
 window.abrirCrearSalon = function () {
     const form = document.getElementById('formSalon');
@@ -1622,55 +1652,29 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // Productos
-function previewImage(event) {
-    const reader = new FileReader();
+document.addEventListener('DOMContentLoaded', function () {
+    const inputImagen = document.getElementById('imagen');
+    if (inputImagen) {
+        inputImagen.addEventListener('change', function (e) {
 
-    reader.onload = function () {
-        const output = document.getElementById("imagePreview");
-        const container = document.getElementById("previewContainer");
+            const file = e.target.files[0];
+            const label = e.target.nextElementSibling;
 
-        if (output && container) {
-            output.src = reader.result;
-            container.classList.remove("hidden");
-        }
-    };
+            if (!file || !label) return;
 
-    if (event.target.files && event.target.files[0]) {
-        reader.readAsDataURL(event.target.files[0]);
-    }
-}
+            const reader = new FileReader();
 
-window.abrirModalQR = function (qr, barra, nombre, pdfUrl) {
-
-    const qrImg = document.getElementById('qrImg');
-    const barraImg = document.getElementById('barraImg');
-    const nombreText = document.getElementById('modalNombreProducto');
-    const btnPDF = document.getElementById('btnPdf'); 
-    const modal = document.getElementById('modalQR');
-    
-
-    if (!modal) {
-        console.error("Modal QR no encontrado");
-        return;
+            reader.onload = function (event) {
+                label.innerHTML = `
+                    <img src="${event.target.result}" 
+                        style="width:100%; height:100%; object-fit:cover; border-radius:16px;">
+                `;
+            };
+            reader.readAsDataURL(file);
+        });
     }
 
-    if (qrImg) qrImg.src = qr;
-    if (barraImg) barraImg.src = barra;
-    if (nombreText) nombreText.innerText = nombre;
-    if (btnPDF) btnPDF.href = pdfUrl;
-
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
-};
-
-window.cerrarModalQR = function () {
-    const modal = document.getElementById('modalQR');
-
-    if (!modal) return;
-
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
-};
+});
 
 window.abrirEliminarProducto = function (id, nombre) {
 
@@ -1684,7 +1688,7 @@ window.abrirEliminarProducto = function (id, nombre) {
     }
 
     nombreSpan.textContent = nombre;
-    form.action = `/admin/Producto/${id}`;
+    form.action = `/admin/producto/${id}`;
 
     modal.classList.remove("hidden");
     modal.classList.add("flex");
@@ -1698,7 +1702,6 @@ window.cerrarEliminarProducto = function () {
     modal.classList.add("hidden");
     modal.classList.remove("flex");
 };
-
 document.addEventListener('DOMContentLoaded', function () {
     const btn = document.getElementById("btnGenerarCodigo");
     const input = document.getElementById("codigo_barra");
@@ -1751,8 +1754,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (buscador) buscador.addEventListener('input', filtrar);
 
 });
-
-
 // Combos
 document.addEventListener("DOMContentLoaded", () => {
 

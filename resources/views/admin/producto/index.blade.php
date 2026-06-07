@@ -34,7 +34,7 @@
                     Volver al Menú
                 </a>
 
-                <a href="{{ route('admin.Producto.create') }}" 
+                <a href="{{ route('admin.producto.create') }}" 
                 class="flex items-center justify-center gap-3 px-8 py-3 bg-white text-[#0096D9] rounded-2xl font-extrabold text-sm shadow-xl hover:shadow-2xl hover:scale-105 transition-all active:scale-95">
                     <i class="fas fa-plus animate-bounce"></i> 
                     Nuevo Producto
@@ -47,20 +47,17 @@
     </div>
 
     {{-- Tarjetas de Estadísticas --}}
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
         @php
             $total = $productos->count();
             $activos = $productos->where('estado', 'a')->count();
             $inactivos = $productos->where('estado', 'i')->count();
-            $delivery = $productos->where('delivery', 1)->count();
 
             $divisor = $total > 0 ? $total : 1;
             $porcActivos = round(($activos / $divisor) * 100);
             $porcInactivos = round(($inactivos / $divisor) * 100);
-            $porcDelivery = round(($delivery / $divisor) * 100);
         @endphp
 
-        <!-- Total -->
         <div class="group relative bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4 transition-all duration-300 hover:shadow-md hover:-translate-y-1 overflow-hidden">
             <div class="w-11 h-11 rounded-xl flex items-center justify-center text-lg shadow-sm transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3"
                 style="background: linear-gradient(135deg, var(--primary, #0ea5e9) 0%, #0096D9 100%); color: white;">
@@ -73,7 +70,6 @@
             <div class="absolute bottom-0 left-0 w-full h-1 bg-blue-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
         </div>
 
-        <!-- Habilitados -->
         <div class="group relative bg-white p-4 rounded-2xl shadow-sm border border-slate-100 transition-all duration-300 hover:shadow-md hover:-translate-y-1 overflow-hidden">
             <div class="flex items-center gap-4 mb-3">
                 <div class="w-11 h-11 rounded-xl flex items-center justify-center text-lg shadow-sm transition-transform duration-500 group-hover:rotate-12"
@@ -94,7 +90,6 @@
             </div>
         </div>
 
-        <!-- Inactivos -->
         <div class="group relative bg-white p-4 rounded-2xl shadow-sm border border-slate-100 transition-all duration-300 hover:shadow-md hover:-translate-y-1 overflow-hidden">
             <div class="flex items-center gap-4 mb-3">
                 <div class="w-11 h-11 rounded-xl flex items-center justify-center text-lg shadow-sm transition-transform duration-500 group-hover:scale-110"
@@ -114,29 +109,7 @@
                     style="width: {{ $porcInactivos }}%; background: linear-gradient(90deg, #EF4444, #B91C1C);"></div>
             </div>
         </div>
-
-        <!-- Delivery -->
-        <div class="group relative bg-white p-4 rounded-2xl shadow-sm border border-slate-100 transition-all duration-300 hover:shadow-md hover:-translate-y-1 overflow-hidden">
-            <div class="flex items-center gap-4 mb-3">
-                <div class="w-11 h-11 rounded-xl flex items-center justify-center text-lg shadow-sm transition-transform duration-500 group-hover:scale-110"
-                    style="background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); color: white;">
-                    <i class="fas fa-motorcycle"></i>
-                </div>
-                <div>
-                    <p class="text-2xl font-black text-slate-800 leading-none">{{ $delivery }}</p>
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tight mt-1">En Delivery</p>
-                </div>
-                <span class="ml-auto text-[9px] font-black bg-amber-50 text-amber-600 px-2 py-0.5 rounded-md border border-amber-100 transition-colors group-hover:bg-amber-500 group-hover:text-white">
-                    {{ $porcDelivery }}%
-                </span>
-            </div>
-            <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                <div class="h-full rounded-full transition-all duration-1000 group-hover:animate-pulse" 
-                    style="width: {{ $porcDelivery }}%; background: linear-gradient(90deg, #F59E0B, #D97706);"></div>
-            </div>
-        </div>
     </div>
-
     {{-- Buscador y Filtros Segmentados --}}
     <div class="flex flex-col md:flex-row md:items-center gap-4 mb-6">
         <div class="flex-1 relative group">
@@ -157,10 +130,6 @@
                 <button id="btnInactivos" class="flex-1 py-2.5 text-slate-400 hover:text-slate-600 rounded-xl text-[11px] font-bold uppercase tracking-wider transition-all">
                     Inactivos
                 </button>
-                <button id="btnDelivery" 
-                    class="flex-1 py-2.5 text-slate-400 hover:text-slate-600 rounded-xl text-[11px] font-bold uppercase tracking-wider transition-all">
-                    Delivery
-                </button>
             </div>
         </div>
     </div>
@@ -169,126 +138,67 @@
         @foreach($productos as $prod)
         <div class="producto group bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col"
             data-estado="{{ $prod->estado }}"
-            data-nombre="{{ strtolower($prod->nombre ?? '') }}"   data-delivery="{{ $prod->delivery ? '1' : '0' }}">
+            data-nombre="{{ strtolower($prod->nombre ?? '') }}">
             
+            {{-- CABECERA DE IMAGEN --}}
             <div class="relative h-44 overflow-hidden bg-slate-100">
                 <div class="absolute top-3 left-3 right-3 z-10 flex justify-between items-center">
-                    @if($prod->destacado)
-                        <span class="bg-amber-400 text-white p-1.5 rounded-lg shadow-lg animate-pulse" title="Producto Destacado">
-                            <i class="fas fa-star text-[10px]"></i>
-                        </span>
-                    @else
-                        <div></div>
-                    @endif
                     <span class="px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider text-white shadow-md"
                         style="background: linear-gradient(135deg, {{ $prod->estado == 'a' ? '#10b981' : '#ef4444' }} 0%, {{ $prod->estado == 'a' ? '#059669' : '#b91c1c' }} 100%);">
                         {{ $prod->estado == 'a' ? 'Activo' : 'Inactivo' }}
                     </span>
+                    <span class="bg-black/40 backdrop-blur-md text-white text-[10px] font-black px-2 py-1 rounded-lg">
+                        Orden: {{ $prod->orden }}
+                    </span>
                 </div>
 
-                @php
-                $tieneImagen = !empty($prod->imagen) && $prod->imagen !== 'NULL';
-                @endphp
-
+                @php $tieneImagen = !empty($prod->imagen); @endphp
                 @if($tieneImagen)
                     <img src="{{ asset('storage/'.$prod->imagen) }}"
-                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-
-                    {{-- fallback por si la imagen falla --}}
-                    <div class="w-full h-full hidden items-center justify-center bg-slate-50">
-                        <i class="fas fa-utensils text-slate-200 text-3xl"></i>
-                    </div>
+                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                 @else
                     <div class="w-full h-full flex items-center justify-center bg-slate-50">
-                        <i class="fas fa-utensils text-slate-200 text-3xl"></i>
+                        <i class="fas fa-box-open text-slate-200 text-3xl"></i>
                     </div>
                 @endif
-                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4 backdrop-blur-[2px]">
-                    @if($prod->codigo_qr)
-                        <div class="bg-white p-1 rounded-lg shadow-xl translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                            <i class="fas fa-qrcode text-slate-800 text-xl"></i>
-                        </div>
-                    @endif
-                    @if($prod->codigo_barra)
-                        <div class="bg-white p-1 rounded-lg shadow-xl translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-75 text-[10px] font-bold px-2">
-                            <i class="fas fa-barcode mr-1"></i> {{ $prod->codigo_barra }}
-                        </div>
-                    @endif
-                </div>
-
-                {{-- Precio y Stock --}}
-                <div class="absolute bottom-3 left-3 right-3 flex justify-between items-end">
-                    <span class="bg-black/60 backdrop-blur-md text-white text-xs font-black px-2 py-1 rounded-lg border border-white/20">
-                        S/ {{ number_format($prod->precio, 2) }}
-                    </span>
-                    <span class="{{ $prod->stock <= $prod->stock_minimo ? 'bg-red-500' : 'bg-blue-600' }} text-white text-[9px] font-bold px-2 py-0.5 rounded-full shadow-lg border border-white/20">
-                        Stock: {{ $prod->stock }}
-                    </span>
-                </div>
             </div>
 
-            <!-- Información del Producto -->
             <div class="p-4 flex-1 flex flex-col">
-                <div class="flex justify-between items-start mb-1">
+                <div class="flex justify-between items-start mb-2">
                     <h3 class="text-sm font-black text-slate-800 uppercase truncate flex-1 tracking-tight">
                         {{ $prod->nombre }}
                     </h3>
-                    <span class="text-[9px] font-mono font-bold text-slate-400 ml-2 bg-slate-50 px-1.5 py-0.5 rounded">#{{ $prod->id }}</span>
+                    <span class="text-[9px] font-mono font-bold text-slate-400 ml-2 bg-slate-50 px-1.5 py-0.5 rounded">ID: {{ $prod->id }}</span>
                 </div>
                 
-                <div class="flex flex-wrap gap-x-3 gap-y-1 mb-3">
-                    <p class="text-[9px] text-slate-400 font-bold uppercase">
-                        <i class="fas fa-tag mr-1 text-blue-400/60"></i> {{ $prod->categoria->descripcion ?? 'Sin Cat.' }}
+                <div class="flex flex-wrap gap-2 mb-3">
+                    <p class="text-[9px] text-slate-500 font-bold uppercase">
+                        <i class="fas fa-tag mr-1" style="background: linear-gradient(135deg, var(--primary, #0ea5e9) 0%, #0096D9 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i> 
+                        Cat: {{ $prod->categoria->descripcion ?? 'Sin categoría' }}
                     </p>
-                    <p class="text-[9px] text-emerald-500 font-bold uppercase">
-                        <i class="fas fa-wallet mr-1 text-emerald-400/60"></i> Costo: S/{{ number_format($prod->costo, 2) }}
+                    <p class="text-[9px] text-slate-500 font-bold uppercase">
+                        <i class="fas fa-industry mr-1" style="background: linear-gradient(135deg, var(--primary, #0ea5e9) 0%, #0096D9 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i> 
+                        Área: {{ $prod->areaProduccion->nombre ?? 'Sin área' }}
                     </p>
                 </div>
-
-                {{-- Detalles Técnicos --}}
-                <div class="grid grid-cols-2 gap-2 mb-4 bg-slate-50 p-2 rounded-xl border border-slate-100">
-                    <div class="flex items-center gap-1.5">
-                        <i class="fas fa-clock text-[10px] text-slate-400"></i>
-                        <span class="text-[9px] font-bold text-slate-600">{{ $prod->tiempo_preparacion }} min</span>
-                    </div>
-                    <div class="flex items-center gap-1.5 {{ $prod->delivery ? 'text-orange-500' : 'text-slate-400' }}">
-                        <i class="fas fa-motorcycle text-[10px]"></i>
-                        <span class="text-[9px] font-black uppercase tracking-tighter">{{ $prod->delivery ? 'Si' : 'No' }}</span>
-                    </div>
-                    <div class="flex items-center gap-1.5 text-slate-500">
-                        <i class="fas fa-sort-numeric-down text-[10px]"></i>
-                        <span class="text-[9px] font-bold uppercase">Ord: {{ $prod->orden }}</span>
-                    </div>
-                    <div class="flex items-center gap-1.5 text-blue-500">
-                        <i class="fas fa-fire text-[10px]"></i>
-                        <span class="text-[9px] font-bold uppercase truncate">{{ $prod->preparacion }}</span>
-                    </div>
-                </div>
-
-                <!-- Botones de Acción -->
                 <div class="flex gap-2 mt-auto">
-                    <a href="{{ route('admin.Producto.edit', $prod->id) }}" 
+                    <a href="{{ route('admin.producto.edit', $prod->id) }}" 
                     class="flex-1 h-10 flex items-center justify-center gap-2 text-white rounded-xl transition-all active:scale-95 shadow-md hover:opacity-90"
                     style="background: linear-gradient(135deg, var(--primary, #0ea5e9) 0%, #0096D9 100%);">
                         <i class="fas fa-edit text-xs"></i>
                         <span class="text-[10px] font-bold uppercase">Editar</span>
                     </a>
-                    <button 
-                        onclick='abrirModalQR(
-                            {{ json_encode(asset("storage/".$prod->codigo_qr)) }},
-                            {{ json_encode(asset("storage/".$prod->codigo_barra)) }},
-                            {{ json_encode($prod->nombre) }},
-                            {{ json_encode(route("admin.Producto.ticket", $prod->id)) }}
-                        )'
-                        class="w-10 h-10 flex items-center justify-center bg-sky-50 text-sky-500 hover:bg-sky-100 rounded-xl">
-
-                        <i class="fas fa-qrcode text-sm"></i>
-                    </button>
-                    <a href="{{ route('admin.Producto.show', $prod->id) }}"
-                    class="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-50 text-blue-400 hover:bg-blue-600 hover:text-white transition-all shadow-sm border border-blue-50">
-                        <i class="fa fa-eye text-sm"></i>
+                    <a href="{{ route('admin.producto_temp.form', $prod->id) }}"
+                        class="flex-1 h-10 flex items-center justify-center gap-2 text-white rounded-xl"
+                        style="background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);">
+                        
+                        <i class="fas fa-box-open text-xs"></i>
+                        <span class="text-[10px] font-bold uppercase">
+                            Presentación
+                        </span>
                     </a>
+
+                    
                     <button type="button"
                         onclick="abrirEliminarProducto('{{ $prod->id }}', '{{ addslashes($prod->nombre) }}')"
                         class="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-50 text-red-400 hover:bg-red-600 hover:text-white transition-all shadow-sm border border-red-50">
@@ -341,85 +251,6 @@
 
             </div>
         </form>
-
-    </div>
-</div>
-<!-- Modal QR & Barcode -->
-<div id="modalQR" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center z-[100] transition-all duration-300">
-    <div class="bg-white rounded-[2.5rem] shadow-2xl w-[340px] overflow-hidden relative border border-slate-100 transform transition-all">
-        
-        {{-- Header con Gradiente --}}
-        <div class="relative h-16 flex items-center justify-center" style="background: linear-gradient(135deg, var(--primary, #0ea5e9) 0%, #0096D9 100%);">
-            <h2 class="text-white font-black uppercase tracking-widest text-[10px] flex items-center gap-2">
-                <i class="fas fa-qrcode text-sm"></i>
-                Identificación
-            </h2>
-            <button onclick="cerrarModalQR()" 
-                class="absolute top-4 right-4 w-7 h-7 flex items-center justify-center rounded-full bg-white/20 text-white hover:bg-white/40 transition-all">
-                <i class="fas fa-times text-[10px]"></i>
-            </button>
-        </div>
-
-        <div class="p-6 space-y-5">
-            
-            {{-- Sección QR --}}
-            <div class="flex flex-col items-center group">
-                <span class="inline-flex items-center px-3 py-0.5 rounded-full bg-blue-50 text-blue-600 text-[9px] font-black uppercase tracking-tight mb-3 border border-blue-100">
-                    Código QR
-                </span>
-                <div class="relative p-3 bg-white rounded-2xl shadow-sm border border-slate-100 group-hover:scale-105 transition-transform duration-500">
-                    <img id="qrImg" class="w-28 h-28 object-contain">
-                </div>
-            </div>
-
-            {{-- Divisor --}}
-            <div class="relative flex items-center justify-center">
-                <div class="w-full h-px bg-slate-100"></div>
-                <div class="absolute px-3 bg-white text-[8px] font-black text-slate-300 uppercase tracking-[2px]">Etiqueta</div>
-            </div>
-
-            {{-- Sección Barras --}}
-            <div class="flex flex-col items-center">
-                <div class="bg-[#f8fafc] p-4 rounded-xl border border-slate-200 w-full flex flex-col items-center">
-                    <img id="barraImg" class="w-full h-12 object-contain">
-                    <div class="mt-2">
-                        <span id="barraTexto" class="text-[10px] font-mono font-bold text-slate-500 tracking-[3px]"></span>
-                    </div>
-                </div>
-            </div>
-
-            {{-- Grupo de Botones de Acción --}}
-            <div class="grid grid-cols-1 gap-2 pt-2">
-                {{-- Botón Imprimir --}}
-                <button onclick="window.print()" 
-                    style="background: linear-gradient(135deg, var(--primary, #0ea5e9) 0%, #0096D9 100%);"
-                    class="w-full py-3.5 text-white rounded-xl text-[10px] font-black uppercase tracking-[2px] transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-100 hover:opacity-90 active:scale-95">
-                    <i class="fas fa-print"></i>
-                    Imprimir Etiqueta
-                </button>
-                <a id="btnPdf"
-                href="#"
-                target="_blank"
-                class="w-full py-3.5 bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200 rounded-xl text-[10px] font-black uppercase tracking-[2px] flex items-center justify-center gap-2">
-                    <i class="fas fa-file-pdf text-red-500 text-sm"></i>
-                    DESCARGAR PDF
-                </a>
-                
-            </div>
-        </div>
-
-        {{-- Footer Producto --}}
-        <div class="bg-slate-50 px-6 py-3 border-t border-slate-100">
-            <div class="flex items-center gap-2">
-                <div class="w-7 h-7 rounded-lg bg-white border border-slate-200 flex items-center justify-center">
-                    <i class="fas fa-tag text-slate-400 text-[9px]"></i>
-                </div>
-                <div class="flex flex-col truncate">
-                    <span class="text-[8px] font-bold text-slate-400 uppercase leading-none">Seleccionado</span>
-                    <span id="modalNombreProducto" class="text-[10px] font-black text-slate-700 truncate">Nombre del Producto</span>
-                </div>
-            </div>
-        </div>
 
     </div>
 </div>

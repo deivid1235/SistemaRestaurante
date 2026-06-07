@@ -151,8 +151,10 @@
                                                 class="w-8 h-8 rounded-lg bg-blue-50 text-blue-500 hover:bg-blue-500 hover:text-white transition-all flex items-center justify-center">
                                             <i class="fa fa-edit text-[10px]"></i>
                                         </button>
-                                        <button onclick="event.stopPropagation(); abrirEliminar({{ $salon->id }}, '{{ $salon->nombre }}', 'salon')" 
-                                                class="w-8 h-8 rounded-lg bg-red-50 text-red-400 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center">
+                                        <button type="button"
+                                            class="btnEliminarSalon w-8 h-8 rounded-lg bg-red-50 text-red-400 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center"
+                                            data-id="{{ $salon->id }}"
+                                            data-nombre="{{ $salon->nombre }}">
                                             <i class="fa fa-trash text-[10px]"></i>
                                         </button>
                                     </div>
@@ -237,11 +239,13 @@
                                     <i class="fa fa-edit"></i>
                                     EDITAR
                                 </button>
-                                
-                                <button onclick="abrirEliminar({{ $mesa->id }}, '{{ $mesa->nombre }}', 'mesa')" 
-                                        class="w-11 h-10 flex items-center justify-center rounded-xl bg-slate-50 text-red-400 hover:bg-red-500 hover:text-white transition-all shadow-sm">
-                                    <i class="fa fa-trash"></i>
+                                <button type="button"
+                                        class="btnEliminarMesa w-8 h-8 flex items-center justify-center rounded-xl bg-slate-50 border border-slate-200 text-slate-400 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 transition-all active:scale-95 shrink-0"
+                                        data-id="{{ $mesa->id }}"
+                                        data-nombre="{{ $mesa->nombre }}">
+                                    <i class="fa-regular fa-trash-can text-xs"></i>
                                 </button>
+
                             </div>
                         </div>
 

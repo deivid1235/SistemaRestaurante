@@ -54,6 +54,7 @@ class DatabaseSeeder extends Seeder
         );
         $this->call(TipomedidaSeeder::class);
         $this->call(RoleSeeder::class);
+        $this->call(TurnosSeeder::class);
 
     }
 
