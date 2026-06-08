@@ -208,10 +208,8 @@
                     </div>
 
                     <div class="flex gap-2 mt-auto">
-                        <a href="javascript:void(0)"
-                        onclick="addToCart({{ $prod->id }}, '{{ $prod->nombre }}', {{ $prod->precio }})"
-                        class="flex-1 h-10 flex items-center justify-center gap-2 bg-[#0081C9] text-white rounded-xl shadow-md hover:bg-[#0071b3] transition-all active:scale-95">
-
+                        <a href="{{ route('carrito.add', $prod->id) }}"
+                        class="flex-1 h-10 flex items-center justify-center gap-2 bg-[#0081C9] text-white rounded-xl">
                             <i class="fas fa-shopping-cart text-xs"></i>
 
                             <span class="text-[10px] font-black uppercase tracking-wider">
@@ -649,97 +647,22 @@
         }
 
         document.addEventListener("DOMContentLoaded", function () {
-                    let images = document.querySelectorAll("#slider img");
-                    let index = 0;
+            let images = document.querySelectorAll("#slider img");
+            let index = 0;
 
-                    function showSlide() {
-                        images.forEach(img => img.style.opacity = "0");
-                        images[index].style.opacity = "1";
-                    }
-
-                    function nextSlide() {
-                        index = (index + 1) % images.length;
-                        showSlide();
-                    }
-
-                    showSlide();
-                    setInterval(nextSlide, 3000);
-                });
-
-        let cart = [];
-
-        // AGREGAR PRODUCTO
-        function addToCart(id, nombre, precio) {
-            let item = cart.find(p => p.id === id);
-
-            if (item) {
-                item.cantidad += 1;
-            } else {
-                cart.push({
-                    id: id,
-                    nombre: nombre,
-                    precio: precio,
-                    cantidad: 1
-                });
+            function showSlide() {
+                images.forEach(img => img.style.opacity = "0");
+                images[index].style.opacity = "1";
             }
 
-            updateCart();
-        }
+            function nextSlide() {
+                index = (index + 1) % images.length;
+                showSlide();
+            }
 
-        //  ACTUALIZAR CARRITO
-        function updateCart() {
-            let count = cart.reduce((sum, item) => sum + item.cantidad, 0);
-            let total = cart.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
-
-            // contador
-            let countEl = document.getElementById('cart-count');
-            if (countEl) countEl.innerText = count;
-
-            // total
-            let totalEl = document.getElementById('cart-total');
-            if (totalEl) totalEl.innerText = total.toFixed(2);
-
-            // items
-            let itemsEl = document.getElementById('cart-items');
-            if (!itemsEl) return;
-
-            let html = '';
-
-            cart.forEach((item, index) => {
-                html += `
-                    <div class="border rounded-lg p-2 flex justify-between items-center">
-                        <div>
-                            <p class="font-bold text-sm">${item.nombre}</p>
-                            <p class="text-xs text-gray-500">
-                                S/ ${item.precio} x ${item.cantidad}
-                            </p>
-                        </div>
-
-                        <button onclick="removeItem(${index})"
-                            class="text-red-500 text-xs font-bold">
-                            X
-                        </button>
-                    </div>
-                `;
-            });
-
-            itemsEl.innerHTML = html;
-        }
-
-        //  ELIMINAR PRODUCTO
-        function removeItem(index) {
-            cart.splice(index, 1);
-            updateCart();
-        }
-
-        //  MOSTRAR / OCULTAR CARRITO
-        function toggleCart() {
-            let panel = document.getElementById('cart-panel');
-            if (!panel) return;
-
-            panel.classList.toggle('translate-x-full');
-        }
-
+            showSlide();
+            setInterval(nextSlide, 3000);
+        });
     </script>
 
 @endsection

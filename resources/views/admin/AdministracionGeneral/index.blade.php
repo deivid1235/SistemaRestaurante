@@ -165,7 +165,7 @@
                                     <i class="fa fa-tags mr-1.5 w-4 text-center"></i> Categorías
                                 </a>
                                 
-                                <a href="{{ url('admin/Producto') }}" 
+                                <a href="{{ url('admin/producto') }}" 
                                 class="text-[10px] font-black uppercase tracking-wider text-emerald-600 hover:text-emerald-700 transition-colors flex items-center">
                                     <i class="fa fa-hamburger mr-1.5 w-4 text-center"></i> Productos
                                 </a>

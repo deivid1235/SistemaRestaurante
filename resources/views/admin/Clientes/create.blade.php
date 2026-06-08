@@ -81,6 +81,9 @@
                             </svg>
                         </button>
                     </div>
+                    @error('numero_documento')
+                        <small style="color: red">{{ $message }}</small>
+                    @enderror
                 </div>
 
                 <div class="relative">
@@ -107,6 +110,9 @@
                         </div>
                         <input type="text" name="nombres" id="nombres" placeholder="EJ: JUAN CARLOS" class="w-full min-w-0 bg-[#f8fafc] border-none rounded-2xl py-3.5 pl-11 pr-4 text-sm text-slate-600 placeholder:text-slate-300 focus:ring-2 focus:ring-blue-500/20 focus:bg-white transition-all outline-none">
                     </div>
+                    @error('nombres')
+                        <small style="color: red">{{ $message }}</small>
+                    @enderror
                 </div>
 
                 <div class="md:col-span-2 relative group">
@@ -117,6 +123,9 @@
                         </div>
                         <input type="text" name="razon_social" id="razon_social" placeholder="EJ: EMPRESA SAC" class="w-full min-w-0 bg-[#f8fafc] border-none rounded-2xl py-3.5 pl-11 pr-4 text-sm text-slate-600 placeholder:text-slate-300 focus:ring=2 focus:ring-blue-50０/２０ focus:bg-white transition-all outline-none">
                     </div>
+                    @error('razon_social')
+                        <small style="color: red">{{ $message }}</small>
+                    @enderror
                 </div>
 
                 <div class="relative group">
@@ -127,6 +136,9 @@
                         </div>
                         <input type="text" name="telefono" id="telefono" placeholder="EJ: 987654321" class="w-full min-w-0 bg-[#f8fafc] border-none rounded-2xl py-3.5 pl-11 pr-4 text-sm text-slate-600 placeholder:text-slate-300 focus:ring-2 focus:ring-blue-500/20 focus:bg-white transition-all outline-none">
                     </div>
+                    @error('telefono')
+                        <small style="color: red">{{ $message }}</small>
+                    @enderror
                 </div>
 
                 <div class="md:col-span-2 relative group">
@@ -140,6 +152,9 @@
                         <input type="email" name="correo" id="correo" placeholder="usuario@empresa.com" required
                             class="w-full min-w-0 bg-[#f8fafc] border-none rounded-2xl py-3.5 pl-11 pr-4 text-sm text-slate-600 placeholder:text-slate-300 focus:ring-2 focus:ring-blue-500/20 focus:bg-white transition-all outline-none">
                     </div>
+                    @error('correo')
+                        <small style="color: red">{{ $message }}</small>
+                    @enderror
                 </div>
 
                <div class="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -154,7 +169,11 @@
                             <input type="password" name="password" id="password" placeholder="••••••••" required
                                 class="w-full min-w-0 bg-[#f8fafc] border-none rounded-2xl py-3.5 pl-11 pr-4 text-sm text-slate-600 placeholder:text-slate-300 focus:ring-2 focus:ring-blue-500/20 focus:bg-white transition-all outline-none">
                         </div>
+                        @error('password')
+                            <small style="color: red">{{ $message }}</small>
+                        @enderror
                     </div>
+
 
                     <div class="relative group">
                         <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1.5 ml-1 tracking-wide">Referencia</label>
@@ -168,6 +187,9 @@
                             <input type="text" name="referencia" id="referencia" placeholder="Ej. Frente al parque central"
                                 class="w-full min-w-0 bg-[#f8fafc] border-none rounded-2xl py-3.5 pl-11 pr-4 text-sm text-slate-600 placeholder:text-slate-300 focus:ring-2 focus:ring-blue-500/20 focus:bg-white transition-all outline-none">
                         </div>
+                        @error('referencia')
+                            <small style="color: red">{{ $message }}</small>
+                        @enderror
                     </div>
                 </div>
 
@@ -179,6 +201,9 @@
                         </div>
                         <input type="date" name="fecha_nac" id="fecha_nac" class="w-full min-w-0 bg-[#f8fafc] border-none rounded-2xl py-3.5 pl-11 pr-4 text-sm focus:ring-2 focus:ring-blue-500/20 transition-all outline-none text-slate-600">
                     </div>
+                    @error('fecha_nac')
+                        <small style="color: red">{{ $message }}</small>
+                    @enderror
                 </div>
 
                 <div class="md:col-span-2 relative group">
@@ -192,6 +217,9 @@
                         </div>
                         <input type="text" name="direccion" id="direccion" placeholder="Calle, Av, Jr..." class="w-full min-w-0 bg-[#f8fafc] border-none rounded-2xl py-3.5 pl-11 pr-4 text-sm text-slate-600 placeholder:text-slate-300 focus:ring-2 focus:ring-blue-500/20 focus:bg-white transition-all outline-none shadow-sm">
                     </div>
+                    @error('direccion')
+                        <small style="color: red">{{ $message }}</small>
+                    @enderror
                 </div>
             </div>
         </div>

@@ -279,7 +279,6 @@
         </a>
 
         <p class="sidebar-section">Principal</p>
-
         <a href="#" class="flex items-center {{ request()->routeIs('admin.pos.*') ? 'active-link' : '' }}">
             <span class="nav-icon"><i class="fa fa-store"></i></span>
             <span class="nav-text">Punto de Venta</span>

@@ -15,4 +15,9 @@ class ProductoCategoria extends Model
         'imagen',
         'estado'
     ];
+
+    public function productos()
+    {
+        return $this->hasMany(Producto::class, 'id_catg', 'id');
+    }
 }

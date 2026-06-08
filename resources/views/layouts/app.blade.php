@@ -84,11 +84,20 @@
         </div>
 
         <div class="flex items-center space-x-4">
-            <a href="#" class="relative w-11 h-11 flex items-center justify-center bg-white border border-slate-100 rounded-xl shadow-[0_4px_12px_-2px_rgba(0,0,0,0.03)] text-slate-600 transition-all duration-300 hover:scale-105 hover:border-emerald-500 hover:text-emerald-500 hover:shadow-[0_8px_20px_-4px_rgba(16,185,129,0.15)] group">
-                <i class="fas fa-shopping-cart text-base transition-transform duration-300 group-hover:-translate-y-0.5"></i>
-                <span id="cart-count"
-                    class="absolute -top-1.5 -right-1.5 bg-rose-500 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-xl font-black shadow-md shadow-rose-500/30 border-2 border-white tracking-tighter animate-[pulse_2s_infinite]">
-                    0
+            <a href="{{ route('carrito') }}"
+            class="relative w-11 h-11 flex items-center justify-center bg-white border border-slate-100 rounded-xl shadow text-slate-600 hover:scale-105 group">
+
+                <i class="fas fa-shopping-cart"></i>
+
+                @php
+                    $totalCantidad = 0;
+                    foreach(session('carrito', []) as $item){
+                        $totalCantidad += $item['cantidad'];
+                    }
+                @endphp
+
+                <span class="absolute -top-1.5 -right-1.5 bg-rose-500 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-xl font-black">
+                    {{ $totalCantidad }}
                 </span>
             </a>
 

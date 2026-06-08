@@ -1,7 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -93,6 +96,7 @@ class HomeController extends Controller
         return redirect()->back()->with('success', 'Registro exitoso');
     }
 
+
     public function buscarDocumento(string $tipo, string $numero)
     {
         try {
@@ -168,5 +172,74 @@ class HomeController extends Controller
         }
     }
 
+    public function verCarrito()
+    {
+        $carrito = session()->get('carrito', []);
+        $totalGeneral = collect($carrito)->sum(function ($item) {
+            return $item['precio'] * $item['cantidad'];
+        });
+        $page = request()->get('page', 1);
+        $perPage = 5;
+
+        $collection = collect($carrito);
+
+        $items = $collection
+            ->slice(($page - 1) * $perPage, $perPage)
+            ->all();
+        $carritoPaginado = new LengthAwarePaginator(
+            $items,
+            count($carrito),
+            $perPage,
+            $page,
+            [
+                'path' => request()->url(),
+                'query' => request()->query()
+            ]
+        );
+        return view('home.Carrito', [
+            'carrito' => $carritoPaginado,
+            'totalGeneral' => $totalGeneral
+        ]);
+    }
+
+    public function agregarCarrito(int $id)
+    {
+        $producto = Producto::findOrFail($id);
+
+        $carrito = session()->get('carrito', []);
+
+        if(isset($carrito[$id])) {
+            $carrito[$id]['cantidad']++;
+        } else {
+            $imagen = $producto->imagen;
+
+            if(empty($imagen) || $imagen === 'NULL') {
+                $imagen = null; 
+            }
+
+            $carrito[$id] = [
+                "nombre" => $producto->nombre,
+                "precio" => $producto->precio,
+                "imagen" => $imagen,
+                "cantidad" => 1
+            ];
+        }
+
+        session()->put('carrito', $carrito);
+
+        return back()->with('success', 'Producto agregado al carrito');
+    }
+
+    public function eliminarCarrito( int $id)
+    {
+        $carrito = session()->get('carrito', []);
+
+        if(isset($carrito[$id])) {
+            unset($carrito[$id]);
+            session()->put('carrito', $carrito);
+        }
+
+        return back()->with('success', 'Producto eliminado del carrito');
+    }
   
 }

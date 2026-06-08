@@ -52,6 +52,10 @@ class DatabaseSeeder extends Seeder
             'updated_at' => now(),
             ]
         );
+        $this->call(TipomedidaSeeder::class);
+        $this->call(RoleSeeder::class);
+        $this->call(TurnosSeeder::class);
+
     }
 
 }
