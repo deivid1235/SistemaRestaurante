@@ -3,19 +3,6 @@
 
 @section('content')
 
-@if(empty($cajaAbierta))
-    <div class="bg-gradient-to-r from-red-500 to-rose-600 text-white p-5 rounded-2xl flex flex-col sm:flex-row justify-between items-center shadow-lg animate-pulse m-4 gap-4">
-        <div class="flex items-center gap-3"> 
-            <i class="fa fa-exclamation-triangle text-xl"></i>
-            <span class="font-medium">No hay una caja abierta en este turno. Debe aperturar una caja para procesar comandas.</span>
-        </div>
-        <a href="{{ route('admin.AperturaCaja.index') }}" 
-           class="bg-white text-rose-600 px-5 py-2.5 rounded-xl font-bold text-sm shadow-sm hover:bg-rose-50 transition-all flex-shrink-0">
-            Abrir Caja Activa
-        </a>
-    </div>
-@else
-
 <div class="max-w-8xl mx-auto space-y-5 animate-fade-in text-gray-800 px-2 sm:px-4">
 
     {{-- HEADER --}}
@@ -344,7 +331,66 @@
     </div>
 </div>
 
+@if(empty($cajaAbierta) || $mesas->isEmpty())
+
+    <!-- Contenedor invisible para centrar la tarjeta sin fondos raros -->
+    <div class="flex justify-center items-start mt-6 w-full overflow-hidden">
+        
+        <!-- La tarjeta limpia estilo pizarra flotante -->
+        <div class="bg-white text-gray-800 p-6 rounded-[2rem] border-4 border-[#D50000] flex flex-col items-center text-center shadow-md max-w-xl w-full gap-4 relative dynamic-card">
+            
+            <div class="flex flex-col items-center dynamic-alert-icon">
+                <div class="relative w-20 h-16 flex items-center justify-center mb-1">
+                    <span class="absolute left-1 top-4 w-2 h-0.5 bg-orange-500 rounded-full transform -rotate-12"></span>
+                    <span class="absolute left-0 top-7 w-3 h-0.5 bg-orange-500 rounded-full"></span>
+                    <span class="absolute left-1 bottom-4 w-2 h-0.5 bg-orange-500 rounded-full transform rotate-12"></span>
+                    
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-14 h-14 text-orange-500 drop-shadow-sm">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3l9 15.5a1.5 1.5 0 0 1-1.3 2.25H4.3a1.5 1.5 0 0 1-1.3-2.25L12 3z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4" stroke-width="3" />
+                        <circle cx="12" cy="16" r="1.2" fill="currentColor" />
+                    </svg>
+                    
+                    <span class="absolute right-1 top-4 w-2 h-0.5 bg-orange-500 rounded-full transform rotate-12"></span>
+                    <span class="absolute right-0 top-7 w-3 h-0.5 bg-orange-500 rounded-full"></span>
+                    <span class="absolute right-1 bottom-4 w-2 h-0.5 bg-orange-500 rounded-full transform -rotate-12"></span>
+                </div>
+
+                <h2 class="text-2xl font-black tracking-wider text-gray-900 uppercase">¡ATENCIÓN!</h2>
+            </div>
+
+            <p class="text-base font-semibold text-gray-600 px-4 leading-relaxed dynamic-message">
+                @if(empty($cajaAbierta) && $mesas->isEmpty())
+                    Estimado usuario, actualmente no hay una caja abierta y tampoco cuentas con mesas registradas en el sistema.
+                @elseif(empty($cajaAbierta))
+                    Estimado usuario, no hay una caja abierta en este turno. Debe aperturar una caja para operar.
+                @elseif($mesas->isEmpty())
+                    Estimado usuario, no se encuentran mesas registradas para poder operar el salón.
+                @endif
+            </p>
+
+            <div class="flex gap-3 flex-wrap justify-center mt-2 w-full dynamic-actions">
+                @if(empty($cajaAbierta))
+                    <a href="{{ route('admin.AperturaCaja.index') }}" 
+                       class="bg-orange-500 text-white px-6 py-2.5 rounded-full font-bold text-sm shadow-md hover:bg-orange-600 hover:scale-105 transition-all uppercase tracking-wider">
+                        Abrir Caja
+                    </a>
+                @endif
+
+                @if($mesas->isEmpty())
+                    <a href="{{ route('admin.Salon.index') }}" 
+                       class="bg-gray-800 text-white px-6 py-2.5 rounded-full font-bold text-sm shadow-md hover:bg-gray-900 hover:scale-105 transition-all uppercase tracking-wider"
+                       style="background: linear-gradient(135deg, var(--primary, #0096D9) 0%, #007bb5 100%);">
+                        Crear Mesas
+                    </a>
+                @endif
+            </div>
+
+        </div>
+    </div>
+
 @endif
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
 

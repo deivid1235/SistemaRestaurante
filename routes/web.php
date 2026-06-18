@@ -31,7 +31,9 @@ use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\VentaController;
 use App\Http\Controllers\ProductoPresController;
 use App\Http\Controllers\PedidoMesaController;
-
+use App\Http\Controllers\CompraController;
+use App\Http\Controllers\CreditoController;
+use App\Http\Controllers\InventarioController;
 
 
 
@@ -203,6 +205,35 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/AperturaCaja/edit/{id}', [AperturasCajaController::class, 'edit'])->name('admin.AperturaCaja.edit');
     Route::put('/admin/AperturaCaja/update/{id}', [AperturasCajaController::class, 'update'])->name('admin.AperturaCaja.update');
     Route::delete('/admin/AperturaCaja/delete/{id}', [AperturasCajaController::class, 'destroy'])->name('admin.AperturaCaja.destroy');
+
+    //  Compras 
+    Route::get('/admin/Compras',[CompraController::class, 'index'])->name('admin.Compras.index');
+    Route::get('/admin/Compras/nueva',[CompraController::class, 'create'])->name('admin.Compras.create');
+    Route::post('/admin/Compras/store',[CompraController::class, 'store'])->name('admin.Compras.store');
+
+    // ── Proveedores dentro de Compras 
+    Route::get('/admin/Compras/proveedores',[CompraController::class, 'proveedores'])->name('admin.Compras.proveedores');
+    Route::post('/admin/Compras/proveedores/store',[CompraController::class, 'storeProveedor'])->name('admin.Compras.proveedores.store');
+    Route::put('/admin/Compras/proveedores/{id}',[CompraController::class, 'updateProveedor'])->name('admin.Compras.proveedores.update');
+    Route::post('/admin/Compras/proveedores/{id}/toggle',[CompraController::class, 'toggleProveedor'])->name('admin.Compras.proveedores.toggle');
+
+    //Compras con {id} (DESPUÉS de las rutas específicas) 
+    Route::get('/admin/Compras/{id}', [CompraController::class, 'show'])->name('admin.Compras.show');
+    Route::post('/admin/Compras/{id}/anular',[CompraController::class, 'anular'])->name('admin.Compras.anular');
+
+    //Créditos 
+    Route::get('/admin/Creditos',[CreditoController::class, 'index'])->name('admin.Creditos.index');
+    Route::get('/admin/Creditos/{id}',[CreditoController::class, 'show'])->name('admin.Creditos.show');
+    Route::post('/admin/Creditos/{id}/pago',[CreditoController::class, 'registrarPago'])->name('admin.Creditos.pago');
+
+    //Inventario 
+    Route::get('/admin/Inventario/stock',[InventarioController::class, 'stock'])->name('admin.Inventario.stock');
+    Route::get('/admin/Inventario/kardex', [InventarioController::class, 'kardex'])->name('admin.Inventario.kardex');
+    Route::get('/admin/Inventario/ajuste', [InventarioController::class, 'ajuste'])->name('admin.Inventario.ajuste');
+    Route::get('/admin/Inventario/ajuste/nuevo',[InventarioController::class, 'ajusteCreate'])->name('admin.Inventario.ajuste.create');
+    Route::post('/admin/Inventario/ajuste/store',[InventarioController::class, 'ajusteStore'])->name('admin.Inventario.ajuste.store');
+    Route::post('/admin/Inventario/ajuste/{id}/anular',[InventarioController::class, 'ajusteAnular'])->name('admin.Inventario.ajuste.anular');
+
     // Rutas para Proveedores
     Route::get('/admin/Proveedor', [ProveedorController::class, 'index'])->name('admin.Proveedor.index');
     Route::get('/admin/Proveedor/create', [ProveedorController::class, 'create'])->name('admin.Proveedor.create');
@@ -223,8 +254,6 @@ Route::middleware('auth')->group(function () {
     Route::get('admin/Venta/agregar-carrito/{id}', [VentaController::class, 'agregar'])->name('admin.Venta.agregar-carrito');
     Route::get('admin/Venta/carrito/{accion}/{id?}', [VentaController::class, 'carritoAccion'])->name('admin.Venta.carrito-accion');
     Route::get('admin/Venta/pago', [VentaController::class, 'pago'])->name('admin.Venta.pago');
-    Route::get('admin/Venta/pago/{id}', [VentaController::class, 'pago'])
-    ->name('admin.Venta.pago');
     //Rutas para Pedido Mesa
     Route::post('admin/Venta/pedido/guardar', [VentaController::class, 'GuardarPedido'])->name('admin.Venta.guardar');
     Route::get('/venta/cancelar/{id}', [VentaController::class, 'cancelarPedido'])->name('admin.Venta.cancelar');

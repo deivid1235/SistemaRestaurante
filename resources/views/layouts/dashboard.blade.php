@@ -11,7 +11,6 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
@@ -41,7 +40,6 @@
     .bg-primary   { background-color: var(--primary) !important; }
     .text-primary { color: var(--primary) !important; }
 
-   
     #overlay {
         position: fixed;
         inset: 0;
@@ -51,386 +49,188 @@
         pointer-events: none;
         transition: opacity 0.3s ease;
     }
+    #overlay.active { opacity: 1; pointer-events: all; }
 
-    #overlay.active {
-        opacity: 1;
-        pointer-events: all;
-    }
-
-    
     #sidebar {
         position: fixed;
-        top: 0;
-        left: 0;
+        top: 0; left: 0;
         z-index: 50;
         width: var(--sidebar-w);
         height: 100vh;
         background: var(--primary);
-        
         background-image: radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px);
         background-size: 22px 22px;
         display: flex;
         flex-direction: column;
         border-right: 1px solid rgba(255,255,255,0.12);
-        
         transform: translateX(-100%);
-        transition: transform 0.3s cubic-bezier(.4,0,.2,1),
-                    width    0.3s cubic-bezier(.4,0,.2,1);
+        transition: transform 0.3s cubic-bezier(.4,0,.2,1), width 0.3s cubic-bezier(.4,0,.2,1);
     }
-
-    #sidebar.sidebar-open {
-        transform: translateX(0);
-    }
+    #sidebar.sidebar-open { transform: translateX(0); }
 
     @media (min-width: 1024px) {
-        #sidebar {
-            position: static;
-            transform: none !important;
-        }
+        #sidebar { position: static; transform: none !important; }
     }
 
-    .sidebar-mini {
-        width: 68px !important;
-    }
+    .sidebar-mini { width: 68px !important; }
     .sidebar-mini .sidebar-section,
     .sidebar-mini .nav-text,
     .sidebar-mini .chevron,
     .sidebar-mini .user-info,
-    .sidebar-mini .logo-text {
-        display: none !important;
-    }
+    .sidebar-mini .logo-text { display: none !important; }
     .sidebar-mini nav a,
-    .sidebar-mini .submenu-trigger {
-        justify-content: center;
-        padding-left: 0 !important;
-    }
-    .sidebar-mini #submenu-ajustes {
-        display: none !important;
-    }
+    .sidebar-mini .submenu-trigger { justify-content: center; padding-left: 0 !important; }
+    .sidebar-mini #submenu-ajustes { display: none !important; }
 
     .logo-area {
         padding: 16px 14px;
         border-bottom: 1px solid rgba(255,255,255,0.1);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: rgba(255, 255, 255, 0.05);
+        display: flex; justify-content: center; align-items: center;
+        background: rgba(255,255,255,0.05);
     }
-
-    .logo-area img {
-        max-height: 52px;
-        width: auto;
-        object-fit: contain;
-    }
+    .logo-area img { max-height: 52px; width: auto; object-fit: contain; }
 
     .user-card {
-        margin: 12px 10px;
-        padding: 10px 12px;
+        margin: 12px 10px; padding: 10px 12px;
         background: rgba(255,255,255,0.15);
         border: 1px solid rgba(255,255,255,0.2);
         border-radius: 12px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
+        display: flex; align-items: center; gap: 10px;
     }
-
     .user-avatar {
-        width: 34px;
-        height: 34px;
-        border-radius: 50%;
+        width: 34px; height: 34px; border-radius: 50%;
         background: rgba(255,255,255,0.25);
         border: 1.5px solid rgba(255,255,255,0.4);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 13px;
-        color: #fff;
-        font-weight: 600;
-        flex-shrink: 0;
-        overflow: hidden;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 13px; color: #fff; font-weight: 600;
+        flex-shrink: 0; overflow: hidden;
     }
-
-    .user-avatar img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
+    .user-avatar img { width: 100%; height: 100%; object-fit: cover; }
     .user-info { flex: 1; min-width: 0; }
-
     .user-info .name {
-        color: #fff;
-        font-size: 12.5px;
-        font-weight: 600;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        color: #fff; font-size: 12.5px; font-weight: 600;
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
+    .user-info .role { color: rgba(255,255,255,0.7); font-size: 10.5px; }
 
-    .user-info .role {
-        color: rgba(255,255,255,0.7);
-        font-size: 10.5px;
-    }
-
-    nav.nav-primary {
-        flex: 1;
-        padding: 4px 10px;
-        overflow-y: auto;
-        scrollbar-width: none;
-    }
+    nav.nav-primary { flex: 1; padding: 4px 10px; overflow-y: auto; scrollbar-width: none; }
     nav.nav-primary::-webkit-scrollbar { display: none; }
 
     .sidebar-section {
-        font-size: 9.5px;
-        font-weight: 700;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        color: rgba(255,255,255,0.5);
-        padding: 14px 8px 4px;
-        margin: 0;
-        user-select: none;
+        font-size: 9.5px; font-weight: 700; letter-spacing: 0.12em;
+        text-transform: uppercase; color: rgba(255,255,255,0.5);
+        padding: 14px 8px 4px; margin: 0; user-select: none;
     }
 
     nav.nav-primary a {
-        position: relative;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 9px 10px;
-        margin-bottom: 2px;
-        border-radius: 10px;
-        color: rgba(255,255,255,0.85);
-        font-size: 13px;
-        font-weight: 500;
-        text-decoration: none;
-        overflow: hidden;
-        transition:
-            background 0.18s ease,
-            color      0.18s ease,
-            transform  0.16s cubic-bezier(.34,1.56,.64,1),
-            padding-left 0.18s ease;
+        position: relative; display: flex; align-items: center;
+        gap: 10px; padding: 9px 10px; margin-bottom: 2px;
+        border-radius: 10px; color: rgba(255,255,255,0.85);
+        font-size: 13px; font-weight: 500; text-decoration: none; overflow: hidden;
+        transition: background 0.18s ease, color 0.18s ease,
+                    transform 0.16s cubic-bezier(.34,1.56,.64,1), padding-left 0.18s ease;
     }
-
     nav.nav-primary a::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: rgba(255,255,255,0);
-        border-radius: inherit;
+        content: ''; position: absolute; inset: 0;
+        background: rgba(255,255,255,0); border-radius: inherit;
         transition: background 0.18s ease;
     }
-
-    nav.nav-primary a:hover {
-        color: #fff;
-        transform: translateX(3px);
-        padding-left: 14px;
-    }
-
-    nav.nav-primary a:hover::before {
-        background: rgba(255,255,255,0.2);
-    }
-
+    nav.nav-primary a:hover { color: #fff; transform: translateX(3px); padding-left: 14px; }
+    nav.nav-primary a:hover::before { background: rgba(255,255,255,0.2); }
     nav.nav-primary a::after {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 50%;
+        content: ''; position: absolute; left: 0; top: 50%;
         transform: translateY(-50%) scaleY(0);
-        width: 3px;
-        height: 55%;
-        background: #fff;
+        width: 3px; height: 55%; background: #fff;
         border-radius: 0 3px 3px 0;
         transition: transform 0.2s cubic-bezier(.34,1.56,.64,1);
     }
-
     nav.nav-primary a:hover::after,
-    nav.nav-primary a.active-link::after {
-        transform: translateY(-50%) scaleY(1);
-    }
+    nav.nav-primary a.active-link::after { transform: translateY(-50%) scaleY(1); }
 
     .nav-icon {
-        width: 30px;
-        height: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 8px;
-        background: rgba(255,255,255,0.15);
-        flex-shrink: 0;
-        font-size: 13px;
+        width: 30px; height: 30px;
+        display: flex; align-items: center; justify-content: center;
+        border-radius: 8px; background: rgba(255,255,255,0.15);
+        flex-shrink: 0; font-size: 13px;
         transition: background 0.18s ease, transform 0.2s cubic-bezier(.34,1.56,.64,1);
     }
-
-    nav.nav-primary a:hover .nav-icon {
-        background: rgba(255,255,255,0.3);
-        transform: scale(1.1);
-    }
-
+    nav.nav-primary a:hover .nav-icon { background: rgba(255,255,255,0.3); transform: scale(1.1); }
     nav.nav-primary a.active-link {
-        color: #fff;
-        background: rgba(255,255,255,0.25);
-        box-shadow: inset 0 1px 0 rgba(255,255,255,0.15),
-                    0 2px 8px rgba(0,0,0,0.08);
+        color: #fff; background: rgba(255,255,255,0.25);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.15), 0 2px 8px rgba(0,0,0,0.08);
     }
-
-    nav.nav-primary a.active-link .nav-icon {
-        background: rgba(255,255,255,0.35);
-    }
+    nav.nav-primary a.active-link .nav-icon { background: rgba(255,255,255,0.35); }
 
     .chevron {
-        margin-left: auto;
-        font-size: 10px;
+        margin-left: auto; font-size: 10px;
         color: rgba(255,255,255,0.5);
-        transition: transform 0.3s ease, color 0.2s;
-        flex-shrink: 0;
+        transition: transform 0.3s ease, color 0.2s; flex-shrink: 0;
     }
-
     nav.nav-primary a:hover .chevron { color: rgba(255,255,255,0.9); }
 
     .submenu {
-    overflow: hidden;
-    transition: max-height 0.35s cubic-bezier(.4,0,.2,1), opacity 0.3s ease;
-    max-height: 500px;
-    opacity: 1;
-    margin: 2px 0 4px 14px;
-    padding-left: 12px;
-    border-left: 1.5px solid rgba(255,255,255,0.25);
+        overflow: hidden;
+        transition: max-height 0.35s cubic-bezier(.4,0,.2,1), opacity 0.3s ease;
+        max-height: 500px; opacity: 1;
+        margin: 2px 0 4px 14px; padding-left: 12px;
+        border-left: 1.5px solid rgba(255,255,255,0.25);
     }
-
-    .submenu.hidden {
-        max-height: 0 !important;
-        opacity: 0;
-        display: flex !important;
-        flex-direction: column;
-    }
-
+    .submenu.hidden { max-height: 0 !important; opacity: 0; display: flex !important; flex-direction: column; }
     .submenu a {
-        font-size: 12px !important;
-        font-weight: 400 !important;
+        font-size: 12px !important; font-weight: 400 !important;
         color: rgba(255,255,255,0.75) !important;
-        padding: 7px 10px !important;
-        border-radius: 8px !important;
-        margin-bottom: 1px !important;
+        padding: 7px 10px !important; border-radius: 8px !important; margin-bottom: 1px !important;
     }
-
     .submenu a:hover { color: #fff !important; }
     .submenu a.active-link { color: #fff !important; }
-    .sidebar-footer {
-        padding: 10px 12px 14px;
-        border-top: 1px solid rgba(255,255,255,0.15);
-    }
-    
 
     .btn-logout {
-        width: 100%;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 9px 10px;
-        border-radius: 10px;
-        color: rgba(255,255,255,0.8);
-        font-size: 12.5px;
-        font-weight: 500;
+        width: 100%; display: flex; align-items: center; gap: 10px;
+        padding: 9px 10px; border-radius: 10px;
+        color: rgba(255,255,255,0.8); font-size: 12.5px; font-weight: 500;
         font-family: 'Plus Jakarta Sans', sans-serif;
-        cursor: pointer;
-        background: none;
-        border: none;
+        cursor: pointer; background: none; border: none;
         transition: background 0.18s ease, color 0.18s ease, transform 0.16s ease;
     }
-
-    .btn-logout:hover {
-        background: rgba(255,255,255,0.2);
-        color: #fff;
-        transform: translateX(3px);
-    }
-
-    .btn-logout .nav-icon {
-        background: rgba(255,255,255,0.1);
-    }
+    .btn-logout:hover { background: rgba(255,255,255,0.2); color: #fff; transform: translateX(3px); }
+    .btn-logout .nav-icon { background: rgba(255,255,255,0.1); }
 
     .top-header {
-        height: 56px;
-        background: #fff;
+        height: 56px; background: #fff;
         border-bottom: 1px solid #e8edf3;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 20px;
-        flex-shrink: 0;
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 0 20px; flex-shrink: 0;
     }
-
     .header-btn {
-        width: 34px;
-        height: 34px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 8px;
-        border: 1px solid #e8edf3;
-        background: #fff;
-        color: #64748b;
-        cursor: pointer;
-        font-size: 15px;
+        width: 34px; height: 34px;
+        display: flex; align-items: center; justify-content: center;
+        border-radius: 8px; border: 1px solid #e8edf3;
+        background: #fff; color: #64748b; cursor: pointer; font-size: 15px;
         transition: background 0.15s, color 0.15s, border-color 0.15s;
     }
-
-    .header-btn:hover {
-        background: var(--primary);
-        color: #fff;
-        border-color: var(--primary);
-    }
+    .header-btn:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
 
     .header-user-chip {
-        display: flex;
-        align-items: center;
-        gap: 8px;
+        display: flex; align-items: center; gap: 8px;
         padding: 5px 12px 5px 6px;
-        border: 1px solid #e8edf3;
-        border-radius: 999px;
-        background: #f8fafc;
-        font-size: 12px;
-        color: #475569;
-        font-weight: 500;
+        border: 1px solid #e8edf3; border-radius: 999px;
+        background: #f8fafc; font-size: 12px; color: #475569; font-weight: 500;
         transition: border-color 0.15s, background 0.15s;
     }
-
-    .header-user-chip:hover {
-        border-color: var(--primary);
-        background: #fff;
-    }
+    .header-user-chip:hover { border-color: var(--primary); background: #fff; }
 
     .header-avatar {
-        width: 24px;
-        height: 24px;
-        border-radius: 50%;
+        width: 24px; height: 24px; border-radius: 50%;
         background: var(--primary);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 10px;
-        color: #fff;
-        font-weight: 700;
-        flex-shrink: 0;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 10px; color: #fff; font-weight: 700; flex-shrink: 0;
     }
 
-    #main-wrapper {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        min-width: 0;
-        overflow: hidden;
-    }
-
-    main {
-        flex: 1;
-        overflow-y: auto;
-        padding: 24px;
-        background: var(--bg);
-    }
+    #main-wrapper { flex: 1; display: flex; flex-direction: column; min-width: 0; overflow: hidden; }
+    main { flex: 1; overflow-y: auto; padding: 24px; background: var(--bg); }
 
     .btn-mobile-menu  { display: flex; }
     .btn-desktop-menu { display: none; }
-
     @media (min-width: 1024px) {
         .btn-mobile-menu  { display: none; }
         .btn-desktop-menu { display: flex; }
@@ -446,8 +246,7 @@
     <div class="logo-area">
         <img src="{{ asset('iconos/logotipo.jpg') }}" alt="Logo AOSC"
             onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='flex'">
-        <div id="logo-fallback"
-            style="display:none; align-items:center; gap:8px;">
+        <div id="logo-fallback" style="display:none; align-items:center; gap:8px;">
             <div style="width:36px;height:36px;background:rgba(255,255,255,0.15);border-radius:10px;
                         display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.2);">
                 <i class="fa fa-building" style="color:#fff;font-size:15px;"></i>
@@ -461,11 +260,9 @@
 
     <!-- USUARIO -->
     <div class="user-card">
-
         <div class="user-avatar">
-            <img src="{{ session('logo')  ? asset(session('logo'))  : asset('perfil/default.png') }}" alt="user">
+            <img src="{{ session('logo') ? asset(session('logo')) : asset('perfil/default.png') }}" alt="user">
         </div>
-
         <div class="user-info">
             <div class="name">{{ auth()->user()->name ?? 'Administrador' }}</div>
             <div class="role">{{ auth()->user()->email ?? 'admin@aosc.com' }}</div>
@@ -474,131 +271,119 @@
 
     <!-- MENÚ -->
     <nav class="nav-primary">
-        <a href="{{ route('admin.dashboard') }}" 
-        class="flex items-center {{ request()->routeIs('admin.dashboard') ? 'active-link' : '' }}">
-            <span class="nav-icon">
-                <i class="fa fa-th-large"></i>
-            </span>
+
+        <a href="{{ route('admin.dashboard') }}"
+            class="flex items-center {{ request()->routeIs('admin.dashboard') ? 'active-link' : '' }}">
+            <span class="nav-icon"><i class="fa fa-th-large"></i></span>
             <span class="nav-text">Dashboard</span>
         </a>
 
-        <p class="sidebar-section">Principal</p>
-        <a href="{{ route('admin.Venta.index')}}" class="flex items-center {{ request()->routeIs('admin.Venta.*') ? 'active-link' : '' }}">
+        <a href="{{ route('admin.Venta.index') }}" 
+        class="flex items-center {{ request()->routeIs('admin.Venta.*') ? 'active-link' : '' }}">
             <span class="nav-icon"><i class="fa fa-store"></i></span>
             <span class="nav-text">Punto de Venta</span>
         </a>
 
+        {{-- CAJA --}}
         <li class="nav-item">
-
-        <a href="#" onclick="toggleSubmenu('submenu-caja', this)" 
-            class="flex items-center justify-between {{ request()->routeIs('admin.caja.*','admin.AperturaCaja.index') ? 'active-link' : '' }}">
-
+            <a href="#" onclick="toggleSubmenu('submenu-caja', this)"
+                class="flex items-center justify-between {{ request()->routeIs('admin.caja.*','admin.AperturaCaja.index') ? 'active-link' : '' }}">
                 <div class="flex items-center">
                     <span class="nav-icon"><i class="fa fa-cash-register"></i></span>
                     <span class="nav-text ml-2">Caja</span>
                 </div>
-
-                <i class="fa fa-chevron-right chevron 
-                {{ request()->routeIs('admin.caja.*', 'admin.AperturaCaja.index') ? 'rotate-90' : '' }}"></i>
+                <i class="fa fa-chevron-right chevron {{ request()->routeIs('admin.caja.*','admin.AperturaCaja.index') ? 'rotate-90' : '' }}"></i>
             </a>
-
-            <!-- SUBMENÚ -->
-            <ul id="submenu-caja"
-            class="submenu ml-8 mt-2 space-y-2 
-            {{ request()->routeIs('admin.caja.*','admin.AperturaCaja.index') ? '' : 'hidden' }}">
-
+            <ul id="submenu-caja" class="submenu ml-8 mt-2 space-y-2 {{ request()->routeIs('admin.caja.*','admin.AperturaCaja.index') ? '' : 'hidden' }}">
                 <li>
                     <a href="{{ route('admin.AperturaCaja.index') }}"
-                    class="flex items-center gap-2 {{ request()->routeIs('admin.AperturaCaja.index') ? 'active-link' : '' }}">
-                        <i class="fa fa-door-open text-green-500"></i>
-                        <span>Apertura y Cierre</span>
+                        class="flex items-center gap-2 {{ request()->routeIs('admin.AperturaCaja.index') ? 'active-link' : '' }}">
+                        <i class="fa fa-door-open text-green-500"></i><span>Apertura y Cierre</span>
                     </a>
                 </li>
-
-                <li>
-                    <a href=""  
-                    class="flex items-center gap-2 {{ request()->routeIs('admin.caja.ingresos') ? 'active-link' : '' }}">
-                        <i class="fa fa-arrow-down text-green-400"></i>
-                        <span>Ingresos</span>
-                    </a>
-                </li>
-
-                <li>
-                    <a href=""
-                    class="flex items-center gap-2 {{ request()->routeIs('admin.caja.egresos') ? 'active-link' : '' }}">
-                        <i class="fa fa-arrow-up text-red-400"></i>
-                        <span>Egresos</span>
-                    </a>
-                </li>
-
-                <li>
-                    <a href=""
-                    class="flex items-center gap-2 {{ request()->routeIs('admin.caja.monitor') ? 'active-link' : '' }}">
-                        <i class="fa fa-chart-line text-blue-400"></i>
-                        <span>Monitor de Ventas</span>
-                    </a>
-                </li>
-
+                <li><a href="" class="flex items-center gap-2"><i class="fa fa-arrow-down text-green-400"></i><span>Ingresos</span></a></li>
+                <li><a href="" class="flex items-center gap-2"><i class="fa fa-arrow-up text-red-400"></i><span>Egresos</span></a></li>
+                <li><a href="" class="flex items-center gap-2"><i class="fa fa-chart-line text-blue-400"></i><span>Monitor de Ventas</span></a></li>
             </ul>
         </li>
 
-        <a href="{{ route('admin.Clientes.index') }}" class="flex items-center {{ request()->routeIs('admin.Clientes.*') ? 'active-link' : '' }}">
+        <a href="{{ route('admin.Clientes.index') }}"
+            class="flex items-center {{ request()->routeIs('admin.Clientes.*') ? 'active-link' : '' }}">
             <span class="nav-icon"><i class="fa fa-users"></i></span>
             <span class="nav-text">Clientes</span>
         </a>
 
         <p class="sidebar-section">Operaciones</p>
 
+        {{-- COMPRAS --}}
         <li>
-            <a href="#" onclick="toggleSubmenu('submenu-compras', this)" 
-            class="flex items-center justify-between
-            {{ request()->routeIs('admin.compras.*','admin.Proveedor.*') ? 'active-link' : '' }}">
-
+            <a href="#" onclick="toggleSubmenu('submenu-compras', this)"
+                class="flex items-center justify-between
+                {{ request()->routeIs('admin.Compras.*') ? 'active-link' : '' }}">
                 <div class="flex items-center">
                     <span class="nav-icon"><i class="fa fa-shopping-cart"></i></span>
                     <span class="nav-text ml-2">Compras</span>
                 </div>
-
-                <i class="fa fa-chevron-right chevron 
-                {{ request()->routeIs('admin.compras.*','admin.Proveedor.*') ? 'rotate-90' : '' }}"></i>
+                <i class="fa fa-chevron-right chevron {{ request()->routeIs('admin.Compras.*') ? 'rotate-90' : '' }}"></i>
             </a>
-
-            <!-- SUBMENÚ -->
             <ul id="submenu-compras"
-                class="submenu ml-8 mt-2 space-y-2
-                {{ request()->routeIs('admin.compras.*','admin.Proveedor.*') ? '' : 'hidden' }}">
-
-                <!-- Compras -->
+                class="submenu ml-8 mt-2 space-y-2 {{ request()->routeIs('admin.Compras.*') ? '' : 'hidden' }}">
                 <li>
-                    <a href=""
-                    class="flex items-center gap-2 {{ request()->routeIs('admin.compras.*') ? 'active-link' : '' }}">
-                        <i class="fa fa-circle text-blue-400 text-[8px]"></i>
+                    <a href="{{ route('admin.Compras.index') }}"
+                        class="flex items-center gap-2 {{ request()->routeIs('admin.Compras.index','admin.Compras.create') ? 'active-link' : '' }}">
+                        <i class="fa fa-circle text-blue-400" style="font-size:8px"></i>
                         <span>Compras</span>
                     </a>
                 </li>
-
-                <!-- Proveedores -->
                 <li>
-                    <a href="{{ route('admin.Proveedor.index') }}"
-                    class="flex items-center gap-2 {{ request()->routeIs('admin.Proveedor.*') ? 'active-link' : '' }}">
-                        <i class="fa fa-circle text-green-400 text-[8px]"></i>
+                    <a href="{{ route('admin.Compras.proveedores') }}"
+                        class="flex items-center gap-2 {{ request()->routeIs('admin.Compras.proveedores*') ? 'active-link' : '' }}">
+                        <i class="fa fa-circle text-green-400" style="font-size:8px"></i>
                         <span>Proveedores</span>
                     </a>
                 </li>
-
             </ul>
         </li>
-        
 
-        <a href="#" class="flex items-center {{ request()->routeIs('admin.creditos.*') ? 'active-link' : '' }}">
+        <a href="{{ route('admin.Creditos.index') }}"
+        class="flex items-center {{ request()->routeIs('admin.Creditos.*') ? 'active-link' : '' }}">
             <span class="nav-icon"><i class="fa fa-credit-card"></i></span>
             <span class="nav-text">Créditos</span>
         </a>
 
-        <a href="#" class="flex items-center {{ request()->routeIs('admin.inventario.*') ? 'active-link' : '' }}">
-            <span class="nav-icon"><i class="fa fa-box"></i></span>
-            <span class="nav-text">Inventario</span>
-        </a>
+        <li>
+            <a href="#" onclick="toggleSubmenu('submenu-inventario', this)"
+                class="flex items-center justify-between {{ request()->routeIs('admin.Inventario.*') ? 'active-link' : '' }}">
+                <div class="flex items-center">
+                    <span class="nav-icon"><i class="fa fa-box"></i></span>
+                    <span class="nav-text ml-2">Inventario</span>
+                </div>
+                <i class="fa fa-chevron-right chevron {{ request()->routeIs('admin.Inventario.*') ? 'rotate-90' : '' }}"></i>
+            </a>
+            <ul id="submenu-inventario" class="submenu ml-8 mt-2 space-y-2 {{ request()->routeIs('admin.Inventario.*') ? '' : 'hidden' }}">
+                <li>
+                    <a href="{{ route('admin.Inventario.stock') }}"
+                        class="flex items-center gap-2 {{ request()->routeIs('admin.Inventario.stock') ? 'active-link' : '' }}">
+                        <i class="fa fa-circle text-green-400" style="font-size:8px"></i>
+                        <span>Stock</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.Inventario.kardex') }}"
+                        class="flex items-center gap-2 {{ request()->routeIs('admin.Inventario.kardex') ? 'active-link' : '' }}">
+                        <i class="fa fa-circle text-blue-400" style="font-size:8px"></i>
+                        <span>Kardex valorizado</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.Inventario.ajuste') }}"
+                        class="flex items-center gap-2 {{ request()->routeIs('admin.Inventario.ajuste*') ? 'active-link' : '' }}">
+                        <i class="fa fa-circle text-orange-400" style="font-size:8px"></i>
+                        <span>Ajuste de stock</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
 
         <p class="sidebar-section">Análisis</p>
 
@@ -612,93 +397,64 @@
             <span class="nav-text">Tablero</span>
         </a>
 
-        
-        <!-- AJUSTES-->
-        <p class="sidebar-section">Configuración</p> 
+        <p class="sidebar-section">Configuración</p>
 
-        <a href="#" onclick="toggleAjustes('submenu-ajustes', this)" 
-        class="submenu-trigger flex items-center
-        {{ request()->routeIs('admin.ConfiguracionVisual.*', 'admin.LibroReclamacion.*', 'admin.AdministracionGeneral.*') ? 'active-link' : '' }}">
-
+        <a href="#" onclick="toggleAjustes('submenu-ajustes', this)"
+            class="submenu-trigger flex items-center
+            {{ request()->routeIs('admin.ConfiguracionVisual.*','admin.LibroReclamacion.*','admin.AdministracionGeneral.*') ? 'active-link' : '' }}">
             <span class="nav-icon"><i class="fa fa-cog"></i></span>
             <span class="nav-text">Ajustes</span>
-
-            <i class="fa fa-chevron-right chevron
-            {{ request()->routeIs('admin.ConfiguracionVisual.*', 'admin.LibroReclamacion.*', 'admin.AdministracionGeneral.*') ? 'rotate-90' : '' }}">
-            </i>
+            <i class="fa fa-chevron-right chevron {{ request()->routeIs('admin.ConfiguracionVisual.*','admin.LibroReclamacion.*','admin.AdministracionGeneral.*') ? 'rotate-90' : '' }}"></i>
         </a>
 
         <div id="submenu-ajustes"
-        class="submenu flex flex-col {{ request()->routeIs('admin.ConfiguracionVisual.*', 'admin.LibroReclamacion.*', 'admin.AdministracionGeneral.*') ? '' : 'hidden' }}">
-
-            <a href="{{ route('admin.AdministracionGeneral.index') }}" 
-            class="flex items-center {{ request()->routeIs('admin.AdministracionGeneral.*') ? 'active-link' : '' }}">
+            class="submenu flex flex-col {{ request()->routeIs('admin.ConfiguracionVisual.*','admin.LibroReclamacion.*','admin.AdministracionGeneral.*') ? '' : 'hidden' }}">
+            <a href="{{ route('admin.AdministracionGeneral.index') }}"
+                class="flex items-center {{ request()->routeIs('admin.AdministracionGeneral.*') ? 'active-link' : '' }}">
                 <span class="nav-icon"><i class="fa fa-user-cog"></i></span>
                 <span class="nav-text">Administración General</span>
             </a>
-
-            <a href="{{ route('admin.LibroReclamacion.index') }}" 
-            class="flex items-center {{ request()->routeIs('admin.LibroReclamacion.*') ? 'active-link' : '' }}">
-                <span class="nav-icon">
-                    <i class="fa fa-book"></i>
-                </span>
+            <a href="{{ route('admin.LibroReclamacion.index') }}"
+                class="flex items-center {{ request()->routeIs('admin.LibroReclamacion.*') ? 'active-link' : '' }}">
+                <span class="nav-icon"><i class="fa fa-book"></i></span>
                 <span class="nav-text">Libro de Reclamaciones</span>
             </a>
-
             <a href="{{ route('admin.ConfiguracionVisual.index') }}"
-            class="flex items-center {{ request()->routeIs('admin.ConfiguracionVisual.*') ? 'active-link' : '' }}">
+                class="flex items-center {{ request()->routeIs('admin.ConfiguracionVisual.*') ? 'active-link' : '' }}">
                 <span class="nav-icon"><i class="fa fa-palette"></i></span>
                 <span class="nav-text">Config. Visual</span>
             </a>
-
         </div>
+
     </nav>
 
     <!-- LOGOUT -->
-   <form method="POST" action="{{ route('logout') }}" style="margin:0;">
+    <form method="POST" action="{{ route('logout') }}" style="margin:0;">
         @csrf
         <button type="submit" class="btn-logout">
             <span class="nav-icon"><i class="fa fa-power-off"></i></span>
             <span class="nav-text">Cerrar sesión</span>
         </button>
     </form>
-
 </aside>
-
 
 @if(session('success'))
 <div id="alertSuccess" class="fixed top-4 inset-x-0 flex justify-center z-[100] pointer-events-none animate-fade-in-down">
-    
-    <div class="
-        bg-green-50 text-green-700 
-        border border-green-200
-        px-4 py-2 
-        rounded-2xl
-        text-sm font-bold
-        flex items-center gap-3
-        shadow-xl shadow-green-900/5
-        backdrop-blur-sm
-        pointer-events-auto
-    ">
+    <div class="bg-green-50 text-green-700 border border-green-200 px-4 py-2 rounded-2xl text-sm font-bold flex items-center gap-3 shadow-xl backdrop-blur-sm pointer-events-auto">
         <div class="w-6 h-6 bg-green-500 rounded-lg flex items-center justify-center text-white shadow-sm">
             <i class="fa fa-check text-xs"></i>
         </div>
-
         <span>{{ session('success') }}</span>
     </div>
-
 </div>
 @endif
 
-
 <style>
     @keyframes fade-in-down {
-        0% { opacity: 0; transform: translateY(-20px); }
+        0%   { opacity: 0; transform: translateY(-20px); }
         100% { opacity: 1; transform: translateY(0); }
     }
-    .animate-fade-in-down {
-        animation: fade-in-down 0.5s ease-out;
-    }
+    .animate-fade-in-down { animation: fade-in-down 0.5s ease-out; }
 </style>
 
 <script>
@@ -712,32 +468,20 @@
     }, 3000);
 </script>
 
-
 <div id="main-wrapper">
-
     <header class="top-header">
         <div style="display:flex;align-items:center;gap:10px;">
-           
-            <button class="header-btn btn-mobile-menu" onclick="openSidebar()">
-                <i class="fa fa-bars"></i>
-            </button>
-            <button class="header-btn btn-desktop-menu" onclick="toggleMiniSidebar()">
-                <i class="fa fa-bars"></i>
-            </button>
+            <button class="header-btn btn-mobile-menu" onclick="openSidebar()"><i class="fa fa-bars"></i></button>
+            <button class="header-btn btn-desktop-menu" onclick="toggleMiniSidebar()"><i class="fa fa-bars"></i></button>
         </div>
-
         <div style="display:flex;align-items:center;gap:8px;">
             <div class="header-user-chip">
-                <div class="header-avatar">
-                    {{ strtoupper(substr(auth()->user()->name ?? 'A', 0, 1)) }}
-                </div>
+                <div class="header-avatar">{{ strtoupper(substr(auth()->user()->name ?? 'A', 0, 1)) }}</div>
                 <span>{{ auth()->user()->email ?? 'admin@aosc.com' }}</span>
             </div>
             <form method="POST" action="{{ route('logout') }}" style="margin:0;">
                 @csrf
-                <button type="submit" class="header-btn" title="Cerrar sesión">
-                    <i class="fa fa-sign-out-alt"></i>
-                </button>
+                <button type="submit" class="header-btn" title="Cerrar sesión"><i class="fa fa-sign-out-alt"></i></button>
             </form>
         </div>
     </header>
@@ -745,51 +489,36 @@
     <main>
         @yield('content')
     </main>
-
 </div>
 
-
-
 <script>
-    /* ── Abrir sidebar en móvil ── */
     function openSidebar() {
         document.getElementById('sidebar').classList.add('sidebar-open');
         document.getElementById('overlay').classList.add('active');
     }
-
-    /* ── Cerrar sidebar en móvil ── */
     function closeSidebar() {
         document.getElementById('sidebar').classList.remove('sidebar-open');
         document.getElementById('overlay').classList.remove('active');
     }
-
-    /* ── Colapsar a mini en escritorio ── */
     function toggleMiniSidebar() {
         document.getElementById('sidebar').classList.toggle('sidebar-mini');
     }
-
-    /* ── Submenú Ajustes ── */
-        function toggleAjustes(id, el) {
+    function toggleAjustes(id, el) {
         const sub = document.getElementById(id);
         const icon = el.querySelector('.chevron');
-
         sub.classList.toggle('hidden');
-
-        if (icon) {
-            icon.classList.toggle('rotate-90');
-        }
+        if (icon) icon.classList.toggle('rotate-90');
     }
     function toggleSubmenu(id, el) {
         const sub = document.getElementById(id);
         const icon = el.querySelector('.chevron');
-
         sub.classList.toggle('hidden');
-
-        if (icon) {
-            icon.classList.toggle('rotate-90');
-        }
+        if (icon) icon.classList.toggle('rotate-90');
     }
 </script>
+
+{{-- Bootstrap JS - REQUERIDO para modales --}}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 @stack('scripts')
 </body>
 </html>
