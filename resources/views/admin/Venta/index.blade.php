@@ -54,8 +54,13 @@
                         <span class="font-bold flex items-center gap-1"><i class="fa fa-user opacity-80"></i> {{ Str::words(auth()->user()->name, 1, '') }}</span>
                     </div>
                     <div class="text-left text-xs">
-                        <span class="block text-[9px] font-medium opacity-70 uppercase tracking-wider">Monto Inicial</span>
-                        <span class="font-bold">S/ {{ number_format($cajaAbierta->monto_apertura, 2) }}</span>
+                        <span class="block text-[9px] font-medium opacity-70 uppercase tracking-wider">
+                            Total
+                        </span>
+
+                        <span class="font-bold">
+                            S/ {{ number_format($cajaAbierta->monto_apertura + $cajaAbierta->monto_sistema, 2) }}
+                        </span>
                     </div>
                 </div>
                 <div class="flex-shrink-0 w-full sm:w-auto">
@@ -191,13 +196,20 @@
                         </span>
                         <span class="text-xs text-slate-400 flex items-center gap-1.5 mt-1">
                             <i class="fa fa-clock text-slate-300"></i>
-                            @if($mesa->estado === 'ocupado' && !empty($mesa->hora_inicio))
-                                Tiempo: {{ \Carbon\Carbon::parse($mesa->hora_inicio)->diffForHumans(null, true) }}
+                            @php
+                                $pedido = $pedidos[$mesa->id] ?? null;
+                            @endphp
+                            @if(strtolower($mesa->estado) === 'ocupado' && $pedido)
+                                @php
+                                    $inicio = \Carbon\Carbon::parse($pedido->created_at);
+                                @endphp
+                                Tiempo: {{ $inicio->diffForHumans(null, true) }}
                             @else
                                 Tiempo: --:--
                             @endif
                         </span>
                     </div>
+
                 </div>
             @endforeach
         </div>

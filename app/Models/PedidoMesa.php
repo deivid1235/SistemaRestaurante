@@ -21,4 +21,6 @@ class PedidoMesa extends Model
     {
         return $this->belongsTo(Mesa::class, 'id_mesa');
     }
+
+    
 }

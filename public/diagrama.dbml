@@ -1,61 +1,42 @@
 Table venta {
     id_venta int [pk, increment]
 
-    // RELACIONES PRINCIPALES
-    id_pedido_mesa int [ref: > Pedido_mesa.id]
-    id_tipo_pedido int [ref: > tipo_pedido.id]
+    //  RELACIONES
     id_cliente int [ref: > clientes.id]
     id_tipo_doc int [ref: > tipo_documentos.id]
-    id_tipo_pago int [ref: > tipo_pagos.id]
     id_usu int [ref: > usuarios.id]
     id_apc int [ref: > aperturas_caja.id]
 
-    // DOCUMENTO
+    //  DOCUMENTO SUNAT
     serie_doc char(4)
     nro_doc varchar(8)
+    codigo_operacion varchar(4) // ej: 0101
 
-    // PAGOS
-    pago_efe decimal(10,2) [default: 0]
-    pago_efe_none decimal(10,2) [default: 0]
-    pago_tar decimal(10,2) [default: 0]
+    //  TOTALES (OBLIGATORIO SUNAT)
+    op_gravadas decimal(10,2) [default: 0]
+    op_exoneradas decimal(10,2) [default: 0]
+    op_inafectas decimal(10,2) [default: 0]
 
-    // DESCUENTOS
-    descuento_tipo char(1)
-    descuento_personal int
-    descuento_monto decimal(10,2) [default: 0]
-    descuento_motivo varchar(200)
+    igv decimal(10,2)
+    total decimal(10,2)
 
-    // COMISIONES
-    comision_tarjeta decimal(10,2) [default: 0]
-    comision_delivery decimal(10,2) [default: 0]
+    // FECHAS
+    fecha_emision datetime
+    fecha_vencimiento date
 
-    // IMPUESTOS Y TOTAL
-    igv decimal(10,2) [default: 0]
-    total decimal(10,2) [default: 0]
-
-    // SUNAT
-    codigo_operacion varchar(20)
-    fecha_venta datetime
-    estado varchar(15) [default: 'a']
-    enviado_sunat char(1)
+    //  SUNAT RESPUESTA
+    enviado_sunat char(1) [default: '0']
+    estado_sunat varchar(20)
 
     code_respuesta_sunat varchar(5)
     descripcion_sunat_cdr varchar(300)
-    name_file_sunat varchar(80)
-    hash_cdr varchar(200)
+
     hash_cpe varchar(200)
+    hash_cdr varchar(200)
+    name_file_sunat varchar(100)
 
-    fecha_vencimiento date
-
-    // PAGOS EXTRA
-    pago_yape varchar(100)
-    pago_plin varchar(100)
-    pago_transferencia varchar(100)
-
-    // REFERENCIA NOTA
-    id_documento_referencia int
-    motivo_nota_id char(2)
-    motivo_sustento varchar(500)
+    //  ESTADO INTERNO
+    estado varchar(15) [default: 'emitido']
 
     created_at datetime
     updated_at datetime

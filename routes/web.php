@@ -223,10 +223,14 @@ Route::middleware('auth')->group(function () {
     Route::get('admin/Venta/agregar-carrito/{id}', [VentaController::class, 'agregar'])->name('admin.Venta.agregar-carrito');
     Route::get('admin/Venta/carrito/{accion}/{id?}', [VentaController::class, 'carritoAccion'])->name('admin.Venta.carrito-accion');
     Route::get('admin/Venta/pago', [VentaController::class, 'pago'])->name('admin.Venta.pago');
+    Route::get('admin/Venta/pago/{id}', [VentaController::class, 'pago'])
+    ->name('admin.Venta.pago');
     //Rutas para Pedido Mesa
     Route::post('admin/Venta/pedido/guardar', [VentaController::class, 'GuardarPedido'])->name('admin.Venta.guardar');
     Route::get('/venta/cancelar/{id}', [VentaController::class, 'cancelarPedido'])->name('admin.Venta.cancelar');
-        
+    //Venta
+    Route::post('/admin/Venta/store', [VentaController::class, 'store'])->name('admin.Venta.store');
+
     
 });
 

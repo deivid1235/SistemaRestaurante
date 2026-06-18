@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
+use Carbon\Carbon;
 use App\Models\Aperturas_Caja;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Models\Venta;
 use App\Models\Salon;
 use App\Models\Mesa;
@@ -13,6 +15,7 @@ use App\Models\Cliente;
 use App\Models\TipoPago;
 use App\Models\PedidoMesa;
 use App\Models\Usuario;
+
 
 use Illuminate\Http\Request;
 
@@ -37,7 +40,7 @@ class VentaController extends Controller
 
         $mesas = Mesa::with(['salon', 'pedidoMesa'])->where('salon_id', $salonId)->get();
         $pedidos = PedidoMesa::all()->keyBy('id_mesa');
-       $clientes = Cliente::where('estado', 'a')->get();
+        $clientes = Cliente::where('estado', 'a')->get();
 
         $mesasDisponibles = Mesa::where('estado', 'disponible')->count();
         $mesasOcupadas    = Mesa::where('estado', 'ocupado')->count();
@@ -65,6 +68,7 @@ class VentaController extends Controller
     public function create()
     {
         //
+      
     }
 
     /**
@@ -72,9 +76,94 @@ class VentaController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $request->validate([
+            'id_tipo_doc' => 'required|exists:tipo_documentos,id',
+            'serie_doc'   => 'required|max:4',
+            'nro_doc'     => 'required|max:8',
+        ]);
 
+        try {
+            $carrito = session()->get('carrito', []);
+
+            if (empty($carrito)) {
+                return back()->with('error', 'El carrito está vacío');
+            }
+
+            DB::beginTransaction();
+
+            $subtotal = 0;
+
+            foreach ($carrito as $item) {
+                $subtotal += ($item['precio'] * $item['cantidad']);
+            }
+
+            $descuento = $request->descuento ?? 0;
+
+            if ($descuento > $subtotal) {
+                $descuento = $subtotal;
+            }
+
+            $totalFinal = $subtotal - $descuento;
+            $igv = round($subtotal * 0.18, 2);
+            $cajaAbierta = Aperturas_Caja::where('usuario_id', Auth::id())
+                ->where('estado', 'a')
+                ->first();
+
+            $venta = Venta::create([
+                'id_cliente' => $request->id_cliente ?: null,
+                'id_tipo_doc' => $request->id_tipo_doc,
+                'id_usu' => Auth::id(),
+                'id_apc' => $cajaAbierta?->id,
+                'serie_doc' => strtoupper($request->serie_doc),
+                'nro_doc' => $request->nro_doc,
+                'codigo_operacion' => '0101',
+                'op_gravadas' => $subtotal,
+                'op_exoneradas' => 0,
+                'op_inafectas' => 0,
+                'igv' => $igv,
+                'total' => $totalFinal,
+                'descuento' => $descuento,
+                'fecha_emision' => now(),
+                'enviado_sunat' => '0',
+                'estado_sunat' => 'pendiente',
+                'estado' => 'emitido',
+            ]);
+
+            foreach ($carrito as $item) {
+                DB::table('venta_detalles')->insert([
+                    'venta_id' => $venta->id,
+                    'id_prod' => $item['id'],
+                    'cantidad' => $item['cantidad'],
+                    'precio' => $item['precio'],
+                    'total' => ($item['precio'] * $item['cantidad']),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+
+            if ($cajaAbierta) {
+                $cajaAbierta->monto_sistema = ($cajaAbierta->monto_sistema ?? 0) + $totalFinal;
+                $cajaAbierta->save();
+            }
+
+            session()->forget('carrito');
+
+            DB::commit();
+
+            return redirect()
+                ->route('admin.Venta.index')
+                ->with('success', 'Venta registrada correctamente');
+
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+
+            return back()->with(
+                'error',
+                'Error al guardar: ' . $e->getMessage()
+            );
+        }
+    }
     /**
      * Display the specified resource.
      */
@@ -197,20 +286,6 @@ class VentaController extends Controller
         return redirect()->back();
     }
 
-    public function pago()
-    {
-        $carrito = session()->get('carrito', []);
-        $total = 0;
-
-        foreach ($carrito as $item) {
-            $total += $item['precio'] * $item['cantidad'];
-        }
-        $tipos_doc = TipoDocumento::all();
-        $clientes = Cliente::all();
-        $tipos_pago = TipoPago::all();
-        return view('admin.Venta.pago', compact('carrito', 'total', 'tipos_doc', 'clientes', 'tipos_pago'));
-    }
-
     public function ordenPedido(int $id_mesa)
     {
         if (!Auth::check()) {
@@ -241,8 +316,6 @@ class VentaController extends Controller
             'nombre_cliente' => 'nullable|string',
             'nro_personas' => 'nullable|integer',
         ]);
-
-        // 🔥 crear o actualizar pedido
         PedidoMesa::updateOrCreate(
             ['id_mesa' => $request->id_mesa],
             [
@@ -251,8 +324,6 @@ class VentaController extends Controller
                 'nro_personas' => $request->nro_personas ?? 1,
             ]
         );
-
-        // 🔥 asegurar mesa ocupada
         Mesa::where('id', $request->id_mesa)->update([
             'estado' => 'ocupado'
         ]);
@@ -264,16 +335,39 @@ class VentaController extends Controller
 
     public function cancelarPedido(int $id_mesa)
     {
-        // 🔥 eliminar pedido
         PedidoMesa::where('id_mesa', $id_mesa)->delete();
-
-        // 🔥 liberar mesa
         Mesa::where('id', $id_mesa)->update([
             'estado' => 'disponible'
         ]);
-
         return redirect()->route('admin.Venta.index')
             ->with('success', 'Pedido cancelado y mesa liberada');
     }
+
+    public function pago()
+    {
+        $carrito = session()->get('carrito', []);
+        $total = 0;
+
+        foreach ($carrito as $item) {
+            $total += ($item['precio'] ?? 0) * ($item['cantidad'] ?? 0);
+        }
+
+        $tipos_doc = TipoDocumento::all();
+        $clientes = Cliente::where('estado', 'a')->get();
+        $tipos_pago = TipoPago::all();
+        $pedidos = PedidoMesa::whereHas('mesa')->get();
+        
+
+        return view('admin.Venta.pago', compact(
+            'carrito',
+            'total',
+            'tipos_doc',
+            'clientes',
+            'tipos_pago',
+            'pedidos'
+        ));
+    }
+
+
 
 }
