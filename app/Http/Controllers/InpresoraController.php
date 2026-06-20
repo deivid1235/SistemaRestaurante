@@ -1,9 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\DB;
 use App\Models\Inpresora;
+use App\Models\Venta;
 use Illuminate\Http\Request;
+
 
 class InpresoraController extends Controller
 {
@@ -82,4 +84,27 @@ class InpresoraController extends Controller
         return redirect()->back()->with('success', 'Impresora eliminada');
 
     }
+
+    public function ticket(int $id)
+    {
+        $venta = Venta::with([
+            'detalles.producto',
+            'cliente',
+            'usuario',
+            'tipoDocumento'
+        ])->findOrFail($id);
+
+        // obtener plantilla activa desde BD
+        $config = DB::table('modeloplanilla')->first();
+
+        $plantilla = $config->plantilla ?? '80';
+
+        // validar por seguridad
+        if (!in_array($plantilla, ['80', '58', '50', 'A4'])) {
+            $plantilla = '80';
+        }
+
+        return view("admin.Inpresora.ModeloTikes.ticket_$plantilla", compact('venta'));
+    }
+    
 }

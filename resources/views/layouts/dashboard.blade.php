@@ -287,23 +287,39 @@
         {{-- CAJA --}}
         <li class="nav-item">
             <a href="#" onclick="toggleSubmenu('submenu-caja', this)"
-                class="flex items-center justify-between {{ request()->routeIs('admin.caja.*','admin.AperturaCaja.index') ? 'active-link' : '' }}">
+                class="flex items-center justify-between {{ request()->routeIs('admin.caja.*','admin.AperturaCaja.index','admin.Ingresos.index','admin.MonitorVenta.index') ? 'active-link' : '' }}">
                 <div class="flex items-center">
                     <span class="nav-icon"><i class="fa fa-cash-register"></i></span>
                     <span class="nav-text ml-2">Caja</span>
                 </div>
-                <i class="fa fa-chevron-right chevron {{ request()->routeIs('admin.caja.*','admin.AperturaCaja.index') ? 'rotate-90' : '' }}"></i>
+                <i class="fa fa-chevron-right chevron {{ request()->routeIs('admin.caja.*','admin.AperturaCaja.index','admin.Ingresos.index','admin.MonitorVenta.index') ? 'rotate-90' : '' }}"></i>
             </a>
-            <ul id="submenu-caja" class="submenu ml-8 mt-2 space-y-2 {{ request()->routeIs('admin.caja.*','admin.AperturaCaja.index') ? '' : 'hidden' }}">
+            <ul id="submenu-caja" class="submenu ml-8 mt-2 space-y-2 {{ request()->routeIs('admin.caja.*','admin.AperturaCaja.index', 'admin.Ingresos.index','admin.MonitorVenta.index') ? '' : 'hidden' }}">
                 <li>
                     <a href="{{ route('admin.AperturaCaja.index') }}"
                         class="flex items-center gap-2 {{ request()->routeIs('admin.AperturaCaja.index') ? 'active-link' : '' }}">
                         <i class="fa fa-door-open text-green-500"></i><span>Apertura y Cierre</span>
                     </a>
                 </li>
-                <li><a href="" class="flex items-center gap-2"><i class="fa fa-arrow-down text-green-400"></i><span>Ingresos</span></a></li>
+
+                <li>
+                    <a href="{{ route('admin.Ingresos.index') }}"
+                        class="flex items-center gap-2 {{ request()->routeIs('admin.Ingresos.index') ? 'active-link' : '' }}">
+                        
+                        <i class="fa fa-arrow-down text-green-400"></i>
+                        <span>Ingresos</span>
+                    </a>
+                </li>
+
                 <li><a href="" class="flex items-center gap-2"><i class="fa fa-arrow-up text-red-400"></i><span>Egresos</span></a></li>
-                <li><a href="" class="flex items-center gap-2"><i class="fa fa-chart-line text-blue-400"></i><span>Monitor de Ventas</span></a></li>
+                <li>
+                    <a href="{{ route('admin.MonitorVenta.index') }}"
+                    class="flex items-center gap-2 {{ request()->routeIs('admin.MonitorVenta.index') ? 'active-link' : ''}}">
+                    
+                        <i class="fa fa-chart-line text-blue-400"></i>
+                        <span>Monitor de Ventas</span>
+                    </a>
+                </li>
             </ul>
         </li>
 

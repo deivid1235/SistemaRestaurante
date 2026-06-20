@@ -34,9 +34,10 @@ use App\Http\Controllers\PedidoMesaController;
 use App\Http\Controllers\CompraController;
 use App\Http\Controllers\CreditoController;
 use App\Http\Controllers\InventarioController;
-
-
-
+use App\Http\Controllers\ModeloplanillaController;
+use App\Http\Controllers\IngresosController;
+use App\Http\Controllers\MonitorVentaController;
+use App\Models\Ingresos;
 
 Route::get('/', [HomeController::class, 'index']);
 Route::post('/login', [LoginController::class, 'login'])->name('login');
@@ -111,6 +112,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/admin/Inpresora', [InpresoraController::class, 'store'])->name('admin.Inpresora.store');
     Route::put('/admin/Inpresora/{id}', [InpresoraController::class, 'update'])->name('admin.Inpresora.update');
     Route::delete('/admin/Inpresora/{id}', [InpresoraController::class, 'destroy'])->name('admin.Inpresora.destroy');
+    Route::get('/admin/Impresora/Tikes', function () {return view('admin.Inpresora.Tikes');})->name('admin.tikes.index');
+    Route::get('/venta/ticket/{id}', [VentaController::class, 'ticket'])->name('admin.Venta.ticket');
+    Route::post('/plantilla/activar/{tipo}', [ModeloplanillaController::class, 'activar'])
+    ->name('plantilla.activar');
+
     //Rutas para Salón
     Route::get('/admin/Salon', [SalonController::class, 'index'])->name('admin.Salon.index');
     Route::post('/admin/Salon', [SalonController::class, 'store'])->name('admin.Salon.store');
@@ -205,6 +211,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/AperturaCaja/edit/{id}', [AperturasCajaController::class, 'edit'])->name('admin.AperturaCaja.edit');
     Route::put('/admin/AperturaCaja/update/{id}', [AperturasCajaController::class, 'update'])->name('admin.AperturaCaja.update');
     Route::delete('/admin/AperturaCaja/delete/{id}', [AperturasCajaController::class, 'destroy'])->name('admin.AperturaCaja.destroy');
+    //Ingresos
+    Route::get('/admin/Ingresos', [IngresosController::class, 'index'])->name('admin.Ingresos.index');
+    Route::post('/admin/Ingresos', [IngresosController::class, 'store'])->name('admin.Ingresos.store');
+
+    //Monitor de ventas 
+     Route::get('/admin/MonitorVenta', [MonitorVentaController::class, 'index'])->name('admin.MonitorVenta.index');
 
     //  Compras 
     Route::get('/admin/Compras',[CompraController::class, 'index'])->name('admin.Compras.index');
@@ -259,6 +271,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/venta/cancelar/{id}', [VentaController::class, 'cancelarPedido'])->name('admin.Venta.cancelar');
     //Venta
     Route::post('/admin/Venta/store', [VentaController::class, 'store'])->name('admin.Venta.store');
+
 
     
 });

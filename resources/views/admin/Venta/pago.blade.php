@@ -28,8 +28,13 @@
             </div>
         @empty
             <div class="p-8 text-center text-slate-400 text-sm font-semibold">
-                <div class="text-3xl mb-2">🛒</div>
-                El carrito está vacío
+                <div class="flex justify-center mb-3 text-slate-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.116 60.116 0 0 0-20.736 0M5.216 5.5A2.25 2.25 0 1 1 9 7.5m2.25 1.5a2.25 2.25 0 1 0-4.5 0M12 18.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 18.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                    </svg>
+                </div>
+                
+                <span>El carrito está vacío</span>
             </div>
         @endforelse
         <div class="flex-1"></div>
@@ -175,21 +180,45 @@
             <div class="px-5 py-3 border-b border-slate-100">
                 <div class="grid grid-cols-3 gap-3">
                     <div>
-                        <label class="block text-xs font-black uppercase text-slate-400 tracking-wider mb-1.5">Serie</label>
+                        <label class="block text-xs font-black uppercase text-slate-400 tracking-wider mb-1.5">
+                            Serie
+                        </label>
+
                         <div class="relative">
                             <span class="absolute inset-y-0 left-3 flex items-center text-slate-400 pointer-events-none">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M7 7h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                </svg>
                             </span>
-                            <input type="text" name="serie_doc" maxlength="4" placeholder="B001" class="w-full pl-8 pr-3 py-2.5 border border-slate-200 rounded-lg bg-slate-50 text-sm font-bold uppercase text-slate-700 placeholder:text-slate-300 focus:outline-none focus:border-[#0096D9] focus:ring-2 focus:ring-[#0096D9]/20" required>
+
+                            <input type="text"
+                                name="serie_doc"
+                                value="{{ $documento->serie }}"
+                                readonly
+                                class="w-full pl-8 pr-3 py-2.5 border border-slate-200 rounded-lg bg-slate-100 text-sm font-bold text-slate-700">
                         </div>
                     </div>
+
+                    <!-- NÚMERO AUTOMÁTICO -->
                     <div>
-                        <label class="block text-xs font-black uppercase text-slate-400 tracking-wider mb-1.5">Número</label>
+                        <label class="block text-xs font-black uppercase text-slate-400 tracking-wider mb-1.5">
+                            Número
+                        </label>
+
                         <div class="relative">
                             <span class="absolute inset-y-0 left-3 flex items-center text-slate-400 pointer-events-none">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                                </svg>
                             </span>
-                            <input type="text" name="nro_doc" maxlength="8" placeholder="00000001" class="w-full pl-8 pr-3 py-2.5 border border-slate-200 rounded-lg bg-slate-50 text-sm font-bold text-slate-700 placeholder:text-slate-300 focus:outline-none focus:border-[#0096D9] focus:ring-2 focus:ring-[#0096D9]/20" required>
+
+                            <input type="text"
+                                name="nro_doc"
+                                value="{{ str_pad($documento->numero ?? 1, 8, '0', STR_PAD_LEFT) }}"
+                                readonly
+                                class="w-full pl-8 pr-3 py-2.5 border border-slate-200 rounded-lg bg-slate-100 text-sm font-bold text-slate-700">
                         </div>
                     </div>
                     <div>
@@ -207,6 +236,7 @@
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     Registrar sin Imprimir
                 </button>
+
                 <button type="submit" name="_action" value="previsualizar" class="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-white text-sm font-black uppercase tracking-wide active:scale-[.99] transition-all" style="background: linear-gradient(135deg, var(--primary, #0096D9) 0%, #007bb5 100%); box-shadow: 0 4px 14px rgba(0, 150, 217, 0.3)">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>

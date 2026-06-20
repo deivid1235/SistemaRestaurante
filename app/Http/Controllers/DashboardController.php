@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Cliente;
 use App\Models\Producto;
@@ -60,6 +60,25 @@ class DashboardController extends Controller
             Carbon::now()->subDays(7)
         ])->count();
 
+        $ventasPorDia = DB::table('ventas')
+        ->select(
+            DB::raw('DATE(fecha_emision) as fecha'),
+            DB::raw('SUM(total) as total')
+        )
+        ->groupBy(DB::raw('DATE(fecha_emision)'))
+        ->orderBy('fecha', 'ASC')
+        ->get();
+
+        $ingresosPorDia = DB::table('ingresos')
+        ->select(
+            DB::raw('DATE(fecha_reg) as fecha'),
+            DB::raw('SUM(importe) as total')
+        )
+        ->where('estado', 'A')
+        ->groupBy('fecha')
+        ->orderBy('fecha', 'ASC')
+        ->get();
+
         $porcentajeUsuarios = $usuariosSemanaAnterior > 0
             ? (($usuariosSemana - $usuariosSemanaAnterior) / $usuariosSemanaAnterior) * 100
             : 100;
@@ -73,7 +92,9 @@ class DashboardController extends Controller
             'porcentajeClientes',
             'porcentajeProductos',
             'porcentajeMesas',
-            'porcentajeUsuarios'
+            'porcentajeUsuarios',
+            'ventasPorDia',
+            'ingresosPorDia'
         ));
     }
 }

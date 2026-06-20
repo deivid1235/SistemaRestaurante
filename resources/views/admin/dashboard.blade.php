@@ -195,6 +195,210 @@
 
     </div>
 
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div style="
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); 
+    gap: 20px; 
+    margin-top: 20px; 
+    width: 100%; 
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+">
+
+    <div style="
+        background: #ffffff;
+        padding: 24px;
+        border-radius: 24px;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+        border: 1px solid #f3f4f6;
+        display: flex;
+        flex-col;
+        flex-direction: column;
+        justify-content: space-between;
+    ">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div>
+                <h3 style="margin: 0; font-size: 16px; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 8px; text-transform: uppercase; tracking-tight;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0096D9" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                    Ventas por Día
+                </h3>
+                <p style="margin: 4px 0 0 0; font-size: 12px; color: #6b7280;">Monitoreo de ingresos diarios en tiempo real</p>
+            </div>
+            <div style="background: #f0fdf4; color: #166534; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 20px;">
+                Soles (S/)
+            </div>
+        </div>
+        <div style="position: relative; width: 100%; height: 280px;">
+            <canvas id="ventasChart"></canvas>
+        </div>
+    </div>
+
+    <div style="
+        background: #ffffff;
+        padding: 24px;
+        border-radius: 24px;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+        border: 1px solid #f3f4f6;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    ">
+        <div style="margin-bottom: 20px;">
+            <h3 style="margin: 0; font-size: 16px; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 8px; text-transform: uppercase; tracking-tight;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFA500" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path>
+                    <path d="M22 12A10 10 0 0 0 12 2v10z"></path>
+                </svg>
+                Distribución de Ventas
+            </h3>
+            <p style="margin: 4px 0 0 0; font-size: 12px; color: #6b7280;">Participación porcentual según su volumen monetario</p>
+        </div>
+        <div style="position: relative; width: 100%; height: 280px; display: flex; justify-content: center; align-items: center;">
+            <canvas id="ventasPieChart"></canvas>
+        </div>
+    </div>
+
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // 1. Configuración Gráfico de Barras
+    const ctxBar = document.getElementById('ventasChart').getContext('2d');
+    const gradientBar = ctxBar.createLinearGradient(0, 0, 0, 250);
+    gradientBar.addColorStop(0, '#0096D9');       
+    gradientBar.addColorStop(1, 'rgba(0, 150, 217, 0.15)'); 
+
+    new Chart(ctxBar, {
+        type: 'bar',
+        data: {
+            labels: [
+                @foreach($ventasPorDia as $v)
+                    "{{ $v->fecha }}",
+                @endforeach
+            ],
+            datasets: [{
+                label: 'Total Ventas',
+                data: [
+                    @foreach($ventasPorDia as $v)
+                        {{ $v->total }},
+                    @endforeach
+                ],
+                backgroundColor: gradientBar,
+                borderColor: '#0085C3',
+                borderWidth: 1,
+                borderRadius: 6, 
+                borderSkipped: false,
+                hoverBackgroundColor: '#0085C3',
+                barPercentage: 0.5, 
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: '#1f2937',
+                    titleFont: { size: 12, weight: 'bold' },
+                    bodyFont: { size: 12 },
+                    padding: 10,
+                    cornerRadius: 8,
+                    displayColors: false,
+                    callbacks: {
+                        label: function(context) {
+                            return ' Ventas: S/ ' + (context.parsed.y || 0).toFixed(2);
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    grid: { display: false },
+                    ticks: { color: '#64748b', font: { size: 11, weight: '500' } }
+                },
+                y: {
+                    grid: { color: '#f1f5f9', drawBorder: false },
+                    ticks: {
+                        color: '#64748b',
+                        font: { size: 11 },
+                        callback: function(value) { return 'S/ ' + value; }
+                    }
+                }
+            }
+        }
+    });
+
+    // 2. Configuración Gráfico de Torta (Pie)
+    const ctxPie = document.getElementById('ventasPieChart').getContext('2d');
+    new Chart(ctxPie, {
+        type: 'pie',
+        data: {
+            labels: [
+                @foreach($ventasPorDia as $v)
+                    "{{ $v->fecha }}",
+                @endforeach
+            ],
+            datasets: [{
+                data: [
+                    @foreach($ventasPorDia as $v)
+                        {{ $v->total }},
+                    @endforeach
+                ],
+                // Nueva paleta ejecutiva: Azul Marino, Índigo, Esmeralda, Pizarra y Menta
+                backgroundColor: [
+                    '#C6FF00', // Azul Marino Profundo (Dominante)
+                    '#3b82f6', // Azul Ejecutivo
+                    '#0f766e', // Verde Tejan / Esmeralda Opaco
+                    '#475569', // Pizarra / Gris Corporativo
+                    '#10b981', // Verde Esmeralda Limpio
+                    '#6366f1', // Índigo Moderno
+                    '#64DD17'  // Gris Platino Sutil
+                ],
+                borderWidth: 2,
+                borderColor: '#ffffff'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'bottom',
+                    labels: {
+                        boxWidth: 10,
+                        padding: 12,
+                        font: { size: 11, weight: '600', family: 'system-ui' },
+                        color: '#475569' // Texto de leyenda más suave y elegante
+                    }
+                },
+                tooltip: {
+                    backgroundColor: '#0f172a', // Fondo casi negro ultra elegante para el tooltip
+                    titleFont: { size: 12, weight: 'bold', family: 'system-ui' },
+                    bodyFont: { size: 12, family: 'system-ui' },
+                    padding: 10,
+                    cornerRadius: 8,
+                    callbacks: {
+                        label: function(context) {
+                            let totalSum = context.dataset.data.reduce((a, b) => a + b, 0);
+                            let currentValue = context.raw;
+                            let percentage = totalSum > 0 ? ((currentValue / totalSum) * 100).toFixed(0) : 0;
+                            return ' ' + context.label + ': S/ ' + currentValue.toFixed(2) + ' (' + percentage + '%)';
+                        }
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
+
 </div>
 
 @endsection

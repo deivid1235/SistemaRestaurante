@@ -34,13 +34,11 @@
                     style="background: linear-gradient(135deg, var(--primary) 0%, #0096D9 100%);">
                     <i class="fa fa-plus"></i> Nueva Impresora
                 </button>
-                <button id="btnNueva" 
-                    onclick="document.getElementById('modalTicketera').classList.remove('hidden')"
-                    class="flex-1 md:flex-none text-white px-8 py-3 rounded-full font-bold text-sm flex items-center justify-center gap-2 transition-all shadow-lg active:scale-95 border border-white/20 hover:brightness-110" 
-                    style="background: linear-gradient(135deg, var(--primary) 0%, #0096D9 100%);">
-                    <i class="fa fa-plus"></i> Tiketera 
-                </button>
-
+                <a href="{{ route('admin.tikes.index') }}"
+                class="flex-1 md:flex-none text-white px-8 py-3 rounded-full font-bold text-sm flex items-center justify-center gap-2 transition-all shadow-lg active:scale-95 border border-white/20 hover:brightness-110"
+                style="background: linear-gradient(135deg, var(--primary) 0%, #0096D9 100%);">
+                    <i class="fa fa-plus"></i> Tiketera
+                </a>
                 <a href="{{ route('admin.AdministracionGeneral.index') }}" 
                     class="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3 bg-white/20 backdrop-blur-md border border-white/30 rounded-full font-bold text-sm transition-all hover:bg-white hover:text-[#0096D9] active:scale-95">
                     <i class="fa fa-arrow-left text-xs"></i> Volver
@@ -158,10 +156,18 @@
                     </span>
                 </div>
 
-               <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 overflow-hidden">
-                    <img src="{{ asset('imagen/Impresora.png') }}" 
-                        alt="Impresora"
-                        class="w-56 h-56 object-contain mx-auto drop-shadow-2xl transition-all duration-500 group-hover:scale-125 group-hover:-translate-y-2">
+                <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 overflow-hidden">
+                    <svg xmlns="http://www.w3.org/2000/svg" 
+                        fill="none" 
+                        viewBox="0 0 24 24" 
+                        stroke-width="1.5" 
+                        stroke="currentColor" 
+                        class="w-48 h-48 text-slate-700 mx-auto drop-shadow-2xl transition-all duration-500 group-hover:scale-125 group-hover:-translate-y-2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12A2.25 2.25 0 0 0 4.5 14.25v3.375c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V14.25A2.25 2.25 0 0 0 17.25 12H6.75Z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12V6.75a2.25 2.25 0 0 0-2.25-2.25h-4.5A2.25 2.25 0 0 0 7.5 6.75V12" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 18.75h9v1.125A1.125 1.125 0 0 1 15.375 21h-6.75A1.125 1.125 0 0 1 7.5 19.875v-1.125Z" />
+                        <circle cx="16.5" cy="15" r="0.75" fill="currentColor" />
+                    </svg>
                 </div>
 
                 <div class="absolute bottom-3 left-3">
@@ -211,73 +217,6 @@
     </div>
 </div>
 
-<!-- Modal Opciones de Ticket - Diseño Premium Compacto -->
-<div id="modalTicketera" class="fixed inset-0 z-[100] flex items-center justify-center hidden bg-slate-900/40 backdrop-blur-sm p-4">
-    <div class="bg-white w-full max-w-md rounded-[2.5rem] overflow-hidden shadow-2xl transform transition-all border border-white/20">
-        <div class="px-6 py-4 flex items-center gap-4" 
-             style="background: linear-gradient(135deg, var(--primary, #00B5E2) 0%, #0096D9 100%);">
-            <div class="bg-white/20 w-10 h-10 rounded-xl flex items-center justify-center border border-white/30 flex-shrink-0 shadow-sm">
-                <i class="fa fa-info text-white text-lg"></i>
-            </div>
-            
-            <div>
-                <h3 class="text-white font-black text-base leading-tight tracking-tight">Información</h3>
-                <p class="text-white/80 text-[9px] font-bold uppercase tracking-[0.1em]">Configuración de Hardware Windows</p>
-            </div>
-        </div>
-
-        <div class="p-6">
-            <div class="mb-4 ml-1">
-                <label class="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-[0.15em]">
-                    <i class="fa fa-cog text-[#00B5E2]"></i> Opciones de Ticket
-                </label>
-                <p class="text-[9px] text-slate-300 font-bold mt-0.5 uppercase">Active solo los formatos que utiliza</p>
-            </div>
-
-            <div class="divide-y divide-slate-50 border border-slate-100 rounded-[1.5rem] overflow-hidden bg-slate-50/20">
-                @php
-                    $formatos = [
-                        ['id' => 't80', 'n' => 'Ticket 80mm', 'd' => 'Estándar térmico', 'checked' => true],
-                        ['id' => 't58', 'n' => 'Ticket 58mm', 'd' => 'Térmico pequeño', 'checked' => false],
-                        ['id' => 't57', 'n' => 'Ticket 57mm', 'd' => 'Térmico estándar', 'checked' => false],
-                        ['id' => 't50', 'n' => 'Ticket 50mm', 'd' => 'Formato reducido', 'checked' => false],
-                        ['id' => 'pdf', 'n' => 'PDF / A4', 'd' => 'Documento digital', 'checked' => false],
-                    ];
-                @endphp
-
-                @foreach($formatos as $f)
-                <div class="flex items-center justify-between px-5 py-2.5 hover:bg-white transition-all group">
-                    <div class="flex items-center gap-3">
-                        <div class="w-1 h-1 rounded-full bg-slate-200 group-hover:bg-[#00B5E2]"></div>
-                        <div>
-                            <p class="text-xs font-black text-slate-600 leading-none group-hover:text-[#00B5E2] transition-colors">{{ $f['n'] }}</p>
-                            <p class="text-[9px] text-slate-400 font-bold mt-1 uppercase tracking-tight">{{ $f['d'] }}</p>
-                        </div>
-                    </div>
-                    
-                    <label class="relative inline-flex items-center cursor-pointer scale-[0.8]">
-                        <input type="checkbox" id="{{ $f['id'] }}" class="sr-only peer" {{ $f['checked'] ? 'checked' : '' }}>
-                        <div class="w-11 h-6 bg-slate-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#2ECC71]"></div>
-                    </label>
-                </div>
-                @endforeach
-            </div>
-        </div>
-
-        <div class="px-8 pb-8 flex items-center justify-between">
-            <button type="button" onclick="document.getElementById('modalTicketera').classList.add('hidden')" 
-                class="text-slate-400 hover:text-slate-600 font-black text-[10px] uppercase tracking-widest transition-colors">
-                CANCELAR
-            </button>
-            
-            <button type="submit" class="flex items-center gap-2 px-6 py-3 text-white rounded-xl font-black text-[10px] uppercase tracking-widest transition-all shadow-lg shadow-blue-100 active:scale-95 hover:brightness-110"
-                style="background: linear-gradient(135deg, var(--primary, #00B5E2) 0%, #0096D9 100%); border: 1px solid rgba(255,255,255,0.1);">
-                <i class="fa fa-save text-xs"></i>
-                GUARDAR CAMBIOS
-            </button>
-        </div>
-    </div>
-</div>
 
 <div id="modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center z-50 transition-all duration-300">
     <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden transform transition-all border border-gray-100 mx-4">

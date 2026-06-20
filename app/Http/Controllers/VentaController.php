@@ -15,7 +15,7 @@ use App\Models\Cliente;
 use App\Models\TipoPago;
 use App\Models\PedidoMesa;
 use App\Models\Usuario;
-
+use App\Models\Empresa;
 
 use Illuminate\Http\Request;
 
@@ -45,6 +45,7 @@ class VentaController extends Controller
         $mesasDisponibles = Mesa::where('estado', 'disponible')->count();
         $mesasOcupadas    = Mesa::where('estado', 'ocupado')->count();
         $mesasReservadas  = Mesa::where('estado', 'reservado')->count();
+        
 
         $mozos = Usuario::where('rol_id', 4)->get();
 
@@ -78,7 +79,6 @@ class VentaController extends Controller
     {
         $request->validate([
             'id_tipo_doc' => 'required|exists:tipo_documentos,id',
-            'serie_doc'   => 'required|max:4',
             'nro_doc'     => 'required|max:8',
         ]);
 
@@ -104,7 +104,11 @@ class VentaController extends Controller
             }
 
             $totalFinal = $subtotal - $descuento;
+
+            $documento = TipoDocumento::where('estado', 'activo')->first();
+
             $igv = round($subtotal * 0.18, 2);
+
             $cajaAbierta = Aperturas_Caja::where('usuario_id', Auth::id())
                 ->where('estado', 'a')
                 ->first();
@@ -114,7 +118,7 @@ class VentaController extends Controller
                 'id_tipo_doc' => $request->id_tipo_doc,
                 'id_usu' => Auth::id(),
                 'id_apc' => $cajaAbierta?->id,
-                'serie_doc' => strtoupper($request->serie_doc),
+                'serie_doc' => $documento->serie,
                 'nro_doc' => $request->nro_doc,
                 'codigo_operacion' => '0101',
                 'op_gravadas' => $subtotal,
@@ -146,9 +150,13 @@ class VentaController extends Controller
                 $cajaAbierta->save();
             }
 
+            DB::commit();
             session()->forget('carrito');
 
-            DB::commit();
+            // ACCIÓN
+            if ($request->_action == 'previsualizar') {
+                return redirect()->route('admin.Venta.ticket', $venta->id);
+            }
 
             return redirect()
                 ->route('admin.Venta.index')
@@ -353,9 +361,11 @@ class VentaController extends Controller
         }
 
         $tipos_doc = TipoDocumento::all();
+        $documento = TipoDocumento::where('estado', 'activo')->first();
         $clientes = Cliente::where('estado', 'a')->get();
         $tipos_pago = TipoPago::all();
         $pedidos = PedidoMesa::whereHas('mesa')->get();
+       
         
 
         return view('admin.Venta.pago', compact(
@@ -364,10 +374,49 @@ class VentaController extends Controller
             'tipos_doc',
             'clientes',
             'tipos_pago',
-            'pedidos'
+            'pedidos',
+            'documento'
         ));
     }
 
+    public function ticket(int $id)
+    {
+        $venta = Venta::with([
+            'detalles.producto',
+            'cliente',
+            'usuario',
+            'tipoDocumento'
+        ])->findOrFail($id);
 
+        // convertir total a letras
+        $venta->total_letras = $this->numeroALetras($venta->total);
+
+        // empresa global del sistema
+        $empresa = Empresa::first();
+
+        // plantilla
+        $config = DB::table('modeloplanilla')->first();
+        $plantilla = $config->plantilla ?? '80';
+
+        if (!in_array($plantilla, ['80', '58', '50', 'A4'])) {
+            $plantilla = '80';
+        }
+
+        return view("admin.Inpresora.ModeloTikes.ticket_$plantilla", compact('venta', 'empresa'));
+    }
+
+    private function numeroALetras(float|int $numero): string
+    {
+        $formatter = new \NumberFormatter("es", \NumberFormatter::SPELLOUT);
+
+        $entero = floor($numero);
+        $decimal = round(($numero - $entero) * 100);
+
+        return strtoupper(
+            $formatter->format($entero)
+            . " CON " . str_pad($decimal, 2, "0", STR_PAD_LEFT)
+            . "/100 SOLES"
+        );
+    }
 
 }

@@ -51,14 +51,28 @@
                     </div>
                 </div>
                 <div class="flex-shrink-0 w-full sm:w-auto">
-                    <form action="" method="POST" class="w-full">
-                        @csrf
-                        <button type="submit" 
-                            class="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-white font-bold text-[11px] transition-all hover:opacity-90 active:scale-95 shadow-xl border border-white/10 uppercase tracking-widest bg-rose-500 hover:bg-rose-600">
-                            <i class="fa fa-lock text-[9px]"></i>
-                            Cerrar Caja
-                        </button>
-                    </form>
+                    <a href="{{ route('admin.AperturaCaja.index') }}"
+                    style="background: linear-gradient(135deg, #ff4d4d 0%, #c40000 100%);
+                            padding:10px 15px;
+                            color:white;
+                            text-decoration:none;
+                            border-radius:6px;
+                            display:inline-flex;
+                            align-items:center;
+                            justify-content:center;
+                            gap:6px;
+                            width:100%;
+                            font-weight:bold;
+                            text-transform:uppercase;
+                            letter-spacing:1px;
+                            font-size:11px;
+                            transition:0.3s;"
+                    onmouseover="this.style.opacity='0.85'"
+                    onmouseout="this.style.opacity='1'">
+
+                        <i class="fa fa-lock" style="font-size:9px;"></i>
+                        Cerrar Caja
+                    </a>
                 </div>
             </div>
         </div>
